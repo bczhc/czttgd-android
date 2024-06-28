@@ -5,4 +5,10 @@
     <string name="password_hint">密码</string>
     <string name="captcha_hint">验证码</string>
     <string name="login_button">登录</string>
+    <string name="start_qr_scanning_button">开启扫码</string>
+    <string name="system_exit_button">退出系统</string>
+    <string name="main_page_bottom_navigator_item1">首页</string>
+    <string name="main_page_bottom_navigator_item2">断线记录</string>
+    <string name="main_page_bottom_navigator_item3">断线管理</string>
+    <string name="main_page_bottom_navigator_item4">我的</string>
 </resources>

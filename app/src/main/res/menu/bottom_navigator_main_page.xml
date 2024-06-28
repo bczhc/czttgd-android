@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_page"
+        android:enabled="true"
+        android:title="@string/bottom_navigator_item1" />
+    <item
+        android:enabled="true"
+        android:title="@string/bottom_navigator_item2" />
+    <item
+        android:enabled="true"
+        android:title="@string/bottom_navigator_item3" />
+    <item
+        android:enabled="true"
+        android:title="@string/bottom_navigator_item4" />
+</menu>

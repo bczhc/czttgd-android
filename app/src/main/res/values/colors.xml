@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_red">#bd3124</color>
+    <color name="container_tonal">#a4adb4</color>
 </resources>

@@ -3,7 +3,14 @@
     <style name="Base.Theme.App" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/app_red</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/container_tonal</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
     </style>
 
     <style name="Theme.App" parent="Base.Theme.App" />
+
+    <style name="Theme.App.MainPageBottomNavigator" parent="Theme.App">
+        <item name="colorSecondaryContainer">#1684fd</item>
+        <item name="colorOnSurface">#1684fd</item>
+    </style>
 </resources>
