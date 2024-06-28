@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="10dp">
+
+    <LinearLayout
+        android:id="@+id/title_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/form_filling_header"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- form ScrollView -->
+    <!-- All items are expected not to go outside the screen, -->
+    <!--   but if exception occurs, this `ScrollView` should work -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@id/bottom_buttons"
+        android:layout_below="@id/title_ll">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- form part 1 -->
+            <RelativeLayout
+                android:id="@+id/form1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableLayout
+                    android:id="@+id/column1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="机台类别"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="操作员"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="生产规格"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="铜线卷号"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="大拉仓号"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:id="@+id/column2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="机台号"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="线种"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="线号"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="铜杆卷号"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textColor="#54bcbd"
+                            tools:text="AAA" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="1dp"
+                            android:gravity="center"
+                            android:text="是否拉丝池断线"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            app:hintEnabled="false">
+
+                            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:theme="@style/Theme.App.SmallerDenseExposedDropdownMenu"
+                                app:simpleItems="@array/yes_no" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </TableRow>
+                </TableLayout>
+            </RelativeLayout>
+
+            <!-- form part 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottom_buttons"
+                android:layout_below="@id/form1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="断线位置（非拉丝池）"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:theme="@style/Theme.App.SmallerDenseExposedDropdownMenu"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="断线位置（拉丝池）"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:padding="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="原因类别"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:theme="@style/Theme.App.SmallerDenseExposedDropdownMenu"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="断线原因（初检）"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:theme="@style/Theme.App.SmallerDenseExposedDropdownMenu"
+                        app:hintEnabled="false">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="备注"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:padding="8dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="断线日期（初检日期）"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textColor="#54bcbd"
+                        tools:text="AAA" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- bottom buttons -->
+    <LinearLayout
+        android:id="@+id/bottom_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="40dp">
+
+        <com.google.android.material.button.MaterialButton
+            style="?materialIconButtonFilledTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingHorizontal="40dp"
+            android:text="@string/print_button"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            android:textStyle="bold"
+            app:cornerRadius="5dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="40dp"
+                android:text="@string/cancel_button"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textStyle="bold"
+                android:theme="@style/Theme.App.NegativeButton"
+                app:cornerRadius="5dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="40dp"
+                android:text="@string/submit_button"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textStyle="bold"
+                app:cornerRadius="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

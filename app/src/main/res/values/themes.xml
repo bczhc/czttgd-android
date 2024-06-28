@@ -13,4 +13,26 @@
         <item name="colorSecondaryContainer">#1684fd</item>
         <item name="colorOnSurface">#1684fd</item>
     </style>
+
+    <style name="Theme.App.NegativeButton" parent="Theme.App">
+        <item name="colorPrimary">@color/negative_button_bg</item>
+    </style>
+
+    <style name="Widget.App.SmallerDenseExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Theme.App.SmallerDenseExposedDropdownMenu" parent="Theme.App">
+        <item name="editTextStyle">@style/Widget.App.SmallerDenseExposedDropdownMenu</item>
+    </style>
+
+    <style name="Widget.App.SmallerDenseEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="Theme.App.SmallerDenseEditText" parent="Theme.App">
+        <item name="editTextStyle">@style/Widget.App.SmallerDenseEditText</item>
+    </style>
 </resources>

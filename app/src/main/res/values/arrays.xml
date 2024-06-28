@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="yes_no">
+        <item>是</item>
+        <item>否</item>
+    </array>
+</resources>

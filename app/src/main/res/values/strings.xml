@@ -11,4 +11,10 @@
     <string name="main_page_bottom_navigator_item2">断线记录</string>
     <string name="main_page_bottom_navigator_item3">断线管理</string>
     <string name="main_page_bottom_navigator_item4">我的</string>
+    <string name="form_filling_header">填写断线记录</string>
+    <string name="print_button">打印</string>
+    <string name="cancel_button">取消</string>
+    <string name="submit_button">提交</string>
+    <string name="menu_yes">是</string>
+    <string name="menu_no">否</string>
 </resources>

@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_red">#bd3124</color>
     <color name="container_tonal">#a4adb4</color>
+    <color name="negative_button_bg">#54bcbd</color>
 </resources>
