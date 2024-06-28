@@ -1,9 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.同泰高导质检" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.App" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/app_red</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
-    <style name="Theme.同泰高导质检" parent="Base.Theme.同泰高导质检" />
+    <style name="Theme.App" parent="Base.Theme.App" />
 </resources>
