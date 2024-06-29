@@ -1,4 +1,4 @@
-package com.czttgd.android.zhijian.ui
+package com.czttgd.android.zhijian.ui.fragments
 
 import android.os.Bundle
 import android.os.Process

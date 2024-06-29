@@ -96,6 +96,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="60dp"
             android:text="@string/login_button"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             app:cornerRadius="5dp" />
     </LinearLayout>
 
