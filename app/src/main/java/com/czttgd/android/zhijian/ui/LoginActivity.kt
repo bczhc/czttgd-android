@@ -13,6 +13,8 @@ class LoginActivity : BaseActivity() {
         val bindings = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(bindings.root)
 
+
+
         super.onCreate(savedInstanceState)
 
         val captcha = resources.openRawResource(R.raw.captcha_demo).use {
