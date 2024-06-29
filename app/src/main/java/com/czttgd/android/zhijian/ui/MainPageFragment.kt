@@ -1,6 +1,7 @@
 package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
+import android.os.Process
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.czttgd.android.zhijian.databinding.FragmentMainPageBinding
 import com.czttgd.android.zhijian.utils.toastShow
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+
 
 class MainPageFragment: Fragment() {
     private val launcher = object {
@@ -25,6 +27,11 @@ class MainPageFragment: Fragment() {
 
         bindings.scanButton.setOnClickListener {
             launcher.barcode.launch(ScanOptions())
+        }
+        bindings.exitSystem.setOnClickListener {
+            requireActivity().finishAffinity()
+            val pid = Process.myPid()
+            Process.killProcess(pid)
         }
 
         return bindings.root
