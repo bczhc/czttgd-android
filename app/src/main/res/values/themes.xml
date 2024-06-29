@@ -5,6 +5,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondaryContainer">@color/container_tonal</item>
         <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.App" parent="Base.Theme.App" />
