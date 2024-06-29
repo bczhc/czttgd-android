@@ -73,7 +73,6 @@
                 </TableRow>
 
                 <TableRow android:layout_marginVertical="5dp">
-                    <!-- TODO: use a more elegant and general way to evenly space out the text -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
