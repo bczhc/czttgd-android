@@ -18,6 +18,7 @@
         android:orientation="horizontal"
         android:theme="@style/Theme.App.MainPageBottomNavigator"
         app:checkedButton="@id/main_page_bottom_item1"
+        app:selectionRequired="true"
         app:singleSelection="true">
 
         <com.google.android.material.button.MaterialButton
