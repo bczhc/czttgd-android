@@ -19,4 +19,14 @@
     <string name="menu_no">否</string>
     <string name="personal_info_title">个人信息</string>
     <string name="change_password_button">密码修改</string>
+    <string name="personnel_info_label_number">人员编码</string>
+    <string name="personnel_info_label_name">姓名</string>
+    <string name="personnel_info_label_username">用户名</string>
+    <string name="personnel_info_label_gender">性别</string>
+    <string name="personnel_info_label_departure">部门</string>
+    <string name="change_password_dialog_title">修改密码</string>
+    <string name="password_old_hint">原密码</string>
+    <string name="password_new_hint">新密码</string>
+    <string name="confirm_button">确认</string>
+    <string name="password_not_matching_error">密码不匹配</string>
 </resources>
