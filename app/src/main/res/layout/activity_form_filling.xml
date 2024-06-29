@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="10dp">
+    android:paddingHorizontal="10dp"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:id="@+id/title_ll"
@@ -290,9 +291,9 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:padding="8dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:padding="8dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -364,8 +365,8 @@
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:padding="8dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:padding="8dp" />
                 </LinearLayout>
 
                 <LinearLayout
