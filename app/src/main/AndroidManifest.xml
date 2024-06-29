@@ -43,6 +43,13 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <!-- allow zxing barcode scanning activity both landscape or portrait -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="unspecified"
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation" />
     </application>
 
 </manifest>

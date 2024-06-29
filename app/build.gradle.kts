@@ -46,6 +46,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") {
+        isTransitive = false
+    }
+    implementation("com.google.zxing:core:3.5.3")
     implementation(kotlin("reflect"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

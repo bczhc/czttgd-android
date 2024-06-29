@@ -13,10 +13,6 @@ class MainPageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            println(LoginRepository.login("abc", "123"))
-        }
-
         val bindings = ActivityMainPageBinding.inflate(layoutInflater)
         setContentView(bindings.root)
 
