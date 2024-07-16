@@ -2,13 +2,13 @@ package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
 import com.czttgd.android.zhijian.BaseActivity
-import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
+import com.czttgd.android.zhijian.databinding.ActivityMainBinding
 
-class FormFillingActivity : BaseActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val bindings = ActivityFormFillingBinding.inflate(layoutInflater)
+        val bindings = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindings.root)
+
     }
 }

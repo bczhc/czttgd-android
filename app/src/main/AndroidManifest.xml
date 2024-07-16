@@ -14,10 +14,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App"
         tools:targetApi="31">
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App">
             <intent-filter>
@@ -27,25 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.MainPageActivity"
-            android:exported="false"
-            android:theme="@style/Theme.App">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.FormFillingActivity"
-            android:exported="false"
-            android:theme="@style/Theme.App">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <!-- allow zxing barcode scanning activity both landscape or portrait -->
+        <!-- allow zxing barcode scanning activity both landscape and portrait -->
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="unspecified"
