@@ -1,6 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#34b9c0</item>
+    </style>
 
     <style name="Theme.App.MainPage" parent="Theme.App.Base">
         <item name="android:windowBackground">@color/main_page_surface</item>
@@ -35,5 +37,11 @@
         <item name="fontFamily">sans-serif-black</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Theme.App.RecordsFragment" parent="Theme.App.MainPage">
+        <item name="android:background">@color/white</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="colorOnSurfaceVariant">#101010</item>
     </style>
 </resources>

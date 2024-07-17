@@ -10,6 +10,6 @@
     <color name="main_card2_button">#e99d42</color>
     <color name="main_card3_button">#a2ef4d</color>
     <color name="bottom_nav_bar_inactive_item">#101010</color>
-    <color name="bottom_nav_bar_active_item">#34b9c0</color>
+    <color name="bottom_nav_bar_active_item">?colorPrimary</color>
     <color name="transparent">#00000000</color>
 </resources>
