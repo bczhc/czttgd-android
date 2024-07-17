@@ -86,10 +86,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@drawable/main_page_bottom_nav_bar_bg"
             android:theme="@style/Theme.App.BottomNavigationView"
             app:elevation="0dp"
             app:itemActiveIndicatorStyle="@style/Theme.App.BottomNavigationView.ActiveIndicator"
-            app:itemPaddingTop="20dp"
+            app:itemPaddingTop="15dp"
+            app:itemPaddingBottom="23dp"
             app:menu="@menu/main_page_bottom_nav_bar" />
     </RelativeLayout>
 </layout>
