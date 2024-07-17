@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="java.lang.String" />
+
+        <variable
+            name="label"
+            type="java.lang.String" />
+
+        <variable
+            name="buttonText"
+            type="java.lang.String" />
+
+        <variable
+            name="cardColor"
+            type="java.lang.Integer" />
+
+        <variable
+            name="buttonColor"
+            type="java.lang.Integer" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@{cardColor}"
+        app:cardElevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="3dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@{title}"
+                    android:textAppearance="?textAppearanceTitleLarge"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    tools:text="断线填报系统" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="15dp"
+                    android:paddingHorizontal="5sp"
+                    android:text="@{label}"
+                    android:textAppearance="?textAppearanceLabelLarge"
+                    android:textSize="17sp"
+                    tools:text="操作上手指南" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                tools:ignore="RelativeOverlap">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@{buttonColor}"
+                    android:minHeight="0dp"
+                    android:paddingVertical="3dp"
+                    android:text="@{buttonText}"
+                    android:textColor="@color/black"
+                    app:cornerRadius="10dp"
+                    tools:text="点击进入 >" />
+            </LinearLayout>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

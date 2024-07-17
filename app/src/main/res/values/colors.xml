@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_card1">#9cc7ef</color>
+    <color name="main_card2">#f1cb9d</color>
+    <color name="main_card3">#d0f7a6</color>
+    <color name="main_card1_button">#4095e5</color>
+    <color name="main_card2_button">#e99d42</color>
+    <color name="main_card3_button">#a2ef4d</color>
 </resources>
