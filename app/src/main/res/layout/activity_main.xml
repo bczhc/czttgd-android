@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:ignore="HardcodedText">
 
         <ImageView
+            android:id="@+id/head_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="50dp"
@@ -23,8 +24,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/bottom_space"
+            android:layout_below="@id/head_image"
             android:orientation="vertical"
-            android:paddingBottom="100dp"
             android:weightSum="3">
 
             <RelativeLayout
@@ -72,6 +74,22 @@
                     app:title="@{`铜线二期`}" />
             </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
 
+        <View
+            android:id="@+id/bottom_space"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_above="@id/bottom_nav_bar" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:theme="@style/Theme.App.BottomNavigationView"
+            app:elevation="0dp"
+            app:itemActiveIndicatorStyle="@style/Theme.App.BottomNavigationView.ActiveIndicator"
+            app:itemPaddingTop="20dp"
+            app:menu="@menu/main_page_bottom_nav_bar" />
+    </RelativeLayout>
 </layout>

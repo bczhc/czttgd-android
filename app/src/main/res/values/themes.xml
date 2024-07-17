@@ -1,5 +1,22 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.App" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <style name="Theme.App.MainPage" parent="Theme.App.Base">
+        <item name="android:windowBackground">@color/main_page_surface</item>
+        <item name="android:colorBackground">@color/main_page_surface</item>
+        <item name="android:statusBarColor">@color/main_page_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.App.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.App.BottomNavigationView" parent="Theme.App.MainPage">
+        <item name="colorSurfaceContainer">@color/main_page_surface</item>
+        <item name="colorOnSurfaceVariant">@color/bottom_nav_bar_inactive_item</item>
+        <item name="colorOnSecondaryContainer">@color/bottom_nav_bar_active_item</item>
+        <item name="colorOnSurface">@color/bottom_nav_bar_active_item</item>
     </style>
 </resources>
