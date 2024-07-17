@@ -32,6 +32,15 @@
             android:screenOrientation="unspecified"
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
+
+        <activity
+            android:name=".ui.FormFillingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.FormFilling">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

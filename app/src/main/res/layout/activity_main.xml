@@ -36,6 +36,7 @@
                 android:gravity="center">
 
                 <include
+                    android:id="@+id/card1"
                     layout="@layout/main_card"
                     app:buttonColor="@{@color/main_card1_button}"
                     app:buttonText="@{`点击进入 >`}"
@@ -51,6 +52,7 @@
                 android:gravity="center">
 
                 <include
+                    android:id="@+id/card2"
                     layout="@layout/main_card"
                     app:buttonColor="@{@color/main_card2_button}"
                     app:buttonText="@{`进行填报 >`}"
@@ -66,6 +68,7 @@
                 android:gravity="center">
 
                 <include
+                    android:id="@+id/card3"
                     layout="@layout/main_card"
                     app:buttonColor="@{@color/main_card3_button}"
                     app:buttonText="@{`进行填报 >`}"
@@ -90,8 +93,8 @@
             android:theme="@style/Theme.App.BottomNavigationView"
             app:elevation="0dp"
             app:itemActiveIndicatorStyle="@style/Theme.App.BottomNavigationView.ActiveIndicator"
-            app:itemPaddingTop="15dp"
             app:itemPaddingBottom="23dp"
+            app:itemPaddingTop="15dp"
             app:menu="@menu/main_page_bottom_nav_bar" />
     </RelativeLayout>
 </layout>

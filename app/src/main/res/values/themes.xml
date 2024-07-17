@@ -19,4 +19,21 @@
         <item name="colorOnSecondaryContainer">@color/bottom_nav_bar_active_item</item>
         <item name="colorOnSurface">@color/bottom_nav_bar_active_item</item>
     </style>
+
+    <style name="Theme.App.FormFilling" parent="Theme.App.MainPage">
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+
+    <style name="Theme.App.Toolbar" parent="Theme.App.FormFilling">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="colorOnSurface">#101010</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TextAppearance.App.Toolbar" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">sans-serif-black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
