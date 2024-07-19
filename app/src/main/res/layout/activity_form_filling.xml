@@ -184,6 +184,7 @@
                     </RadioGroup>
 
                     <include
+                        android:id="@+id/field_breakpoint_position"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请选择 >`}"
                         app:label="@{`断线位置`}"
@@ -194,6 +195,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_breakpoint_reason"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请选择 >`}"
                         app:label="@{`断线原因（初检）`}"

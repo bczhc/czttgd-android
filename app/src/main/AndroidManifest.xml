@@ -41,6 +41,15 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.SelectionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.Base">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-    </style>
-
-    <style name="Theme.App.MainPage" parent="Theme.App.Base">
         <item name="android:windowBackground">@color/main_page_surface</item>
         <item name="android:colorBackground">@color/main_page_surface</item>
         <item name="android:statusBarColor">@color/main_page_surface</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.App.MainPage" parent="Theme.App.Base">
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 

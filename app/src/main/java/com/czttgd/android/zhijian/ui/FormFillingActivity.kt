@@ -1,25 +1,46 @@
 package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.lifecycle.lifecycleScope
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
+import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
+import com.czttgd.android.zhijian.databinding.DialogFetchingInfoBinding
 import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
 import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
 import com.czttgd.android.zhijian.utils.defaultNegativeButton
 import com.czttgd.android.zhijian.utils.setPositiveAction
+import com.czttgd.android.zhijian.utils.toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FormFillingActivity : BaseActivity() {
+    private lateinit var bindings: ActivityFormFillingBinding
+
+    private fun registerSelectionLauncher(getValue: () -> FormFillingFieldLayoutBinding): ActivityResultLauncher<Array<String>> {
+        return registerForActivityResult(SelectionActivity.ActivityContract()) {
+            getValue().tv.text = (it ?: return@registerForActivityResult)
+        }
+    }
+
+    private val selectionLaunchers = arrayOf(
+        registerSelectionLauncher { bindings.fieldCreator },
+        registerSelectionLauncher { bindings.fieldMachineNumber },
+        registerSelectionLauncher { bindings.fieldBreakpointPosition },
+        registerSelectionLauncher { bindings.fieldBreakpointReason },
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bindings = ActivityFormFillingBinding.inflate(layoutInflater)
+        bindings = ActivityFormFillingBinding.inflate(layoutInflater)
 
         setContentView(bindings.root)
 
-        bindings.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        bindings.toolbar.setUpBackButton()
 
         val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding ->
             fieldBindings.tv.setOnClickListener {
@@ -39,6 +60,42 @@ class FormFillingActivity : BaseActivity() {
         }
 
         listOf(bindings.fieldProductSpecs, bindings.fieldWireNumber, bindings.fieldComments).forEach(setUpClickEvent)
+
+        val setUpSelectionFields =
+            { fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
+                fieldBindings.tv.setOnClickListener {
+                    val dialogBindings = DialogFetchingInfoBinding.inflate(layoutInflater)
+                    val dialog = MaterialAlertDialogBuilder(this)
+                        .setView(dialogBindings.root)
+                        .create().apply {
+                            setCanceledOnTouchOutside(false)
+                        }.also { it.show() }
+
+                    lifecycleScope.launch {
+                        val result = runCatching { getItems() }
+                        withContext(Dispatchers.Main) {
+                            dialog.dismiss()
+                            result.onSuccess {
+                                selectionLaunchers[launcherIndex].launch(it)
+                            }.onFailure {
+                                toast(it.toString())
+                            }
+                        }
+                    }
+                }
+            }
+
+        setUpSelectionFields(bindings.fieldCreator, 0) { SelectList.allUsers().toTypedArray() }
+        setUpSelectionFields(bindings.fieldMachineNumber, 1) {
+            val stage = when (val stageExtra = intent.getIntExtra(EXTRA_STAGE, 0)) {
+                STAGE_ONE -> 1
+                STAGE_TWO -> 2
+                else -> throw RuntimeException("Unexpected stage: $stageExtra")
+            }
+            SelectList.machineNumbers(stage).map { it.toString() }.toTypedArray()
+        }
+        setUpSelectionFields(bindings.fieldBreakpointPosition, 2) { arrayOf() }
+        setUpSelectionFields(bindings.fieldBreakpointReason, 3) { arrayOf() }
     }
 
     companion object {

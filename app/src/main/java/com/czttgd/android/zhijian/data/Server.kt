@@ -9,7 +9,8 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-var SERVER_ADDR: String = ""
+val serverAddr: String
+    get() = Settings.read().serverAddr ?: ""
 
 object Server {
     suspend inline fun <reified T> fetch(url: String): T {
@@ -19,7 +20,8 @@ object Server {
                 throw RuntimeException("Non-200 status code")
             }
             val body = res.bodyAsText()
-            val json = App.GSON.fromJsonOrNull<JsonObject>(body) ?: throw RuntimeException("Response JSON parsing error")
+            val json =
+                App.GSON.fromJsonOrNull<JsonObject>(body) ?: throw RuntimeException("Response JSON parsing error")
             if (json["code"].asInt != 0) {
                 throw RuntimeException("Non-zero response code")
             }
