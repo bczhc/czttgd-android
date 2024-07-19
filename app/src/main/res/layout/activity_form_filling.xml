@@ -147,7 +147,7 @@
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checkedButton="@id/拉丝池内断线"
+                        android:checkedButton="@id/拉丝池内断线_radio"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="8dp"
@@ -155,7 +155,7 @@
                         android:weightSum="2">
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/拉丝池内断线"
+                            android:id="@+id/拉丝池内断线_radio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -167,7 +167,7 @@
                             android:theme="@style/Theme.App.FormFilling.RadioButton" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/非拉丝池内断线"
+                            android:id="@+id/非拉丝池内断线_radio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minWidth="0dp"
