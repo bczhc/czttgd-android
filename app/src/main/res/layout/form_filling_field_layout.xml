@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
 
@@ -29,13 +28,14 @@
         android:padding="@dimen/form_filling_field_padding">
 
         <LinearLayout
-            android:id="@+id/label1"
+            android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/label_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{label}"
@@ -57,12 +57,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/label1"
+            android:layout_toEndOf="@id/label"
+            android:drawableRight="@{rightIcon}"
             android:gravity="end"
             android:text="@{initText}"
             android:textAppearance="@style/TextAppearance.App.FormText"
-            android:drawableRight="@{rightIcon}"
-            tools:text="请选择 >"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded"
+            tools:text="请选择 >" />
     </RelativeLayout>
 </layout>

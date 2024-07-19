@@ -38,6 +38,7 @@
                     android:orientation="vertical">
 
                     <include
+                        android:id="@+id/field_creator"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请选择 >`}"
                         app:label="@{`记录人`}"
@@ -48,6 +49,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_machine_number"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请选择 >`}"
                         app:label="@{`机台号`}"
@@ -58,6 +60,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_breakpoint_time"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{``}"
                         app:label="@{`断线时间`}"
@@ -74,6 +77,7 @@
                     android:orientation="vertical">
 
                     <include
+                        android:id="@+id/field_product_specs"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请输入 >`}"
                         app:label="@{`生产规格`}"
@@ -84,6 +88,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_wire_number"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请输入 >`}"
                         app:label="@{`线号`}"
@@ -199,6 +204,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_comments"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{`请输入 >`}"
                         app:label="@{`备注`}"
@@ -214,8 +220,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:paddingHorizontal="8dp"
             android:background="@color/white"
+            android:paddingHorizontal="8dp"
             android:paddingTop="5dp"
             android:paddingBottom="20dp">
 

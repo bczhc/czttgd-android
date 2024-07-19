@@ -32,6 +32,7 @@
     <style name="Theme.App.FormFilling" parent="Theme.App.MainPage">
         <item name="android:statusBarColor">@color/white</item>
         <item name="colorOutlineVariant">@color/form_filling_divider</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
     <style name="Theme.App.Toolbar" parent="Theme.App.FormFilling">

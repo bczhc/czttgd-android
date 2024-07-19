@@ -8,4 +8,5 @@
     <string name="button_test_connection">测试连接</string>
     <string name="connection_succeeded_toast">连接成功</string>
     <string name="connection_failed_toast">连接失败</string>
+    <string name="please_enter_text_dialog_title">请输入：%1$s</string>
 </resources>
