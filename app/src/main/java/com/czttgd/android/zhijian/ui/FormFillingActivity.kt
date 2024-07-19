@@ -43,7 +43,7 @@ class FormFillingActivity : BaseActivity() {
         bindings.toolbar.setUpBackButton()
 
         val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding ->
-            fieldBindings.tv.setOnClickListener {
+            fieldBindings.rl.setOnClickListener {
                 val dialogBindings = DialogInputTextBinding.inflate(layoutInflater)
                 MaterialAlertDialogBuilder(this)
                     .defaultNegativeButton()
@@ -63,7 +63,7 @@ class FormFillingActivity : BaseActivity() {
 
         val setUpSelectionFields =
             { fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
-                fieldBindings.tv.setOnClickListener {
+                fieldBindings.rl.setOnClickListener {
                     val dialogBindings = DialogFetchingInfoBinding.inflate(layoutInflater)
                     val dialog = MaterialAlertDialogBuilder(this)
                         .setView(dialogBindings.root)
