@@ -10,6 +10,7 @@ import com.czttgd.android.zhijian.databinding.ActivityMainBinding
 import com.czttgd.android.zhijian.ui.fragments.BreakpointRecordsFragment
 import com.czttgd.android.zhijian.ui.fragments.WorkspaceFragment
 import com.czttgd.android.zhijian.utils.unimplemented
+import com.czttgd.android.zhijian.utils.unreachable
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,8 +28,7 @@ class MainActivity : BaseActivity() {
             when (it.itemId) {
                 R.id.workspace -> updateFragment(WorkspaceFragment())
                 R.id.records -> updateFragment(BreakpointRecordsFragment())
-                R.id.my_info -> unimplemented()
-                else -> {}
+                else -> unreachable()
             }
             true
         }
