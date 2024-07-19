@@ -9,6 +9,13 @@
         <item name="android:colorBackground">@color/main_page_surface</item>
         <item name="android:statusBarColor">@color/main_page_surface</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="colorSurfaceContainerHigh">@color/white</item>
+        <item name="colorSurfaceContainer">@color/white</item>
     </style>
 
     <style name="Theme.App.BottomNavigationView.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
