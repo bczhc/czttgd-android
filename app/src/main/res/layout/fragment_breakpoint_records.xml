@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.App.Toolbar"
-        app:navigationIcon="@drawable/back"
         app:title="多头拉丝断线记录"
         app:titleCentered="true"
         app:titleTextAppearance="@style/TextAppearance.App.Toolbar" />

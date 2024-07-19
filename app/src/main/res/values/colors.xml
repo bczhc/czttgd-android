@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#34b9c0</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#ff0000</color>
+    <color name="required_red">#e1501b</color>
     <color name="main_page_surface">#f9f9f9</color>
     <color name="main_card1">#9cc7ef</color>
     <color name="main_card2">#f1cb9d</color>
@@ -12,4 +15,6 @@
     <color name="bottom_nav_bar_inactive_item">#101010</color>
     <color name="bottom_nav_bar_active_item">?colorPrimary</color>
     <color name="transparent">#00000000</color>
+    <color name="form_text">#9ea09e</color>
+    <color name="form_filling_divider">#f5f7fa</color>
 </resources>

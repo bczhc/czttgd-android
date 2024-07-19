@@ -1,49 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:ignore="HardcodedText">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.App.Toolbar"
-        app:navigationIcon="@drawable/back"
-        app:title="多头拉丝断线记录"
-        app:titleCentered="true"
-        app:titleTextAppearance="@style/TextAppearance.App.Toolbar" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="HardcodedText">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="记录人"
-                android:textAppearance="?textAppearanceLabelLarge" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="*" />
-        </LinearLayout>
-        <EditText
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@id/label"
-            android:background="@color/transparent"
-            android:hint="请选择 >"
-            />
+            android:theme="@style/Theme.App.Toolbar"
+            app:navigationIcon="@drawable/back"
+            app:title="多头拉丝断线记录"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.App.Toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_layout"
+            android:layout_below="@id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- group one -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请选择 >`}"
+                        app:label="@{`记录人`}"
+                        app:required="@{true}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请输入 >`}"
+                        app:label="@{`机台号`}"
+                        app:required="@{true}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{``}"
+                        app:label="@{`断线时间`}"
+                        app:required="@{false}" />
+
+                </LinearLayout>
+
+                <!-- group two -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请输入 >`}"
+                        app:label="@{`生产规格`}"
+                        app:required="@{true}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请输入 >`}"
+                        app:label="@{`线号`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+                </LinearLayout>
+
+                <!-- group three -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{``}"
+                        app:label="@{`断线规格`}"
+                        app:required="@{true}"
+                        app:rightIcon="@{@drawable/qr_scan}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{``}"
+                        app:label="@{`铜线卷号`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{``}"
+                        app:label="@{`铜杆卷号`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{``}"
+                        app:label="@{`大拉仓号`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <!-- wtf is the layout??? 🤯🤯 -->
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checkedButton="@id/拉丝池内断线"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        android:textAlignment="center"
+                        android:weightSum="2">
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/拉丝池内断线"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:padding="0dp"
+                            android:text="拉丝池内断线"
+                            android:textColor="@color/form_filling_radio_button"
+                            android:theme="@style/Theme.App.FormFilling.RadioButton" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/非拉丝池内断线"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:padding="0dp"
+                            android:text="非拉丝池内断线"
+                            android:textColor="@color/form_filling_radio_button"
+                            android:theme="@style/Theme.App.FormFilling.RadioButton" />
+                    </RadioGroup>
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请选择 >`}"
+                        app:label="@{`断线位置`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请选择 >`}"
+                        app:label="@{`断线原因（初检）`}"
+                        app:required="@{true}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{`请输入 >`}"
+                        app:label="@{`备注`}"
+                        app:required="@{false}" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:paddingHorizontal="8dp"
+            android:background="@color/white"
+            android:paddingTop="5dp"
+            android:paddingBottom="20dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="提交"
+                app:cornerRadius="1000dp" />
+        </RelativeLayout>
     </RelativeLayout>
-</LinearLayout>
+</layout>

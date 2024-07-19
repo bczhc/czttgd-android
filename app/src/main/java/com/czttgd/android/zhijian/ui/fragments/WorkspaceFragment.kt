@@ -15,7 +15,14 @@ class WorkspaceFragment : Fragment() {
 
         val context = inflater.context
         bindings.card2.button.setOnClickListener {
-            startActivity(Intent(context, FormFillingActivity::class.java))
+            startActivity(Intent(context, FormFillingActivity::class.java).apply {
+                putExtra(FormFillingActivity.EXTRA_STAGE, FormFillingActivity.STAGE_ONE)
+            })
+        }
+        bindings.card3.button.setOnClickListener {
+            startActivity(Intent(context, FormFillingActivity::class.java).apply {
+                putExtra(FormFillingActivity.EXTRA_STAGE, FormFillingActivity.STAGE_TWO)
+            })
         }
 
         return bindings.root

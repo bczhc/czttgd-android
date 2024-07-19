@@ -1,7 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.App.Base" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#34b9c0</item>
+        <item name="colorPrimary">@color/primary</item>
     </style>
 
     <style name="Theme.App.MainPage" parent="Theme.App.Base">
@@ -24,6 +24,7 @@
 
     <style name="Theme.App.FormFilling" parent="Theme.App.MainPage">
         <item name="android:statusBarColor">@color/white</item>
+        <item name="colorOutlineVariant">@color/form_filling_divider</item>
     </style>
 
     <style name="Theme.App.Toolbar" parent="Theme.App.FormFilling">
@@ -43,5 +44,14 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="colorOnSurfaceVariant">#101010</item>
         <item name="colorSurface">@color/white</item>
+    </style>
+
+    <style name="TextAppearance.App.FormText" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/form_text</item>
+    </style>
+
+    <style name="Theme.App.FormFilling.RadioButton" parent="Theme.App.FormFilling">
+        <item name="colorOnSurfaceVariant">@color/form_text</item>
+        <item name="android:textColor">@color/form_text</item>
     </style>
 </resources>

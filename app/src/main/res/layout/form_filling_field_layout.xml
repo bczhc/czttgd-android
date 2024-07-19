@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+
+    <data>
+
+        <variable
+            name="label"
+            type="java.lang.String" />
+
+        <variable
+            name="required"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="initText"
+            type="java.lang.String" />
+
+        <variable
+            name="rightIcon"
+            type="android.graphics.drawable.Drawable" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/form_filling_field_padding">
+
+        <LinearLayout
+            android:id="@+id/label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{label}"
+                android:textAppearance="?textAppearanceLabelLarge"
+                tools:text="记录人" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{required ? ` *` : ``}"
+                android:textColor="@color/required_red"
+                tools:text=" *" />
+        </LinearLayout>
+
+        <!-- `app:drawableRightCompat` doesn't play well with data binding -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/label1"
+            android:gravity="end"
+            android:text="@{initText}"
+            android:textAppearance="@style/TextAppearance.App.FormText"
+            android:drawableRight="@{rightIcon}"
+            tools:text="请选择 >"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+</layout>
