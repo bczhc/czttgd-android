@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ip_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="IP地址"
@@ -32,22 +34,25 @@
         android:textAppearance="?textAppearanceTitleMedium" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="?textInputOutlinedDenseStyle"
         android:layout_width="match_parent"
+        style="?textInputOutlinedDenseStyle"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="用户名" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="?textInputOutlinedDenseStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="?textInputOutlinedDenseStyle"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="密码"
