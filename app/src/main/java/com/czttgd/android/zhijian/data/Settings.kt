@@ -6,17 +6,8 @@ import com.czttgd.android.zhijian.utils.fromJsonOrNull
 import java.io.File
 
 data class Settings(
-    var server: Server?,
-    var database: Database?,
+    var serverAddr: String?,
 ) {
-    data class Server(
-        var ip: String?,
-    )
-
-    data class Database(
-        var username: String?,
-        var password: String?,
-    )
 
     companion object {
         private const val JSON_FILENAME = "settings.json"
@@ -30,15 +21,15 @@ data class Settings(
         }
 
         fun empty(): Settings {
-            return Settings(null, null)
+            return Settings(null)
         }
 
         fun read(): Settings {
-            val settings = GSON.fromJsonOrNull(jsonFile.readText(), Settings::class.java)
+            val settings = GSON.fromJsonOrNull<Settings>(jsonFile.readText())
             if (settings == null) {
                 write(empty())
             }
-            return GSON.fromJsonOrNull(jsonFile.readText(), Settings::class.java)!!
+            return GSON.fromJsonOrNull(jsonFile.readText())!!
         }
 
         fun write(settings: Settings) {

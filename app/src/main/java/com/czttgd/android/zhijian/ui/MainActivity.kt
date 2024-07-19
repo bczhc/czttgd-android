@@ -1,11 +1,16 @@
 package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
+import com.czttgd.android.zhijian.data.Ping
+import com.czttgd.android.zhijian.data.SERVER_ADDR
 import com.czttgd.android.zhijian.data.Settings
 import com.czttgd.android.zhijian.databinding.ActivityMainBinding
 import com.czttgd.android.zhijian.databinding.SettingsDialogBinding
@@ -16,6 +21,9 @@ import com.czttgd.android.zhijian.utils.setPositiveAction
 import com.czttgd.android.zhijian.utils.toast
 import com.czttgd.android.zhijian.utils.unreachable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,33 +49,52 @@ class MainActivity : BaseActivity() {
         bindings.settingsIv.setOnClickListener {
             val dialogBindings = SettingsDialogBinding.inflate(layoutInflater)
 
-            val ipEt = dialogBindings.ipEt
-            val passwordEt = dialogBindings.passwordEt
-            val usernameEt = dialogBindings.usernameEt
+            val addrEt = dialogBindings.addrEt
 
             val settings = Settings.read()
+            SERVER_ADDR = settings.serverAddr ?: ""
 
-            ipEt.setText(settings.server?.ip ?: "")
-            usernameEt.setText(settings.database?.username ?: "")
-            passwordEt.setText(settings.database?.password ?: "")
+            addrEt.setText(settings.serverAddr ?: "")
 
+            var onConnectionTesting = false
             val dialog = MaterialAlertDialogBuilder(this)
                 .defaultNegativeButton()
                 .setPositiveAction { _, _ ->
-                    settings.server = Settings.Server(ipEt.text.toString())
-                    settings.database = Settings.Database(
-                        username = usernameEt.text.toString(),
-                        password = passwordEt.text.toString(),
-                    )
+                    settings.serverAddr = addrEt.text.toString().also {
+                        SERVER_ADDR = it
+                    }
                     Settings.write(settings)
                     toast(R.string.saved_toast)
                 }
+                .setNeutralButton(R.string.button_test_connection, null)
                 .setTitle(R.string.settings_dialog_title)
                 .setView(dialogBindings.root)
-                .create().also { it.show() }
+                .create().apply {
+                    // this way makes the dialog not close on the neutral button clicked
+                    setOnShowListener {
+                        (it as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener OnClick@{
+                            try {
+                                if (onConnectionTesting) return@OnClick
+                                onConnectionTesting = true
+                                dialogBindings.progressBar.visibility = View.VISIBLE
+                                lifecycleScope.launch {
+                                    Ping.pingTest(addrEt.text.toString())
+                                    withContext(Dispatchers.Main) {
+                                        dialogBindings.progressBar.visibility = View.GONE
+                                    }
+                                    toast(R.string.connection_succeeded_toast)
+                                    onConnectionTesting = false
+                                }
+                            } catch (_: Exception) {
+                                toast(R.string.connection_failed_toast)
+                                onConnectionTesting = false
+                            }
+                        }
+                    }
+                }.also { it.show() }
 
             // disable dialog canceled-on-touch-outside after text changed for UX improvement
-            listOf(ipEt, usernameEt, passwordEt).forEach {
+            listOf(addrEt).forEach {
                 it.doAfterTextChanged {
                     dialog.setCanceledOnTouchOutside(false)
                 }

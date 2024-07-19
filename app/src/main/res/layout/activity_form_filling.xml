@@ -49,7 +49,7 @@
 
                     <include
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请输入 >`}"
+                        app:initText="@{`请选择 >`}"
                         app:label="@{`机台号`}"
                         app:required="@{true}" />
 

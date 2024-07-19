@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,55 +7,23 @@
     android:paddingHorizontal="10dp"
     tools:ignore="HardcodedText">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="服务器"
-        android:textAppearance="?textAppearanceTitleMedium" />
-
     <com.google.android.material.textfield.TextInputLayout
         style="?textInputOutlinedDenseStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ip_et"
+            android:id="@+id/addr_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="IP地址"
+            android:hint="服务器地址"
             tools:ignore="HardcodedText" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="数据库"
-        android:textAppearance="?textAppearanceTitleMedium" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        style="?textInputOutlinedDenseStyle"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="用户名" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        style="?textInputOutlinedDenseStyle"
-        android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="密码"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
+        android:indeterminate="true"
+        android:visibility="gone" />
 </LinearLayout>
