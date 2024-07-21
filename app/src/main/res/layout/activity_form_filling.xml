@@ -202,7 +202,7 @@
                     <include
                         android:id="@+id/field_breakpoint_position"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{@string/form_please_select_hint}"
+                        app:initText="@{@string/form_please_input_hint}"
                         app:label="@{`断线位置`}"
                         app:required="@{false}" />
 
