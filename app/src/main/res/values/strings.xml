@@ -9,4 +9,10 @@
     <string name="connection_succeeded_toast">连接成功</string>
     <string name="connection_failed_toast">连接失败</string>
     <string name="please_enter_text_dialog_title">请输入：%1$s</string>
+    <string name="form_please_input_hint">请输入 ></string>
+    <string name="form_please_select_hint">请选择 ></string>
+    <string name="fetching_info_dialog_title">正在获取信息</string>
+    <string name="submitting_dialog_title">正在提交</string>
+    <string name="submit_succeeded_toast">提交成功</string>
+    <string name="submit_error_toast">提交出错</string>
 </resources>

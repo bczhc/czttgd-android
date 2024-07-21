@@ -7,11 +7,19 @@ object SelectList {
         return fetch<Array<Int>>("$serverAddr/stage/$stage/machines")
     }
 
-    suspend fun allUsers(): List<String> {
+    suspend fun allUsers(): Array<String> {
         data class Obj(
             val name: String,
         )
 
-        return fetch<Array<Obj>>("$serverAddr/users").map { it.name }
+        return fetch<Array<Obj>>("$serverAddr/users").map { it.name }.toTypedArray()
+    }
+
+    suspend fun breakReasons(): Array<String> {
+        return fetch<Array<String>>("$serverAddr/break/reasons")
+    }
+
+    suspend fun breakPoints(): Array<String> {
+        return fetch<Array<String>>("$serverAddr/break/points")
     }
 }

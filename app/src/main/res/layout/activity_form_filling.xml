@@ -40,7 +40,7 @@
                     <include
                         android:id="@+id/field_creator"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请选择 >`}"
+                        app:initText="@{@string/form_please_select_hint}"
                         app:label="@{`记录人`}"
                         app:required="@{true}" />
 
@@ -51,8 +51,19 @@
                     <include
                         android:id="@+id/field_machine_number"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请选择 >`}"
+                        app:initText="@{@string/form_please_select_hint}"
                         app:label="@{`机台号`}"
+                        app:required="@{true}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
+                        android:id="@+id/field_machine_category"
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{@string/form_please_select_hint}"
+                        app:label="@{`机台类别`}"
                         app:required="@{true}" />
 
                     <com.google.android.material.divider.MaterialDivider
@@ -79,7 +90,7 @@
                     <include
                         android:id="@+id/field_product_specs"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请输入 >`}"
+                        app:initText="@{@string/form_please_input_hint}"
                         app:label="@{`生产规格`}"
                         app:required="@{true}" />
 
@@ -90,7 +101,7 @@
                     <include
                         android:id="@+id/field_wire_number"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请输入 >`}"
+                        app:initText="@{@string/form_please_input_hint}"
                         app:label="@{`线号`}"
                         app:required="@{false}" />
 
@@ -108,6 +119,7 @@
                     android:orientation="vertical">
 
                     <include
+                        android:id="@+id/field_break_specs"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{``}"
                         app:label="@{`断线规格`}"
@@ -119,6 +131,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_copper_wire_no"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{``}"
                         app:label="@{`铜线卷号`}"
@@ -129,6 +142,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_copper_stick_no"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{``}"
                         app:label="@{`铜杆卷号`}"
@@ -139,6 +153,7 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_repo_no"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{``}"
                         app:label="@{`大拉仓号`}"
@@ -155,6 +170,7 @@
                         android:checkedButton="@id/拉丝池内断线_radio"
                         android:gravity="center"
                         android:orientation="horizontal"
+                        android:id="@+id/radio_group"
                         android:padding="8dp"
                         android:textAlignment="center"
                         android:weightSum="2">
@@ -186,7 +202,7 @@
                     <include
                         android:id="@+id/field_breakpoint_position"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请选择 >`}"
+                        app:initText="@{@string/form_please_select_hint}"
                         app:label="@{`断线位置`}"
                         app:required="@{false}" />
 
@@ -197,7 +213,7 @@
                     <include
                         android:id="@+id/field_breakpoint_reason"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请选择 >`}"
+                        app:initText="@{@string/form_please_select_hint}"
                         app:label="@{`断线原因（初检）`}"
                         app:required="@{true}" />
 
@@ -208,7 +224,7 @@
                     <include
                         android:id="@+id/field_comments"
                         layout="@layout/form_filling_field_layout"
-                        app:initText="@{`请输入 >`}"
+                        app:initText="@{@string/form_please_input_hint}"
                         app:label="@{`备注`}"
                         app:required="@{false}" />
 
@@ -228,6 +244,7 @@
             android:paddingBottom="20dp">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="提交"

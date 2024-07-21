@@ -3,6 +3,8 @@ package com.czttgd.android.zhijian
 import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
 class App : Application() {
     companion object {
@@ -16,3 +18,9 @@ class App : Application() {
         appContext = this
     }
 }
+
+val dateFormatter by lazy {
+    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+}
+
+val GSON by lazy { App.GSON }

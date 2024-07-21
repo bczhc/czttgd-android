@@ -1,22 +1,23 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.lifecycleScope
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
+import com.czttgd.android.zhijian.data.Inspection
+import com.czttgd.android.zhijian.data.InspectionRecord
 import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
-import com.czttgd.android.zhijian.databinding.DialogFetchingInfoBinding
 import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
 import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
-import com.czttgd.android.zhijian.utils.defaultNegativeButton
-import com.czttgd.android.zhijian.utils.setPositiveAction
-import com.czttgd.android.zhijian.utils.toast
+import com.czttgd.android.zhijian.dateFormatter
+import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class FormFillingActivity : BaseActivity() {
     private lateinit var bindings: ActivityFormFillingBinding
@@ -32,6 +33,7 @@ class FormFillingActivity : BaseActivity() {
         registerSelectionLauncher { bindings.fieldMachineNumber },
         registerSelectionLauncher { bindings.fieldBreakpointPosition },
         registerSelectionLauncher { bindings.fieldBreakpointReason },
+        registerSelectionLauncher { bindings.fieldMachineCategory },
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,33 +61,36 @@ class FormFillingActivity : BaseActivity() {
             }
         }
 
-        listOf(bindings.fieldProductSpecs, bindings.fieldWireNumber, bindings.fieldComments).forEach(setUpClickEvent)
+        listOf(
+            bindings.fieldProductSpecs,
+            bindings.fieldWireNumber,
+            bindings.fieldComments,
+            bindings.fieldBreakpointPosition
+        ).forEach(setUpClickEvent)
 
         val setUpSelectionFields =
             { fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
                 fieldBindings.rl.setOnClickListener {
-                    val dialogBindings = DialogFetchingInfoBinding.inflate(layoutInflater)
-                    val dialog = MaterialAlertDialogBuilder(this)
-                        .setView(dialogBindings.root)
-                        .create().apply {
-                            setCanceledOnTouchOutside(false)
-                        }.also { it.show() }
-
-                    lifecycleScope.launch {
-                        val result = runCatching { getItems() }
-                        withContext(Dispatchers.Main) {
-                            dialog.dismiss()
-                            result.onSuccess {
-                                selectionLaunchers[launcherIndex].launch(it)
-                            }.onFailure {
-                                toast(it.toString())
+                    buildProgressDialog(
+                        title = getString(R.string.fetching_info_dialog_title)
+                    ) { d ->
+                        coroutineLaunchIo {
+                            val result = runCatching { getItems() }
+                            withContext(Dispatchers.Main) {
+                                d.dismiss()
+                                result.onSuccess {
+                                    selectionLaunchers[launcherIndex].launch(it)
+                                }.onFailure {
+                                    toast(it.toString())
+                                    it.printStackTrace()
+                                }
                             }
                         }
-                    }
+                    }.show()
                 }
             }
 
-        setUpSelectionFields(bindings.fieldCreator, 0) { SelectList.allUsers().toTypedArray() }
+        setUpSelectionFields(bindings.fieldCreator, 0) { SelectList.allUsers() }
         setUpSelectionFields(bindings.fieldMachineNumber, 1) {
             val stage = when (val stageExtra = intent.getIntExtra(EXTRA_STAGE, 0)) {
                 STAGE_ONE -> 1
@@ -94,8 +99,100 @@ class FormFillingActivity : BaseActivity() {
             }
             SelectList.machineNumbers(stage).map { it.toString() }.toTypedArray()
         }
-        setUpSelectionFields(bindings.fieldBreakpointPosition, 2) { arrayOf() }
-        setUpSelectionFields(bindings.fieldBreakpointReason, 3) { arrayOf() }
+        setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
+        setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
+
+        bindings.fieldBreakpointTime.tv.text = dateFormatter.format(Date())
+
+        bindings.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.拉丝池内断线_radio -> {
+                    bindings.fieldBreakpointPosition.tv.text = getString(R.string.form_please_input_hint)
+                    setUpClickEvent(bindings.fieldBreakpointPosition)
+                }
+
+                R.id.非拉丝池内断线_radio -> {
+                    bindings.fieldBreakpointPosition.tv.text = getString(R.string.form_please_select_hint)
+                    setUpSelectionFields(bindings.fieldBreakpointPosition, 2) { SelectList.breakPoints() }
+                }
+
+                else -> unreachable()
+            }
+        }
+
+        fun FormFillingFieldLayoutBinding.fieldValue(): String {
+            return tv.text.toString()
+        }
+        bindings.submit.setOnClickListener {
+            val result = runCatching {
+                val record: InspectionRecord
+                bindings.apply {
+                    val breakType = when (radioGroup.checkedRadioButtonId) {
+                        R.id.拉丝池内断线_radio -> 0
+                        R.id.非拉丝池内断线_radio -> 1
+                        else -> unreachable()
+                    }
+                    val breakPositionInput = fieldBreakpointPosition.fieldValue()
+                    record = InspectionRecord(
+                        creator = fieldCreator.fieldValue(),
+                        machineNumber = fieldMachineNumber.fieldValue().toUInt(),
+                        creationTime = fieldBreakpointTime.fieldValue(),
+                        productSpecs = fieldProductSpecs.fieldValue(),
+                        wireNumber = fieldWireNumber.fieldValue().toUInt(),
+                        breakSpecs = fieldBreakSpecs.fieldValue(),
+                        copperWireNo = fieldCopperWireNo.fieldValue().toUInt(),
+                        copperStickNo = fieldCopperStickNo.fieldValue().toUInt(),
+                        repoNo = fieldRepoNo.fieldValue().toUInt(),
+                        breakType = breakType.toUInt(),
+                        breakReasonA = fieldBreakpointReason.fieldValue(),
+                        breakPositionB = if (breakType == 0) {
+                            breakPositionInput.toFloat()
+                        } else null,
+                        breakPositionA = if (breakType == 1) {
+                            breakPositionInput
+                        } else null,
+                        comments = fieldComments.fieldValue(),
+                        machineCategory = fieldMachineCategory.fieldValue(),
+                    )
+                }
+                record
+            }
+            result.onFailure {
+                toast(it.toString())
+                return@setOnClickListener
+            }
+
+            val record = result.getOrNull()!!
+            buildProgressDialog(
+                title = getString(R.string.submitting_dialog_title)
+            ) {
+                coroutineLaunchIo {
+                    val result = runCatching {
+                        Inspection.post(record)
+                    }
+                    withMain {
+                        it.dismiss()
+                        result.onSuccess {
+                            toast(R.string.submit_succeeded_toast)
+                            finish()
+                        }.onFailure {
+                            toast(R.string.submit_error_toast)
+                            it.printStackTrace()
+                        }
+                    }
+                }
+            }
+        }
+
+        bindings.apply {
+            fieldBreakSpecs.tv.setOnClickListener {
+                // mock data for test purposes
+                fieldBreakSpecs.tv.text = "abc"
+                fieldCopperWireNo.tv.text = "1"
+                fieldCopperStickNo.tv.text = "2"
+                fieldRepoNo.tv.text = "3"
+            }
+        }
     }
 
     companion object {
