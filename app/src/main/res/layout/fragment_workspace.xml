@@ -3,85 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="HardcodedText">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/head_image"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="50dp"
-            android:paddingTop="50dp"
-            android:paddingBottom="30dp"
-            android:scaleX="0.9"
-            android:scaleY="0.9"
-            android:src="@drawable/logo"
-            tools:ignore="ContentDescription" />
+            android:padding="5dp">
 
-        <LinearLayout
+            <ImageView
+                android:id="@+id/settings_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:background="?selectableItemBackground"
+                android:scaleType="fitXY"
+                android:src="@drawable/settings"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bottom_space"
-            android:layout_below="@id/head_image"
             android:orientation="vertical"
-            android:weightSum="3">
+            tools:ignore="HardcodedText">
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/head_image"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="50dp"
+                android:paddingTop="50dp"
+                android:paddingBottom="30dp"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:src="@drawable/logo"
+                tools:ignore="ContentDescription" />
 
-                <include
-                    android:id="@+id/card1"
-                    layout="@layout/main_card"
-                    app:buttonColor="@{@color/main_card1_button}"
-                    app:buttonText="@{`点击进入 >`}"
-                    app:cardColor="@{@color/main_card1}"
-                    app:label="@{`操作上手指南`}"
-                    app:title="@{`断线填报系统`}" />
-            </RelativeLayout>
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
+                android:layout_height="match_parent"
+                android:layout_above="@id/bottom_space"
+                android:layout_below="@id/head_image"
+                android:orientation="vertical"
+                android:weightSum="3">
 
-                <include
-                    android:id="@+id/card2"
-                    layout="@layout/main_card"
-                    app:buttonColor="@{@color/main_card2_button}"
-                    app:buttonText="@{`进行填报 >`}"
-                    app:cardColor="@{@color/main_card2}"
-                    app:label="@{`多头拉丝机断线填报`}"
-                    app:title="@{`铜线一期`}" />
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-            <RelativeLayout
+                    <include
+                        android:id="@+id/card1"
+                        layout="@layout/main_card"
+                        app:buttonColor="@{@color/main_card1_button}"
+                        app:buttonText="@{`点击进入 >`}"
+                        app:cardColor="@{@color/main_card1}"
+                        app:label="@{`操作上手指南`}"
+                        app:title="@{`断线填报系统`}" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <include
+                        android:id="@+id/card2"
+                        layout="@layout/main_card"
+                        app:buttonColor="@{@color/main_card2_button}"
+                        app:buttonText="@{`进行填报 >`}"
+                        app:cardColor="@{@color/main_card2}"
+                        app:label="@{`多头拉丝机断线填报`}"
+                        app:title="@{`铜线一期`}" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <include
+                        android:id="@+id/card3"
+                        layout="@layout/main_card"
+                        app:buttonColor="@{@color/main_card3_button}"
+                        app:buttonText="@{`进行填报 >`}"
+                        app:cardColor="@{@color/main_card3}"
+                        app:label="@{`多头拉丝机断线填报`}"
+                        app:title="@{`铜线二期`}" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/bottom_space"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <include
-                    android:id="@+id/card3"
-                    layout="@layout/main_card"
-                    app:buttonColor="@{@color/main_card3_button}"
-                    app:buttonText="@{`进行填报 >`}"
-                    app:cardColor="@{@color/main_card3}"
-                    app:label="@{`多头拉丝机断线填报`}"
-                    app:title="@{`铜线二期`}" />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <View
-            android:id="@+id/bottom_space"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+    </FrameLayout>
 </layout>
