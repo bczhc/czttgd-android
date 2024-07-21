@@ -54,8 +54,12 @@
         <item name="colorSurface">@color/white</item>
     </style>
 
-    <style name="TextAppearance.App.FormText" parent="TextAppearance.Material3.BodySmall">
+    <style name="TextAppearance.App.FormTextHint" parent="TextAppearance.Material3.BodySmall">
         <item name="android:textColor">@color/form_text</item>
+    </style>
+
+    <style name="TextAppearance.App.FormText" parent="TextAppearance.App.FormTextHint">
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Theme.App.FormFilling.RadioButton" parent="Theme.App.FormFilling">

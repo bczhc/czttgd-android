@@ -51,18 +51,29 @@
                 tools:text=" *" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/input_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/hint_tv"
+            android:layout_toEndOf="@id/label"
+            android:gravity="end|center_vertical"
+            android:textAppearance="@style/TextAppearance.App.FormText"
+            tools:text="张三" />
+
         <!-- `app:drawableRightCompat` doesn't play well with data binding -->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv"
-            android:layout_width="match_parent"
+            android:id="@+id/hint_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/label"
             android:drawableRight="@{rightIcon}"
-            android:gravity="end"
+            android:gravity="end|center_vertical"
+            android:paddingStart="5dp"
             android:text="@{initText}"
-            android:textAppearance="@style/TextAppearance.App.FormText"
+            android:textAppearance="@style/TextAppearance.App.FormTextHint"
             tools:ignore="RtlHardcoded"
             tools:text="请选择 >" />
     </RelativeLayout>

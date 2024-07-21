@@ -3,6 +3,7 @@
 package com.czttgd.android.zhijian.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
@@ -24,7 +25,9 @@ class FormFillingActivity : BaseActivity() {
 
     private fun registerSelectionLauncher(getValue: () -> FormFillingFieldLayoutBinding): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(SelectionActivity.ActivityContract()) {
-            getValue().tv.text = (it ?: return@registerForActivityResult)
+            val bindings = getValue()
+            bindings.hintTv.visibility = View.GONE
+            bindings.inputTv.text = (it ?: return@registerForActivityResult)
         }
     }
 
@@ -50,7 +53,8 @@ class FormFillingActivity : BaseActivity() {
                 MaterialAlertDialogBuilder(this)
                     .defaultNegativeButton()
                     .setPositiveAction { _, _ ->
-                        fieldBindings.tv.text = dialogBindings.et.text.toString()
+                        fieldBindings.hintTv.visibility = View.GONE
+                        fieldBindings.inputTv.text = dialogBindings.et.text.toString()
                     }
                     .setTitle(getString(R.string.please_enter_text_dialog_title, fieldBindings.labelTv.text))
                     .setView(dialogBindings.root)
@@ -102,17 +106,17 @@ class FormFillingActivity : BaseActivity() {
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
         setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
 
-        bindings.fieldBreakpointTime.tv.text = dateFormatter.format(Date())
+        bindings.fieldBreakpointTime.inputTv.text = dateFormatter.format(Date())
 
         bindings.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.拉丝池内断线_radio -> {
-                    bindings.fieldBreakpointPosition.tv.text = getString(R.string.form_please_input_hint)
+                    bindings.fieldBreakpointPosition.hintTv.text = getString(R.string.form_please_input_hint)
                     setUpClickEvent(bindings.fieldBreakpointPosition)
                 }
 
                 R.id.非拉丝池内断线_radio -> {
-                    bindings.fieldBreakpointPosition.tv.text = getString(R.string.form_please_select_hint)
+                    bindings.fieldBreakpointPosition.hintTv.text = getString(R.string.form_please_select_hint)
                     setUpSelectionFields(bindings.fieldBreakpointPosition, 2) { SelectList.breakPoints() }
                 }
 
@@ -121,7 +125,7 @@ class FormFillingActivity : BaseActivity() {
         }
 
         fun FormFillingFieldLayoutBinding.fieldValue(): String {
-            return tv.text.toString()
+            return inputTv.text.toString()
         }
         bindings.submit.setOnClickListener {
             val result = runCatching {
@@ -185,12 +189,12 @@ class FormFillingActivity : BaseActivity() {
         }
 
         bindings.apply {
-            fieldBreakSpecs.tv.setOnClickListener {
+            fieldBreakSpecs.inputTv.setOnClickListener {
                 // mock data for test purposes
-                fieldBreakSpecs.tv.text = "abc"
-                fieldCopperWireNo.tv.text = "1"
-                fieldCopperStickNo.tv.text = "2"
-                fieldRepoNo.tv.text = "3"
+                fieldBreakSpecs.inputTv.text = "abc"
+                fieldCopperWireNo.inputTv.text = "1"
+                fieldCopperStickNo.inputTv.text = "2"
+                fieldRepoNo.inputTv.text = "3"
             }
         }
     }
