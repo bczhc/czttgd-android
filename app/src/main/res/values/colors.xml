@@ -18,4 +18,10 @@
     <color name="form_text">#9ea09e</color>
     <color name="form_filling_divider">#f5f7fa</color>
     <color name="form_filling_error">#ff0000</color>
+    <color name="inspection_records_gray">#aaaaaa</color>
+    <color name="inspection_records_user">#444444</color>
+    <!-- 初检 -->
+    <color name="inspection_records_inspect_a">#eb9d42</color>
+    <!-- 终检 -->
+    <color name="inspection_records_inspect_b">#81b337</color>
 </resources>
