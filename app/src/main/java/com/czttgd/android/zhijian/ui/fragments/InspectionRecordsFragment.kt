@@ -16,10 +16,7 @@ import com.czttgd.android.zhijian.data.InspectionSummary
 import com.czttgd.android.zhijian.databinding.FragmentBreakpointRecordsBinding
 import com.czttgd.android.zhijian.databinding.InspectionRecordsListItemBinding
 import com.czttgd.android.zhijian.dbDateFormatter
-import com.czttgd.android.zhijian.utils.buildProgressDialog
-import com.czttgd.android.zhijian.utils.coroutineLaunchIo
-import com.czttgd.android.zhijian.utils.toast
-import com.czttgd.android.zhijian.utils.withMain
+import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,7 +35,15 @@ class InspectionRecordsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindings.tabLayout.selectIndex(SharedStates.tabIndex)
+        bindings.searchView.setQuery(SharedStates.searchQuery, false)
         queryAndUpdateList()
+    }
+
+    override fun onDestroyView() {
+        SharedStates.tabIndex = bindings.tabLayout.selectedIndex()
+        SharedStates.searchQuery = bindings.searchView.query.toString()
+        super.onDestroyView()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -97,9 +102,10 @@ class InspectionRecordsFragment : Fragment() {
     }
 
     private fun currentStage(): Int {
-        return when (bindings.tabLayout.getTabAt(0)!!.isSelected) {
-            true -> 1
-            false -> 2
+        return when (bindings.tabLayout.selectedIndex()) {
+            0 -> 1
+            1 -> 2
+            else -> unreachable()
         }
     }
 
@@ -167,6 +173,31 @@ class InspectionRecordsFragment : Fragment() {
     companion object {
         val cardDateFormatter by lazy {
             SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault())
+        }
+
+        /**
+         * workaround for fragment not saving view states
+         */
+        object SharedStates {
+            var tabIndex: Int = 0
+            var searchQuery: String = ""
+        }
+    }
+
+    private fun TabLayout.selectedIndex(): Int {
+        if (getTabAt(0)!!.isSelected) return 0
+        return 1
+    }
+
+    private fun TabLayout.selectIndex(i: Int) {
+        when (i) {
+            0 -> {
+                getTabAt(0)!!.select()
+            }
+
+            1 -> {
+                getTabAt(1)!!.select()
+            }
         }
     }
 }
