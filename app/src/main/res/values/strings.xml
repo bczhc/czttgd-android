@@ -15,4 +15,5 @@
     <string name="submitting_dialog_title">正在提交</string>
     <string name="submit_succeeded_toast">提交成功</string>
     <string name="submit_error_toast">提交出错</string>
+    <string name="form_filling_please_check_fields">请检查填写</string>
 </resources>

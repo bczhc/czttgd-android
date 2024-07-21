@@ -30,6 +30,7 @@ object Server {
     )
 
     suspend inline fun <reified T : Any> HttpResponse.parseResponse(): ResponseData<T> {
+        println(this.bodyAsText())
         val json = this.bodyAsJson<JsonObject>() ?: throw RuntimeException("Response JSON parsing error")
         val code = json["code"].asInt
         if (code != 0) {

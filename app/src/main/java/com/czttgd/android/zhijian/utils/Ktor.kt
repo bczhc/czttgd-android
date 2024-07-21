@@ -13,8 +13,10 @@ object FormDataUtils {
         return FormDataContent(Parameters.build {
             T::class.memberProperties.filter { it.visibility == KVisibility.PUBLIC }.forEach {
                 val name = it.name
-                val value = it.getter.call(obj).toString()
-                append(name, value)
+                val value = it.getter.call(obj)
+                value?.let { v ->
+                    append(name, v.toString())
+                }
             }
         })
     }

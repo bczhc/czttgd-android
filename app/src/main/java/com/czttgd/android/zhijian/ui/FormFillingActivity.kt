@@ -1,7 +1,6 @@
-@file:Suppress("NAME_SHADOWING")
-
 package com.czttgd.android.zhijian.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -124,49 +123,14 @@ class FormFillingActivity : BaseActivity() {
             }
         }
 
-        fun FormFillingFieldLayoutBinding.fieldValue(): String {
-            return inputTv.text.toString()
-        }
+
         bindings.submit.setOnClickListener {
-            val result = runCatching {
-                val record: InspectionRecord
-                bindings.apply {
-                    val breakType = when (radioGroup.checkedRadioButtonId) {
-                        R.id.拉丝池内断线_radio -> 0
-                        R.id.非拉丝池内断线_radio -> 1
-                        else -> unreachable()
-                    }
-                    val breakPositionInput = fieldBreakpointPosition.fieldValue()
-                    record = InspectionRecord(
-                        creator = fieldCreator.fieldValue(),
-                        machineNumber = fieldMachineNumber.fieldValue().toUInt(),
-                        creationTime = fieldBreakpointTime.fieldValue(),
-                        productSpecs = fieldProductSpecs.fieldValue(),
-                        wireNumber = fieldWireNumber.fieldValue().toUInt(),
-                        breakSpecs = fieldBreakSpecs.fieldValue(),
-                        copperWireNo = fieldCopperWireNo.fieldValue().toUInt(),
-                        copperStickNo = fieldCopperStickNo.fieldValue().toUInt(),
-                        repoNo = fieldRepoNo.fieldValue().toUInt(),
-                        breakType = breakType.toUInt(),
-                        breakReasonA = fieldBreakpointReason.fieldValue(),
-                        breakPositionB = if (breakType == 0) {
-                            breakPositionInput.toFloat()
-                        } else null,
-                        breakPositionA = if (breakType == 1) {
-                            breakPositionInput
-                        } else null,
-                        comments = fieldComments.fieldValue(),
-                        machineCategory = fieldMachineCategory.fieldValue(),
-                    )
-                }
-                record
-            }
-            result.onFailure {
-                toast(it.toString())
+            val (record, hasError) = collectForm()
+            if (hasError) {
+                toast(R.string.form_filling_please_check_fields)
                 return@setOnClickListener
             }
 
-            val record = result.getOrNull()!!
             buildProgressDialog(
                 title = getString(R.string.submitting_dialog_title)
             ) {
@@ -196,6 +160,73 @@ class FormFillingActivity : BaseActivity() {
                 fieldCopperStickNo.inputTv.text = "2"
                 fieldRepoNo.inputTv.text = "3"
             }
+        }
+    }
+
+    private fun collectForm(): Pair<InspectionRecord, Boolean> {
+        fun FormFillingFieldLayoutBinding.fieldValue(): String {
+            return inputTv.text.toString()
+        }
+
+        bindings.apply {
+            var hasError = false
+
+            fun <T> FormFillingFieldLayoutBinding.checkedField(
+                onError: (field: FormFillingFieldLayoutBinding) -> Unit,
+                transform: (String) -> T
+            ): T? {
+                val field = this
+                field.labelTv.setTextColor(Color.BLACK)
+                val fieldValue = field.fieldValue()
+                if (field.required!! && fieldValue.isEmpty()) {
+                    onError(field)
+                    return null
+                }
+                // empty non-required fields are valid
+                if (!field.required!! && fieldValue.isEmpty()) {
+                    return null
+                }
+                runCatching {
+                    return transform(fieldValue)
+                }.onFailure {
+                    onError(field)
+                }
+                return null
+            }
+
+            val breakType = when (radioGroup.checkedRadioButtonId) {
+                R.id.拉丝池内断线_radio -> 0
+                R.id.非拉丝池内断线_radio -> 1
+                else -> unreachable()
+            }
+
+            val onError: (field: FormFillingFieldLayoutBinding) -> Unit = {
+                it.labelTv.setTextColor(getColor(R.color.form_filling_error))
+                hasError = true
+            }
+            val dummyZero = 0.toUInt()
+            val record = InspectionRecord(
+                creator = fieldCreator.checkedField(onError) { it } ?: "",
+                machineNumber = fieldMachineNumber.checkedField(onError) { it.toUInt() } ?: dummyZero,
+                creationTime = fieldBreakpointTime.checkedField(onError) { it } ?: "",
+                productSpecs = fieldProductSpecs.checkedField(onError) { it } ?: "",
+                wireNumber = fieldWireNumber.checkedField(onError) { it.toUInt() },
+                breakSpecs = fieldBreakSpecs.checkedField(onError) { it } ?: "",
+                copperWireNo = fieldCopperWireNo.checkedField(onError) { it.toUInt() },
+                copperStickNo = fieldCopperStickNo.checkedField(onError) { it.toUInt() },
+                repoNo = fieldRepoNo.checkedField(onError) { it.toUInt() },
+                breakType = breakType.toUInt(),
+                breakReasonA = fieldBreakpointReason.checkedField(onError) { it } ?: "",
+                breakPositionB = if (breakType == 0) {
+                    fieldBreakpointPosition.checkedField(onError) { it.toFloat() }
+                } else null,
+                breakPositionA = if (breakType == 1) {
+                    fieldBreakpointPosition.checkedField(onError) { it }
+                } else null,
+                comments = fieldComments.checkedField(onError) { it },
+                machineCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
+            )
+            return Pair(record, hasError)
         }
     }
 
