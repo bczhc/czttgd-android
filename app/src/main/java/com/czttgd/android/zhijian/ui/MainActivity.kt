@@ -16,16 +16,24 @@ class MainActivity : BaseActivity() {
         val bindings = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindings.root)
 
+        val fragments = object {
+            val workspace = WorkspaceFragment()
+            val inspections = InspectionRecordsFragment()
+        }
+
         val updateFragment = { fragment: Fragment ->
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 replace(R.id.container, fragment)
             }
-        }.also { it(WorkspaceFragment()) }
+        }.also { it(fragments.workspace) }
         bindings.bottomNavBar.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.workspace -> updateFragment(WorkspaceFragment())
-                R.id.records -> updateFragment(InspectionRecordsFragment())
+                R.id.workspace -> updateFragment(fragments.workspace)
+                R.id.records -> {
+                    updateFragment(fragments.inspections)
+                }
+
                 else -> unreachable()
             }
             true

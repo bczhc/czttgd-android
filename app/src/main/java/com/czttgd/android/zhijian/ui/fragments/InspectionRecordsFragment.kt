@@ -30,9 +30,15 @@ class InspectionRecordsFragment : Fragment() {
     private lateinit var listAdapter: ListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         bindings = FragmentBreakpointRecordsBinding.inflate(inflater)
         bindings.setUpViews()
         return bindings.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        queryAndUpdateList()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -45,13 +51,13 @@ class InspectionRecordsFragment : Fragment() {
             }
 
             iv.setOnClickListener {
-                queryList()
+                queryAndUpdateList()
             }
         }
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                queryList()
+                queryAndUpdateList()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -63,7 +69,7 @@ class InspectionRecordsFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun queryList() {
+    fun queryAndUpdateList() {
         requireContext().apply {
             buildProgressDialog(getString(R.string.fetching_dialog_title)) {
                 coroutineLaunchIo {
