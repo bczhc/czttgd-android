@@ -12,7 +12,7 @@ import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
 import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
 import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
-import com.czttgd.android.zhijian.dateFormatter
+import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
@@ -105,7 +105,7 @@ class FormFillingActivity : BaseActivity() {
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
         setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
 
-        bindings.fieldBreakpointTime.inputTv.text = dateFormatter.format(Date())
+        bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
 
         bindings.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {

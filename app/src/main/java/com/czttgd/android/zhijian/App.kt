@@ -19,7 +19,7 @@ class App : Application() {
     }
 }
 
-val dateFormatter by lazy {
+val dbDateFormatter by lazy {
     SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 }
 

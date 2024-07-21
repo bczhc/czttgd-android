@@ -11,7 +11,7 @@ data class InspectionRecord(
     val machineNumber: UInt,
     val machineCategory: String,
     val creationTime: String,
-    val productSpecs: String,
+    val productSpecs: String?,
     val wireNumber: UInt?,
     val breakSpecs: String,
     val copperWireNo: UInt?,
@@ -29,11 +29,27 @@ data class InspectionRecord(
     val comments: String?,
 )
 
+data class InspectionSummary(
+    val id: UInt,
+    val machineNumber: UInt,
+    val cause: String?,
+    val breakSpec: String,
+    val productSpec: String?,
+    val creator: String,
+    val creationTime: String,
+    val checkingState: UInt,
+)
+
 object Inspection {
     suspend fun post(record: InspectionRecord) {
         HttpClient().post("$serverAddr/inspection") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
         }.parseResponse<Unit>()
+    }
+
+    suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
+        return HttpClient().get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
+            .parseResponse<Array<InspectionSummary>>()
     }
 }
