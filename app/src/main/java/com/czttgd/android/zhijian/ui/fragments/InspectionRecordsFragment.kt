@@ -72,6 +72,10 @@ class InspectionRecordsFragment : Fragment() {
                     }
                     withMain {
                         result.onSuccess {
+                            val items = it.data ?: arrayOf()
+                            items.sortByDescending { x ->
+                                dbDateFormatter.parse(x.creationTime)
+                            }
                             itemData.clear()
                             itemData.addAll(it.data ?: arrayOf())
                             listAdapter.notifyDataSetChanged()
