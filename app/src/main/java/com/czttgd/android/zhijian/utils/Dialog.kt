@@ -21,30 +21,6 @@ fun MaterialAlertDialogBuilder.setNegativeAction(action: ((dialog: DialogInterfa
     return this.setNegativeButton(R.string.cancel_button, action)
 }
 
-//val setUpSelectionFields =
-//            { fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
-//                fieldBindings.rl.setOnClickListener {
-//                    val dialogBindings = DialogFetchingInfoBinding.inflate(layoutInflater)
-//                    val dialog = MaterialAlertDialogBuilder(this)
-//                        .setView(dialogBindings.root)
-//                        .create().apply {
-//                            setCanceledOnTouchOutside(false)
-//                        }.also { it.show() }
-//
-//                    lifecycleScope.launch {
-//                        val result = runCatching { getItems() }
-//                        withContext(Dispatchers.Main) {
-//                            dialog.dismiss()
-//                            result.onSuccess {
-//                                selectionLaunchers[launcherIndex].launch(it)
-//                            }.onFailure {
-//                                toast(it.toString())
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-
 fun Context.buildProgressDialog(title: String, task: (dialog: AlertDialog) -> Unit): AlertDialog {
     val context = this
     val viewBindings = DialogProgressIndeterminateBinding.inflate(LayoutInflater.from(context))
