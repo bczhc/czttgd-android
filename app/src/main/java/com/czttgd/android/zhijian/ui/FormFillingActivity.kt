@@ -17,6 +17,7 @@ import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 import java.util.*
 
 class FormFillingActivity : BaseActivity() {
@@ -144,7 +145,7 @@ class FormFillingActivity : BaseActivity() {
                             toast(R.string.submit_succeeded_toast)
                             finish()
                         }.onFailure {
-                            toast(R.string.submit_error_toast)
+                            toast(getString(R.string.submit_error_toast_with_message, it.toString()))
                             it.printStackTrace()
                         }
                     }
@@ -218,7 +219,7 @@ class FormFillingActivity : BaseActivity() {
                 breakType = breakType,
                 breakReasonA = fieldBreakpointReason.checkedField(onError) { it } ?: "",
                 breakPositionB = if (breakType == 0) {
-                    fieldBreakpointPosition.checkedField(onError) { it.toFloat() }
+                    fieldBreakpointPosition.checkedField(onError) { BigDecimal(it); it }
                 } else null,
                 breakPositionA = if (breakType == 1) {
                     fieldBreakpointPosition.checkedField(onError) { it }

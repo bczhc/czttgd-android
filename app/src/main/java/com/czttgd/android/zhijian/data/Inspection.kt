@@ -20,8 +20,8 @@ data class InspectionForm(
     // 0: 拉丝池内断线
     // 1: 非拉丝池内断线
     val breakType: Int,
-    // 拉丝池
-    val breakPositionB: Float?,
+    // 拉丝池 BigDecimal
+    val breakPositionB: String?,
     // 非拉丝池
     val breakPositionA: String?,
     // 初检

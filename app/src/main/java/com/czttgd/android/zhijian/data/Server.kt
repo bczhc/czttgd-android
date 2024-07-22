@@ -33,14 +33,14 @@ object Server {
         println(this.bodyAsText())
         val json = this.bodyAsJson<JsonObject>() ?: throw RuntimeException("Response JSON parsing error")
         val code = json["code"].asInt
-        if (code != 0) {
-            throw RuntimeException("Non-zero response code")
-        }
         val element = json["message"]
         val message = if (element.isJsonNull) {
             null
         } else {
             element.asString
+        }
+        if (code != 0) {
+            throw RuntimeException("Non-zero response code; message: $message")
         }
         val data = GSON.fromJsonOrNull<T>(json["data"])
         return ResponseData(
