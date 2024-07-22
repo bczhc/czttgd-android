@@ -1,3 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <array name="inspection_a_field_labels">
+        <item>记录人</item>
+        <item>机台号</item>
+        <item>断线时间</item>
+        <item>生产规格</item>
+        <item>线号</item>
+        <item>断线规格</item>
+        <item>铜线卷号</item>
+        <item>铜杆卷号</item>
+        <item>大拉仓号</item>
+        <item>铜杆日期</item>
+        <item>是否拉丝池内断线</item>
+        <item>断线位置</item>
+        <item>断线原因类别</item>
+        <item>断线原因（初检）</item>
+        <item>备注</item>
+    </array>
+
+    <array name="inspection_b_field_labels">
+        <item>质检员</item>
+        <item>终检时间</item>
+        <item>断线原因类别</item>
+        <item>断线原因（终检）</item>
+        <item>备注</item>
+    </array>
 </resources>

@@ -50,6 +50,15 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.InspectionDetailsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.InspectionDetails">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

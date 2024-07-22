@@ -16,11 +16,18 @@
     <string name="submit_succeeded_toast">提交成功</string>
     <string name="submit_error_toast">提交出错</string>
     <string name="form_filling_please_check_fields">请检查填写</string>
-    <string name="inspection_records_card_title">%1$d号机台</string>
+    <string name="inspection_device_code">%1$d号机台</string>
+    <string name="inspection_records_card_title">@string/inspection_device_code</string>
     <string name="inspection_records_card_body1">断线规格：%1$s</string>
     <string name="inspection_records_card_body2">生产规格：%1$s</string>
     <string name="inspection_records_已初检">已初检</string>
     <string name="inspection_records_已终检">已终检</string>
     <string name="fetching_dialog_title">正在获取……</string>
     <string name="request_failed_dialog">请求失败</string>
+    <string name="stage_one">铜线一期</string>
+    <string name="stage_two">铜线二期</string>
+    <string name="inspection_a_info_title">初检信息</string>
+    <string name="inspection_b_info_title">终检信息</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
 </resources>

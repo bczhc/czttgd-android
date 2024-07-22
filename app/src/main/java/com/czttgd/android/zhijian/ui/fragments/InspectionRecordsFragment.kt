@@ -62,7 +62,7 @@ class InspectionRecordsFragment : Fragment() {
 
             listAdapter.setOnItemClickListener { position, view ->
                 val id = itemData[position].id
-
+                detailsLauncher.launch(id)
             }
 
             iv.setOnClickListener {
@@ -95,7 +95,7 @@ class InspectionRecordsFragment : Fragment() {
                         result.onSuccess {
                             val items = it.data ?: arrayOf()
                             items.sortByDescending { x ->
-                                dbDateFormatter.parse(x.creationTime)
+                                dbDateFormatter.parse(x.creationTime)!!
                             }
                             itemData.clear()
                             itemData.addAll(it.data ?: arrayOf())
@@ -167,7 +167,7 @@ class InspectionRecordsFragment : Fragment() {
                         }
                     }
 
-                    val date = dbDateFormatter.parse(item.creationTime)
+                    val date = dbDateFormatter.tryParse(item.creationTime)
                     date?.let {
                         dateTv.text = cardDateFormatter.format(it)
                     }

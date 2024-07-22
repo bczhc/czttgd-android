@@ -5,7 +5,6 @@ import com.czttgd.android.zhijian.utils.setFormDataBody
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import java.math.BigDecimal
 
 data class InspectionForm(
     val creator: String,
@@ -31,19 +30,28 @@ data class InspectionForm(
 )
 
 data class InspectionDetails(
-    val deviceCode: UInt,
+    val deviceCode: Int,
     val creator: String,
     val creationTime: String,
-    val inspectionFlag: UInt,
+    /**
+     * 0: 已初检 1: 已终检 2: 关闭
+     */
+    val inspectionFlag: Int,
     val productSpec: String?,
-    val wireNum: UInt?,
+    val wireNum: Int?,
     val breakSpec: String,
     val wireBatchCode: String?,
     val stickBatchCode: String?,
     val warehouse: String?,
     val productTime: String?,
+    /**
+     * 是否拉丝池内断线
+     */
     val breakFlag: Boolean,
-    val breakpointB: BigDecimal?,
+    /**
+     * actually BigDecimal
+     */
+    val breakpointB: String?,
     val breakpointA: String?,
     val causeType: String?,
     val breakCauseA: String?,
@@ -77,8 +85,8 @@ object Inspection {
             .parseResponse<Array<InspectionSummary>>()
     }
 
-    suspend fun queryDetails(id: UInt): Server.ResponseData<Array<InspectionDetails>> {
+    suspend fun queryDetails(id: UInt): Server.ResponseData<InspectionDetails> {
         return HttpClient().get("$serverAddr/inspection/$id/details")
-            .parseResponse<Array<InspectionDetails>>()
+            .parseResponse<InspectionDetails>()
     }
 }

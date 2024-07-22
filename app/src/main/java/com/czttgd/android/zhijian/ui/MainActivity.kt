@@ -11,15 +11,15 @@ import com.czttgd.android.zhijian.ui.fragments.WorkspaceFragment
 import com.czttgd.android.zhijian.utils.unreachable
 
 class MainActivity : BaseActivity() {
+    private val fragments = object {
+        val workspace = WorkspaceFragment()
+        val inspections = InspectionRecordsFragment()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bindings = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindings.root)
-
-        val fragments = object {
-            val workspace = WorkspaceFragment()
-            val inspections = InspectionRecordsFragment()
-        }
 
         val updateFragment = { fragment: Fragment ->
             supportFragmentManager.commit {
