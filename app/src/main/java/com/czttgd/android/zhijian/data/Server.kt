@@ -25,7 +25,7 @@ object Server {
 
     data class ResponseData<T>(
         val data: T?,
-        val code: UInt,
+        val code: Int,
         val message: String?,
     )
 
@@ -45,7 +45,7 @@ object Server {
         val data = GSON.fromJsonOrNull<T>(json["data"])
         return ResponseData(
             data = data,
-            code = 0.toUInt(),
+            code = 0,
             message = message
         )
     }

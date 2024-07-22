@@ -124,8 +124,8 @@ class InspectionRecordsFragment : Fragment() {
         已终检;
 
         companion object {
-            fun from(int: UInt): State {
-                return when (int.toInt()) {
+            fun from(int: Int): State {
+                return when (int) {
                     0 -> 已初检
                     1 -> 已终检
                     else -> {
@@ -150,7 +150,7 @@ class InspectionRecordsFragment : Fragment() {
             val context = holder.bindings.inspectTv.context
             context.apply {
                 holder.bindings.apply {
-                    titleTv.text = getString(R.string.inspection_records_card_title, item.machineNumber.toInt())
+                    titleTv.text = getString(R.string.inspection_records_card_title, item.machineNumber)
                     subtitleTv.text = item.cause
                     bodyLine1.text = getString(R.string.inspection_records_card_body1, item.breakSpec)
                     bodyLine2.text = getString(R.string.inspection_records_card_body2, item.productSpec)

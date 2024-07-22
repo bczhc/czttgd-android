@@ -204,18 +204,18 @@ class FormFillingActivity : BaseActivity() {
                 it.labelTv.setTextColor(getColor(R.color.form_filling_error))
                 hasError = true
             }
-            val dummyZero = 0.toUInt()
+            val dummyZero = 0
             val record = InspectionForm(
                 creator = fieldCreator.checkedField(onError) { it } ?: "",
-                machineNumber = fieldMachineNumber.checkedField(onError) { it.toUInt() } ?: dummyZero,
+                machineNumber = fieldMachineNumber.checkedField(onError) { it.toInt() } ?: dummyZero,
                 creationTime = fieldBreakpointTime.checkedField(onError) { it } ?: "",
                 productSpecs = fieldProductSpecs.checkedField(onError) { it } ?: "",
-                wireNumber = fieldWireNumber.checkedField(onError) { it.toUInt() },
+                wireNumber = fieldWireNumber.checkedField(onError) { it.toInt() },
                 breakSpecs = fieldBreakSpecs.checkedField(onError) { it } ?: "",
-                copperWireNo = fieldCopperWireNo.checkedField(onError) { it.toUInt() },
-                copperStickNo = fieldCopperStickNo.checkedField(onError) { it.toUInt() },
-                repoNo = fieldRepoNo.checkedField(onError) { it.toUInt() },
-                breakType = breakType.toUInt(),
+                copperWireNo = fieldCopperWireNo.checkedField(onError) { it.toInt() },
+                copperStickNo = fieldCopperStickNo.checkedField(onError) { it.toInt() },
+                repoNo = fieldRepoNo.checkedField(onError) { it.toInt() },
+                breakType = breakType,
                 breakReasonA = fieldBreakpointReason.checkedField(onError) { it } ?: "",
                 breakPositionB = if (breakType == 0) {
                     fieldBreakpointPosition.checkedField(onError) { it.toFloat() }

@@ -15,7 +15,7 @@ import com.czttgd.android.zhijian.utils.*
 
 class InspectionDetailsActivity : BaseActivity() {
     private lateinit var bindings: ActivityInspectionDetailsBinding
-    private var stage: UInt? = null
+    private var stage: Int? = null
     private var inspection: InspectionDetails? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +26,9 @@ class InspectionDetailsActivity : BaseActivity() {
 
         val intent = intent
         androidAssertion(intent.hasExtra(EXTRA_ID))
-        val id = intent.getIntExtra(EXTRA_ID, -1).toUInt()
+        val id = intent.getIntExtra(EXTRA_ID, -1)
         Intent().apply {
-            putExtra(EXTRA_ID, id.toInt())
+            putExtra(EXTRA_ID, id)
             setResult(0, this)
         }
 
@@ -52,17 +52,17 @@ class InspectionDetailsActivity : BaseActivity() {
         }
     }
 
-    private suspend fun fetchStage(inspection: InspectionDetails): UInt? {
+    private suspend fun fetchStage(inspection: InspectionDetails): Int? {
         val devices1 = SelectList.machineNumbers(1)
         val devices2 = SelectList.machineNumbers(2)
-        if (devices1.contains(inspection.deviceCode.toInt())) return 1.toUInt()
-        if (devices2.contains(inspection.deviceCode.toInt())) return 2.toUInt()
+        if (devices1.contains(inspection.deviceCode)) return 1
+        if (devices2.contains(inspection.deviceCode)) return 2
         return null
     }
 
     private fun setUpFieldsUi() {
         val inspection = this.inspection ?: return
-        when (inspection.inspectionFlag.toInt()) {
+        when (inspection.inspectionFlag) {
             0 -> {
                 bindings.inspectTv.text = getString(R.string.inspection_records_已初检)
                 bindings.inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
@@ -79,7 +79,7 @@ class InspectionDetailsActivity : BaseActivity() {
         }
 
         bindings.deviceTv.text = getString(R.string.inspection_device_code, inspection.deviceCode)
-        bindings.stageTv.text = when (stage?.toInt()) {
+        bindings.stageTv.text = when (stage) {
             1 -> getString(R.string.stage_one)
             2 -> getString(R.string.stage_two)
             else -> "?"
@@ -131,15 +131,15 @@ class InspectionDetailsActivity : BaseActivity() {
         }
     }
 
-    class ActivityContract : ActivityResultContract<UInt, UInt>() {
-        override fun createIntent(context: Context, input: UInt): Intent {
+    class ActivityContract : ActivityResultContract<Int, Int>() {
+        override fun createIntent(context: Context, input: Int): Intent {
             return Intent(context, InspectionDetailsActivity::class.java).apply {
-                putExtra(EXTRA_ID, input.toInt())
+                putExtra(EXTRA_ID, input)
             }
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): UInt {
-            return intent!!.getIntExtra(EXTRA_ID, -1).toUInt()
+        override fun parseResult(resultCode: Int, intent: Intent?): Int {
+            return intent!!.getIntExtra(EXTRA_ID, -1)
         }
     }
 

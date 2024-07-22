@@ -8,18 +8,18 @@ import io.ktor.http.*
 
 data class InspectionForm(
     val creator: String,
-    val machineNumber: UInt,
+    val machineNumber: Int,
     val machineCategory: String,
     val creationTime: String,
     val productSpecs: String?,
-    val wireNumber: UInt?,
+    val wireNumber: Int?,
     val breakSpecs: String,
-    val copperWireNo: UInt?,
-    val copperStickNo: UInt?,
-    val repoNo: UInt?,
+    val copperWireNo: Int?,
+    val copperStickNo: Int?,
+    val repoNo: Int?,
     // 0: 拉丝池内断线
     // 1: 非拉丝池内断线
-    val breakType: UInt,
+    val breakType: Int,
     // 拉丝池
     val breakPositionB: Float?,
     // 非拉丝池
@@ -62,14 +62,14 @@ data class InspectionDetails(
 )
 
 data class InspectionSummary(
-    val id: UInt,
-    val machineNumber: UInt,
+    val id: Int,
+    val machineNumber: Int,
     val cause: String?,
     val breakSpec: String,
     val productSpec: String?,
     val creator: String,
     val creationTime: String,
-    val checkingState: UInt,
+    val checkingState: Int,
 )
 
 object Inspection {
@@ -85,7 +85,7 @@ object Inspection {
             .parseResponse<Array<InspectionSummary>>()
     }
 
-    suspend fun queryDetails(id: UInt): Server.ResponseData<InspectionDetails> {
+    suspend fun queryDetails(id: Int): Server.ResponseData<InspectionDetails> {
         return HttpClient().get("$serverAddr/inspection/$id/details")
             .parseResponse<InspectionDetails>()
     }
