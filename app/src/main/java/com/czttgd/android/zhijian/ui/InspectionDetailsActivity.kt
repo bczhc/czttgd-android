@@ -32,6 +32,8 @@ class InspectionDetailsActivity : BaseActivity() {
             setResult(0, this)
         }
 
+        bindings.toolbar.setUpBackButton()
+
         buildProgressDialog(getString(R.string.fetching_dialog_title)) {
             coroutineLaunchIo {
                 val result = runCatching {
