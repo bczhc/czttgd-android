@@ -16,6 +16,7 @@ import com.czttgd.android.zhijian.data.InspectionSummary
 import com.czttgd.android.zhijian.databinding.FragmentBreakpointRecordsBinding
 import com.czttgd.android.zhijian.databinding.InspectionRecordsListItemBinding
 import com.czttgd.android.zhijian.dbDateFormatter
+import com.czttgd.android.zhijian.ui.InspectionDetailsActivity
 import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
@@ -46,6 +47,10 @@ class InspectionRecordsFragment : Fragment() {
         super.onDestroyView()
     }
 
+    private val detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
+
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun FragmentBreakpointRecordsBinding.setUpViews() {
         requireContext().apply contextScope@{
@@ -53,6 +58,11 @@ class InspectionRecordsFragment : Fragment() {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(this@contextScope)
                 adapter = listAdapter
+            }
+
+            listAdapter.setOnItemClickListener { position, view ->
+                val id = itemData[position].id
+
             }
 
             iv.setOnClickListener {
@@ -127,10 +137,10 @@ class InspectionRecordsFragment : Fragment() {
     }
 
     class ListAdapter(private val itemData: List<InspectionSummary>) :
-        RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
+        AdapterWithClickListener<ListAdapter.MyViewHolder>() {
         class MyViewHolder(val bindings: InspectionRecordsListItemBinding) : RecyclerView.ViewHolder(bindings.root)
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup): MyViewHolder {
             val bindings = InspectionRecordsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return MyViewHolder(bindings)
         }

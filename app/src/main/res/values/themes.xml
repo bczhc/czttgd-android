@@ -71,4 +71,7 @@
     <style name="Theme.App.RecordsFragment.SearchView" parent="Theme.App.RecordsFragment">
         <item name="android:textSize">15sp</item>
     </style>
+
+    <style name="Theme.App.InspectionDetails" parent="Theme.App.Base">
+    </style>
 </resources>

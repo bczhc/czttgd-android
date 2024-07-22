@@ -7,7 +7,7 @@ import androidx.activity.result.ActivityResultLauncher
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.data.Inspection
-import com.czttgd.android.zhijian.data.InspectionRecord
+import com.czttgd.android.zhijian.data.InspectionForm
 import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
 import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
@@ -163,7 +163,7 @@ class FormFillingActivity : BaseActivity() {
         }
     }
 
-    private fun collectForm(): Pair<InspectionRecord, Boolean> {
+    private fun collectForm(): Pair<InspectionForm, Boolean> {
         fun FormFillingFieldLayoutBinding.fieldValue(): String {
             return inputTv.text.toString()
         }
@@ -205,7 +205,7 @@ class FormFillingActivity : BaseActivity() {
                 hasError = true
             }
             val dummyZero = 0.toUInt()
-            val record = InspectionRecord(
+            val record = InspectionForm(
                 creator = fieldCreator.checkedField(onError) { it } ?: "",
                 machineNumber = fieldMachineNumber.checkedField(onError) { it.toUInt() } ?: dummyZero,
                 creationTime = fieldBreakpointTime.checkedField(onError) { it } ?: "",

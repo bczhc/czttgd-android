@@ -5,8 +5,9 @@ import com.czttgd.android.zhijian.utils.setFormDataBody
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import java.math.BigDecimal
 
-data class InspectionRecord(
+data class InspectionForm(
     val creator: String,
     val machineNumber: UInt,
     val machineCategory: String,
@@ -29,6 +30,29 @@ data class InspectionRecord(
     val comments: String?,
 )
 
+data class InspectionDetails(
+    val deviceCode: UInt,
+    val creator: String,
+    val creationTime: String,
+    val inspectionFlag: UInt,
+    val productSpec: String?,
+    val wireNum: UInt?,
+    val breakSpec: String,
+    val wireBatchCode: String?,
+    val stickBatchCode: String?,
+    val warehouse: String?,
+    val productTime: String?,
+    val breakFlag: Boolean,
+    val breakpointB: BigDecimal?,
+    val breakpointA: String?,
+    val causeType: String?,
+    val breakCauseA: String?,
+    val comments: String?,
+    val inspector: String?,
+    val inspectionTime: String?,
+    val breakCauseB: String?,
+)
+
 data class InspectionSummary(
     val id: UInt,
     val machineNumber: UInt,
@@ -41,7 +65,7 @@ data class InspectionSummary(
 )
 
 object Inspection {
-    suspend fun post(record: InspectionRecord) {
+    suspend fun post(record: InspectionForm) {
         HttpClient().post("$serverAddr/inspection") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
@@ -51,5 +75,10 @@ object Inspection {
     suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
         return HttpClient().get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
             .parseResponse<Array<InspectionSummary>>()
+    }
+
+    suspend fun queryDetails(id: UInt): Server.ResponseData<Array<InspectionDetails>> {
+        return HttpClient().get("$serverAddr/inspection/$id/details")
+            .parseResponse<Array<InspectionDetails>>()
     }
 }
