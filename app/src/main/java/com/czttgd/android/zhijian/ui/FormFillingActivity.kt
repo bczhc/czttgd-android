@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import com.czttgd.android.zhijian.BaseActivity
@@ -23,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.util.*
+
 
 class FormFillingActivity : BaseActivity() {
     private lateinit var bindings: ActivityFormFillingBinding
@@ -72,6 +74,14 @@ class FormFillingActivity : BaseActivity() {
             fieldBindings.rl.setOnClickListener {
                 val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
                     inputType?.let { et.inputType = it }
+                    et.setOnFocusChangeListener { v, hasFocus ->
+                        et.post {
+                            if (hasFocus) {
+                                val imm: InputMethodManager = this@FormFillingActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                                imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
+                            }
+                        }
+                    }
                 }
                 MaterialAlertDialogBuilder(this)
                     .defaultNegativeButton()
@@ -85,6 +95,8 @@ class FormFillingActivity : BaseActivity() {
                         setCanceledOnTouchOutside(false)
                     }
                     .show()
+
+                dialogBindings.et.requestFocus()
             }
         }
 
