@@ -2,6 +2,7 @@ package com.czttgd.android.zhijian.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -9,8 +10,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.core.content.ContextCompat
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
+import com.czttgd.android.zhijian.broadcast.BarcodeBroadcastReceiver
 import com.czttgd.android.zhijian.data.Inspection
 import com.czttgd.android.zhijian.data.InspectionForm
 import com.czttgd.android.zhijian.data.SelectList
@@ -30,6 +33,9 @@ class FormFillingActivity : BaseActivity() {
     private lateinit var bindings: ActivityFormFillingBinding
     private var updateMode: Boolean = false
     private var updateId: Int? = null
+    private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver { _, content ->
+        toast("Scanned: $content")
+    }
 
     private fun registerSelectionLauncher(getValue: () -> FormFillingFieldLayoutBinding): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(SelectionActivity.ActivityContract()) {
@@ -74,10 +80,11 @@ class FormFillingActivity : BaseActivity() {
             fieldBindings.rl.setOnClickListener {
                 val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
                     inputType?.let { et.inputType = it }
-                    et.setOnFocusChangeListener { v, hasFocus ->
+                    et.setOnFocusChangeListener { _, hasFocus ->
                         et.post {
                             if (hasFocus) {
-                                val imm: InputMethodManager = this@FormFillingActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                                val imm: InputMethodManager =
+                                    this@FormFillingActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                                 imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
                             }
                         }
@@ -104,7 +111,10 @@ class FormFillingActivity : BaseActivity() {
         setUpClickEvent(bindings.fieldComments, null)
         setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER)
         setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER)
-        setUpClickEvent(bindings.fieldBreakpointPosition, InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
+        setUpClickEvent(
+            bindings.fieldBreakpointPosition,
+            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        )
 
         val setUpSelectionFields =
             a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
@@ -172,15 +182,12 @@ class FormFillingActivity : BaseActivity() {
 
         setUpButton()
 
-        bindings.apply {
-            fieldBreakSpecs.inputTv.setOnClickListener {
-                // mock data for test purposes
-                fieldBreakSpecs.inputTv.text = "abc"
-                fieldCopperWireNo.inputTv.text = "1"
-                fieldCopperStickNo.inputTv.text = "2"
-                fieldRepoNo.inputTv.text = "3"
-            }
-        }
+        ContextCompat.registerReceiver(
+            this,
+            barcodeBroadcastReceiver,
+            IntentFilter(BarcodeBroadcastReceiver.ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     private fun fillFields(form: InspectionForm) {
@@ -193,8 +200,8 @@ class FormFillingActivity : BaseActivity() {
                 fieldProductSpecs.inputTv.text = it.productSpecs ?: ""
                 fieldWireNumber.inputTv.text = it.wireNumber?.toString() ?: ""
                 fieldBreakSpecs.inputTv.text = it.breakSpecs
-                fieldCopperWireNo.inputTv.text = it.copperWireNo?.toString() ?: ""
-                fieldCopperStickNo.inputTv.text = it.copperStickNo?.toString() ?: ""
+                fieldCopperWireNo.inputTv.text = it.copperWireNo ?: ""
+                fieldCopperStickNo.inputTv.text = it.copperStickNo ?: ""
 
                 radioGroup.check(
                     when (it.breakType) {
@@ -323,6 +330,11 @@ class FormFillingActivity : BaseActivity() {
             )
             return Pair(record, hasError)
         }
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(barcodeBroadcastReceiver)
+        super.onDestroy()
     }
 
     companion object {

@@ -34,4 +34,6 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="updating_dialog_title">正在更新……</string>
+    <string name="scan_dialog_title">扫描</string>
+    <string name="scan_dialog_message">按下侧键进行扫描</string>
 </resources>
