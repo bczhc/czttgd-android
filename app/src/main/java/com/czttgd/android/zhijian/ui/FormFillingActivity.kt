@@ -226,6 +226,10 @@ class FormFillingActivity : BaseActivity() {
                         result.onSuccess {
                             if (updateMode) {
                                 toast(R.string.modification_succeeded_toast)
+                                Intent().apply {
+                                    putExtra(EXTRA_UPDATE_ID, updateId!!)
+                                    setResult(0, this)
+                                }
                             } else {
                                 toast(R.string.submit_succeeded_toast)
                             }

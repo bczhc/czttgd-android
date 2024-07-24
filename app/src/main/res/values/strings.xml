@@ -33,4 +33,5 @@
     <string name="inspection_b_info_title">终检信息</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="updating_dialog_title">正在更新……</string>
 </resources>

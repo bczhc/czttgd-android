@@ -105,7 +105,29 @@ data class InspectionSummary(
     val creator: String,
     val creationTime: String,
     val checkingState: Int,
-)
+) {
+    companion object {
+        fun fromDetails(id: Int, details: InspectionDetails): InspectionSummary {
+            return details.let {
+                return@let InspectionSummary(
+                    id = id,
+                    machineNumber = it.deviceCode,
+                    cause = when (details.inspectionFlag) {
+                        0 -> it.breakCauseA
+                        1 -> it.breakCauseB
+                        2 -> ""
+                        else -> throw RuntimeException("Unexpected value")
+                    },
+                    breakSpec = it.breakSpec,
+                    productSpec = it.productSpec,
+                    creator = it.creator,
+                    creationTime = it.creationTime,
+                    checkingState = it.inspectionFlag,
+                )
+            }
+        }
+    }
+}
 
 object Inspection {
     suspend fun post(record: InspectionForm) {
@@ -127,9 +149,9 @@ object Inspection {
             .parseResponse<Array<InspectionSummary>>()
     }
 
-    suspend fun queryDetails(id: Int): Server.ResponseData<InspectionDetails> {
+    suspend fun queryDetails(id: Int): InspectionDetails {
         return HttpClient().get("$serverAddr/inspection/$id/details")
-            .parseResponse<InspectionDetails>()
+            .parseResponse<InspectionDetails>().data!!
     }
 
     suspend fun fetchStage(deviceCode: Int): Int {

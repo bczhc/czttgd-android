@@ -20,6 +20,8 @@ class InspectionDetailsActivity : BaseActivity() {
     private var inspection: InspectionDetails? = null
     private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) {id->
         id ?: return@registerForActivityResult
+        inspectionId!!
+        fetchAndUpdateUiWithDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,24 +37,31 @@ class InspectionDetailsActivity : BaseActivity() {
         }
 
         bindings.toolbar.setUpBackButton()
+        fetchAndUpdateUiWithDialog()
+    }
 
+    private fun fetchAndUpdateUiWithDialog() {
         buildProgressDialog(getString(R.string.fetching_dialog_title)) {
             coroutineLaunchIo {
-                val result = runCatching {
-                    val inspection = Inspection.queryDetails(inspectionId!!).data!!
-                    this@InspectionDetailsActivity.stage = Inspection.fetchStage(inspection.deviceCode)
-                    this@InspectionDetailsActivity.inspection = inspection
-                }
+                fetchAndUpdateUi()
+            }
+        }
+    }
 
-                withMain {
-                    result.onFailure {
-                        toast(R.string.request_failed_dialog)
-                        it.printStackTrace()
-                    }.onSuccess {
-                        setUpFieldsUi()
-                        setUpButton()
-                    }
-                }
+    private suspend fun fetchAndUpdateUi() {
+        val result = runCatching {
+            val inspection = Inspection.queryDetails(inspectionId!!)
+            this@InspectionDetailsActivity.stage = Inspection.fetchStage(inspection.deviceCode)
+            this@InspectionDetailsActivity.inspection = inspection
+        }
+
+        withMain {
+            result.onFailure {
+                toast(R.string.request_failed_dialog)
+                it.printStackTrace()
+            }.onSuccess {
+                setUpFieldsUi()
+                setUpButton()
             }
         }
     }

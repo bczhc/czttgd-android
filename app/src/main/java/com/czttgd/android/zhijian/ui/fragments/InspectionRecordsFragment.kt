@@ -48,7 +48,19 @@ class InspectionRecordsFragment : Fragment() {
     }
 
     private val detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
+        val id = it ?: return@registerForActivityResult
 
+        requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
+            coroutineLaunchIo {
+                val details = Inspection.queryDetails(id)
+                withMain {
+                    val summary = InspectionSummary.fromDetails(id, details)
+                    val index = itemData.indexOfFirst { x -> x.id == id }
+                    itemData[index] = summary
+                    listAdapter.notifyItemChanged(index)
+                }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -60,7 +72,7 @@ class InspectionRecordsFragment : Fragment() {
                 adapter = listAdapter
             }
 
-            listAdapter.setOnItemClickListener { position, view ->
+            listAdapter.setOnItemClickListener { position, _ ->
                 val id = itemData[position].id
                 detailsLauncher.launch(id)
             }
