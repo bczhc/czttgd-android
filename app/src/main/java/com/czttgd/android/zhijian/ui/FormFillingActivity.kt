@@ -64,6 +64,10 @@ class FormFillingActivity : BaseActivity() {
         this.updateMode = updateMode
 
         val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding ->
+            if (fieldBindings.inputTv.text.isNotEmpty()) {
+                fieldBindings.hintTv.visibility = View.GONE
+            }
+
             fieldBindings.rl.setOnClickListener {
                 val dialogBindings = DialogInputTextBinding.inflate(layoutInflater)
                 MaterialAlertDialogBuilder(this)
@@ -90,7 +94,11 @@ class FormFillingActivity : BaseActivity() {
         ).forEach(setUpClickEvent)
 
         val setUpSelectionFields =
-            { fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
+            a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
+                if (fieldBindings.inputTv.text.isNotEmpty()) {
+                    fieldBindings.hintTv.visibility = View.GONE
+                }
+
                 fieldBindings.rl.setOnClickListener {
                     buildProgressDialog(
                         title = getString(R.string.fetching_info_dialog_title)
@@ -123,7 +131,9 @@ class FormFillingActivity : BaseActivity() {
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
         setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
 
-        bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
+        if (!updateMode) {
+            bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
+        }
 
         bindings.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -269,9 +279,9 @@ class FormFillingActivity : BaseActivity() {
                 productSpecs = fieldProductSpecs.checkedField(onError) { it } ?: "",
                 wireNumber = fieldWireNumber.checkedField(onError) { it.toInt() },
                 breakSpecs = fieldBreakSpecs.checkedField(onError) { it } ?: "",
-                copperWireNo = fieldCopperWireNo.checkedField(onError) { it.toInt() },
-                copperStickNo = fieldCopperStickNo.checkedField(onError) { it.toInt() },
-                repoNo = fieldRepoNo.checkedField(onError) { it.toInt() },
+                copperWireNo = fieldCopperWireNo.checkedField(onError) { it },
+                copperStickNo = fieldCopperStickNo.checkedField(onError) { it },
+                repoNo = fieldRepoNo.checkedField(onError) { it },
                 breakType = breakType,
                 breakReasonA = fieldBreakpointReason.checkedField(onError) { it } ?: "",
                 breakPositionB = if (breakType == 0) {
@@ -320,7 +330,7 @@ class FormFillingActivity : BaseActivity() {
         const val EXTRA_UPDATE_ID = "inspection id"
     }
 
-    class UpdateActivityContract: ActivityResultContract<UpdateActivityContract.Input, Int?>() {
+    class UpdateActivityContract : ActivityResultContract<UpdateActivityContract.Input, Int?>() {
         data class Input(
             val form: InspectionForm,
             val id: Int,

@@ -16,9 +16,9 @@ data class InspectionForm(
     val wireNumber: Int?,
     val wireSpeed: Int?,
     val breakSpecs: String,
-    val copperWireNo: Int?,
-    val copperStickNo: Int?,
-    val repoNo: Int?,
+    val copperWireNo: String?,
+    val copperStickNo: String?,
+    val repoNo: String?,
     // 0: 拉丝池内断线
     // 1: 非拉丝池内断线
     val breakType: Int,
@@ -29,16 +29,34 @@ data class InspectionForm(
     // 初检
     val breakReasonA: String,
     val comments: String?,
-): Serializable {
+) : Serializable {
     companion object {
-        fun fromDetails(details: InspectionDetails) {
+        fun fromDetails(details: InspectionDetails): InspectionForm {
+            if (details.inspectionFlag != 0) {
+                throw RuntimeException("require: 初检")
+            }
             return details.let {
-//                InspectionForm (
-//                    creator = it.creator,
-//                    machineNumber = it.deviceCode,
-//                    machineCategory = TODO(),
-//                )
-                TODO()
+                return@let InspectionForm(
+                    creator = it.creator,
+                    machineNumber = it.deviceCode,
+                    machineCategory = it.deviceCategory,
+                    creationTime = it.creationTime,
+                    productSpecs = it.productSpec,
+                    wireNumber = it.wireNum,
+                    wireSpeed = it.wireSpeed,
+                    breakSpecs = it.breakSpec,
+                    copperWireNo = it.wireBatchCode,
+                    copperStickNo = it.stickBatchCode,
+                    repoNo = it.warehouse,
+                    breakType = when (it.breakFlag) {
+                        true -> 0
+                        false -> 1
+                    },
+                    breakPositionB = it.breakpointB,
+                    breakPositionA = it.breakpointA,
+                    breakReasonA = it.breakCauseA!!,
+                    comments = it.comments
+                )
             }
         }
     }
@@ -46,6 +64,7 @@ data class InspectionForm(
 
 data class InspectionDetails(
     val deviceCode: Int,
+    val deviceCategory: String,
     val creator: String,
     val creationTime: String,
     /**

@@ -9,13 +9,13 @@ import com.czttgd.android.zhijian.*
 import com.czttgd.android.zhijian.data.Inspection
 import com.czttgd.android.zhijian.data.InspectionDetails
 import com.czttgd.android.zhijian.data.InspectionForm
-import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityInspectionDetailsBinding
 import com.czttgd.android.zhijian.databinding.InspectionDetailsFieldBinding
 import com.czttgd.android.zhijian.utils.*
 
 class InspectionDetailsActivity : BaseActivity() {
     private lateinit var bindings: ActivityInspectionDetailsBinding
+    private var inspectionId: Int? = null
     private var stage: Int? = null
     private var inspection: InspectionDetails? = null
     private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) {id->
@@ -28,11 +28,9 @@ class InspectionDetailsActivity : BaseActivity() {
         bindings = ActivityInspectionDetailsBinding.inflate(layoutInflater)
         setContentView(bindings.root)
 
-        val intent = intent
-        androidAssertion(intent.hasExtra(EXTRA_ID))
-        val id = intent.getIntExtra(EXTRA_ID, -1)
+        inspectionId = intent.getId()
         Intent().apply {
-            putExtra(EXTRA_ID, id)
+            putExtra(EXTRA_ID, inspectionId!!)
             setResult(0, this)
         }
 
@@ -41,7 +39,7 @@ class InspectionDetailsActivity : BaseActivity() {
         buildProgressDialog(getString(R.string.fetching_dialog_title)) {
             coroutineLaunchIo {
                 val result = runCatching {
-                    val inspection = Inspection.queryDetails(id).data!!
+                    val inspection = Inspection.queryDetails(inspectionId!!).data!!
                     this@InspectionDetailsActivity.stage = Inspection.fetchStage(inspection.deviceCode)
                     this@InspectionDetailsActivity.inspection = inspection
                 }
@@ -61,14 +59,19 @@ class InspectionDetailsActivity : BaseActivity() {
 
     private fun setUpButton() {
         val inspection = this.inspection ?: return
+        // 只有终检能修改
+        if (inspection.inspectionFlag != 0) {
+            return
+        }
 
-
-
-//        updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
-//            id = TODO(),
-//            form = TODO(),
-//            stage = TODO(),
-//        ))
+        bindings.bottomRl.visibility = View.VISIBLE
+        bindings.bottomButton.setOnClickListener {
+            updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
+                id = intent.getId(),
+                form = InspectionForm.fromDetails(inspection) ,
+                stage = this.stage!!,
+            ))
+        }
     }
 
     private fun setUpFieldsUi() {
@@ -136,11 +139,6 @@ class InspectionDetailsActivity : BaseActivity() {
             }
             bindings.fieldsLl.addView(fieldBindings.root)
         }
-
-        // 初检
-        if (inspection.inspectionFlag == 0) {
-            bindings.bottomRl.visibility = View.VISIBLE
-        }
     }
 
     class ActivityContract : ActivityResultContract<Int, Int>() {
@@ -168,6 +166,11 @@ class InspectionDetailsActivity : BaseActivity() {
 
     private fun toDottedDateTime(date: String): String {
         return dottedDateTimeFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
+    }
+
+    private fun Intent.getId(): Int {
+        androidAssertion(intent.hasExtra(EXTRA_ID))
+        return intent.getIntExtra(EXTRA_ID, -1)
     }
 
     companion object {
