@@ -26,8 +26,6 @@
     <style name="Theme.App.BottomNavigationView" parent="Theme.App.MainPage">
         <item name="colorSurfaceContainer">@color/main_page_surface</item>
         <item name="colorOnSurfaceVariant">@color/bottom_nav_bar_inactive_item</item>
-        <item name="colorOnSecondaryContainer">@color/bottom_nav_bar_active_item</item>
-        <item name="colorOnSurface">@color/bottom_nav_bar_active_item</item>
     </style>
 
     <style name="Theme.App.FormFilling" parent="Theme.App.MainPage">
