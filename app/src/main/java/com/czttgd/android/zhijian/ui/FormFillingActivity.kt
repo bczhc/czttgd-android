@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -63,13 +64,15 @@ class FormFillingActivity : BaseActivity() {
         }
         this.updateMode = updateMode
 
-        val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding ->
+        val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding, inputType: Int? ->
             if (fieldBindings.inputTv.text.isNotEmpty()) {
                 fieldBindings.hintTv.visibility = View.GONE
             }
 
             fieldBindings.rl.setOnClickListener {
-                val dialogBindings = DialogInputTextBinding.inflate(layoutInflater)
+                val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
+                    inputType?.let { et.inputType = it }
+                }
                 MaterialAlertDialogBuilder(this)
                     .defaultNegativeButton()
                     .setPositiveAction { _, _ ->
@@ -85,13 +88,11 @@ class FormFillingActivity : BaseActivity() {
             }
         }
 
-        listOf(
-            bindings.fieldProductSpecs,
-            bindings.fieldWireNumber,
-            bindings.fieldWireSpeed,
-            bindings.fieldComments,
-            bindings.fieldBreakpointPosition
-        ).forEach(setUpClickEvent)
+        setUpClickEvent(bindings.fieldProductSpecs, null)
+        setUpClickEvent(bindings.fieldComments, null)
+        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER)
+        setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER)
+        setUpClickEvent(bindings.fieldBreakpointPosition, InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
 
         val setUpSelectionFields =
             a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
@@ -141,7 +142,7 @@ class FormFillingActivity : BaseActivity() {
                     bindings.fieldBreakpointPosition.apply {
                         hintTv.text = getString(R.string.form_please_input_hint)
                         inputTv.text = ""
-                        setUpClickEvent(this)
+                        setUpClickEvent(this, InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
                     }
                 }
 
