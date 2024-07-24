@@ -18,9 +18,22 @@ android {
     }
 
     buildTypes {
-        release {
+        val types = asMap
+        types["debug"]!!.apply {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isShrinkResources = false
+            proguardFiles("proguard-rules-debug.pro")
+            isDebuggable = true
+            isJniDebuggable = true
+            signingConfig = signingConfigs["debug"]
+        }
+        types["release"]!!.apply {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles("proguard-rules-debug.pro")
+            isDebuggable = true
+            isJniDebuggable = true
+            signingConfig = signingConfigs["debug"]
         }
     }
     compileOptions {
@@ -33,6 +46,16 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+    }
+
+    signingConfigs {
+        val configs = asMap
+        configs["debug"]!!.apply {
+            storeFile = file("release.keystore")
+            storePassword = "123456"
+            keyAlias = "alias_name"
+            keyPassword = "123456"
+        }
     }
 }
 
