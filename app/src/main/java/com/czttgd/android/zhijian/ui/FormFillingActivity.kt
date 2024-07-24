@@ -138,13 +138,19 @@ class FormFillingActivity : BaseActivity() {
         bindings.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.拉丝池内断线_radio -> {
-                    bindings.fieldBreakpointPosition.hintTv.text = getString(R.string.form_please_input_hint)
-                    setUpClickEvent(bindings.fieldBreakpointPosition)
+                    bindings.fieldBreakpointPosition.apply {
+                        hintTv.text = getString(R.string.form_please_input_hint)
+                        inputTv.text = ""
+                        setUpClickEvent(this)
+                    }
                 }
 
                 R.id.非拉丝池内断线_radio -> {
-                    bindings.fieldBreakpointPosition.hintTv.text = getString(R.string.form_please_select_hint)
-                    setUpSelectionFields(bindings.fieldBreakpointPosition, 2) { SelectList.breakPoints() }
+                    bindings.fieldBreakpointPosition.apply {
+                        hintTv.text = getString(R.string.form_please_select_hint)
+                        inputTv.text = ""
+                        setUpSelectionFields(this, 2) { SelectList.breakPoints() }
+                    }
                 }
 
                 else -> unreachable()
