@@ -64,11 +64,11 @@ class InspectionDetailsActivity : BaseActivity() {
 
 
 
-        updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
-            id = TODO(),
-            form = TODO(),
-            stage = TODO(),
-        ))
+//        updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
+//            id = TODO(),
+//            form = TODO(),
+//            stage = TODO(),
+//        ))
     }
 
     private fun setUpFieldsUi() {
@@ -100,11 +100,11 @@ class InspectionDetailsActivity : BaseActivity() {
 
         val breakpointText = when (inspection.breakFlag) {
             true -> {
-                "${inspection.breakpointB}"
+                inspection.breakpointB
             }
 
             false -> {
-                "${inspection.breakpointA}"
+                inspection.breakpointA
             }
         }
 
@@ -114,6 +114,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 "${it.deviceCode}",
                 toDottedDateTime(it.creationTime),
                 it.productSpec ?: "",
+                it.wireSpeed?.toString() ?: "",
                 it.wireNum?.toString() ?: "",
                 it.breakSpec,
                 it.wireBatchCode ?: "",
@@ -121,7 +122,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 it.warehouse ?: "",
                 toDottedDate(it.productTime ?: ""),
                 it.breakFlag.toText(),
-                breakpointText,
+                breakpointText ?: "",
                 it.causeType ?: "",
                 it.breakCauseA ?: "",
                 it.comments ?: "",

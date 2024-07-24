@@ -14,6 +14,7 @@ data class InspectionForm(
     val creationTime: String,
     val productSpecs: String?,
     val wireNumber: Int?,
+    val wireSpeed: Int?,
     val breakSpecs: String,
     val copperWireNo: Int?,
     val copperStickNo: Int?,
@@ -52,6 +53,7 @@ data class InspectionDetails(
      */
     val inspectionFlag: Int,
     val productSpec: String?,
+    val wireSpeed: Int?,
     val wireNum: Int?,
     val breakSpec: String,
     val wireBatchCode: String?,

@@ -84,6 +84,7 @@ class FormFillingActivity : BaseActivity() {
         listOf(
             bindings.fieldProductSpecs,
             bindings.fieldWireNumber,
+            bindings.fieldWireSpeed,
             bindings.fieldComments,
             bindings.fieldBreakpointPosition
         ).forEach(setUpClickEvent)
@@ -281,6 +282,7 @@ class FormFillingActivity : BaseActivity() {
                 } else null,
                 comments = fieldComments.checkedField(onError) { it },
                 machineCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
+                wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
             )
             return Pair(record, hasError)
         }

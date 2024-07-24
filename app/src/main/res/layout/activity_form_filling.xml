@@ -99,6 +99,17 @@
                         android:layout_height="1px" />
 
                     <include
+                        android:id="@+id/field_wire_speed"
+                        layout="@layout/form_filling_field_layout"
+                        app:initText="@{@string/form_please_input_hint}"
+                        app:label="@{`线速`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
+                    <include
                         android:id="@+id/field_wire_number"
                         layout="@layout/form_filling_field_layout"
                         app:initText="@{@string/form_please_input_hint}"
