@@ -218,10 +218,14 @@ class FormFillingActivity : BaseActivity() {
                     withMain {
                         it.dismiss()
                         result.onSuccess {
-                            toast(R.string.submit_succeeded_toast)
+                            if (updateMode) {
+                                toast(R.string.modification_succeeded_toast)
+                            } else {
+                                toast(R.string.submit_succeeded_toast)
+                            }
                             finish()
                         }.onFailure {
-                            toast(getString(R.string.submit_error_toast_with_message, it.toString()))
+                            toast(getString(R.string.request_error_toast_with_message, it.toString()))
                             it.printStackTrace()
                         }
                     }
