@@ -1,6 +1,7 @@
 package com.czttgd.android.zhijian.data
 
 import com.czttgd.android.zhijian.App.Companion.GSON
+import com.czttgd.android.zhijian.appHttpClient
 import com.czttgd.android.zhijian.utils.fromJsonOrNull
 import com.google.gson.JsonObject
 import io.ktor.client.*
@@ -13,7 +14,7 @@ object Ping {
     suspend fun pingTest(serverAddr: String) {
         val text = System.currentTimeMillis().toString()
         withContext(Dispatchers.IO) {
-            val body = HttpClient().get("$serverAddr/echo?text=$text").bodyAsText()
+            val body = appHttpClient.get("$serverAddr/echo?text=$text").bodyAsText()
             val json = GSON.fromJsonOrNull<JsonObject>(body) ?: throw RuntimeException("Invalid body")
             if (json.get("text").asString != text) {
                 throw RuntimeException("Unexpected response")

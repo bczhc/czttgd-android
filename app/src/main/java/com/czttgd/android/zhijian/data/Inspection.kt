@@ -1,5 +1,6 @@
 package com.czttgd.android.zhijian.data
 
+import com.czttgd.android.zhijian.appHttpClient
 import com.czttgd.android.zhijian.data.Server.parseResponse
 import com.czttgd.android.zhijian.utils.setFormDataBody
 import io.ktor.client.*
@@ -131,26 +132,26 @@ data class InspectionSummary(
 
 object Inspection {
     suspend fun post(record: InspectionForm) {
-        HttpClient().post("$serverAddr/inspection") {
+        appHttpClient.post("$serverAddr/inspection") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
         }.parseResponse<Unit>()
     }
 
     suspend fun update(record: InspectionForm, id: Int) {
-        HttpClient().put("$serverAddr/inspection/$id") {
+        appHttpClient.put("$serverAddr/inspection/$id") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
         }.parseResponse<Unit>()
     }
 
     suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
-        return HttpClient().get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
+        return appHttpClient.get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
             .parseResponse<Array<InspectionSummary>>()
     }
 
     suspend fun queryDetails(id: Int): InspectionDetails {
-        return HttpClient().get("$serverAddr/inspection/$id/details")
+        return appHttpClient.get("$serverAddr/inspection/$id/details")
             .parseResponse<InspectionDetails>().data!!
     }
 

@@ -1,6 +1,7 @@
 package com.czttgd.android.zhijian.data
 
 import com.czttgd.android.zhijian.GSON
+import com.czttgd.android.zhijian.appHttpClient
 import com.czttgd.android.zhijian.utils.bodyAsJson
 import com.czttgd.android.zhijian.utils.fromJsonOrNull
 import com.czttgd.android.zhijian.utils.withIo
@@ -15,7 +16,7 @@ val serverAddr: String
 object Server {
     suspend inline fun <reified T : Any> fetch(url: String): T {
         return withIo {
-            val res = HttpClient().get(url)
+            val res = appHttpClient.get(url)
             if (res.status.value != 200) {
                 throw RuntimeException("Non-200 status code")
             }
