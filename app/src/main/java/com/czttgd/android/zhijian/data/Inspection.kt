@@ -5,6 +5,7 @@ import com.czttgd.android.zhijian.utils.setFormDataBody
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import java.io.Serializable
 
 data class InspectionForm(
     val creator: String,
@@ -27,7 +28,20 @@ data class InspectionForm(
     // 初检
     val breakReasonA: String,
     val comments: String?,
-)
+): Serializable {
+    companion object {
+        fun fromDetails(details: InspectionDetails) {
+            return details.let {
+//                InspectionForm (
+//                    creator = it.creator,
+//                    machineNumber = it.deviceCode,
+//                    machineCategory = TODO(),
+//                )
+                TODO()
+            }
+        }
+    }
+}
 
 data class InspectionDetails(
     val deviceCode: Int,
@@ -80,6 +94,13 @@ object Inspection {
         }.parseResponse<Unit>()
     }
 
+    suspend fun update(record: InspectionForm, id: Int) {
+        HttpClient().put("$serverAddr/inspection/$id") {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setFormDataBody(record)
+        }.parseResponse<Unit>()
+    }
+
     suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
         return HttpClient().get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
             .parseResponse<Array<InspectionSummary>>()
@@ -88,5 +109,11 @@ object Inspection {
     suspend fun queryDetails(id: Int): Server.ResponseData<InspectionDetails> {
         return HttpClient().get("$serverAddr/inspection/$id/details")
             .parseResponse<InspectionDetails>()
+    }
+
+    suspend fun fetchStage(deviceCode: Int): Int {
+        if (SelectList.machineNumbers(1).contains(deviceCode)) return 1
+        if (SelectList.machineNumbers(2).contains(deviceCode)) return 2
+        throw RuntimeException("No stage number for device code: $deviceCode")
     }
 }

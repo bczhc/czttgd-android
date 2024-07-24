@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.czttgd.android.zhijian.*
 import com.czttgd.android.zhijian.data.Inspection
 import com.czttgd.android.zhijian.data.InspectionDetails
+import com.czttgd.android.zhijian.data.InspectionForm
 import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityInspectionDetailsBinding
 import com.czttgd.android.zhijian.databinding.InspectionDetailsFieldBinding
@@ -17,6 +18,9 @@ class InspectionDetailsActivity : BaseActivity() {
     private lateinit var bindings: ActivityInspectionDetailsBinding
     private var stage: Int? = null
     private var inspection: InspectionDetails? = null
+    private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) {id->
+        id ?: return@registerForActivityResult
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,7 @@ class InspectionDetailsActivity : BaseActivity() {
             coroutineLaunchIo {
                 val result = runCatching {
                     val inspection = Inspection.queryDetails(id).data!!
-                    this@InspectionDetailsActivity.stage = fetchStage(inspection)
+                    this@InspectionDetailsActivity.stage = Inspection.fetchStage(inspection.deviceCode)
                     this@InspectionDetailsActivity.inspection = inspection
                 }
 
@@ -48,18 +52,23 @@ class InspectionDetailsActivity : BaseActivity() {
                         it.printStackTrace()
                     }.onSuccess {
                         setUpFieldsUi()
+                        setUpButton()
                     }
                 }
             }
         }
     }
 
-    private suspend fun fetchStage(inspection: InspectionDetails): Int? {
-        val devices1 = SelectList.machineNumbers(1)
-        val devices2 = SelectList.machineNumbers(2)
-        if (devices1.contains(inspection.deviceCode)) return 1
-        if (devices2.contains(inspection.deviceCode)) return 2
-        return null
+    private fun setUpButton() {
+        val inspection = this.inspection ?: return
+
+
+
+        updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
+            id = TODO(),
+            form = TODO(),
+            stage = TODO(),
+        ))
     }
 
     private fun setUpFieldsUi() {

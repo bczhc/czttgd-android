@@ -3,6 +3,7 @@
     <string name="confirm_button">确认</string>
     <string name="cancel_button">取消</string>
     <string name="submit_button">提交</string>
+    <string name="modify_button">修改</string>
     <string name="settings_dialog_title">设置</string>
     <string name="saved_toast">已保存</string>
     <string name="button_test_connection">测试连接</string>
