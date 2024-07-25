@@ -258,7 +258,7 @@ class FormFillingActivity : BaseActivity() {
                                     .setPositiveAction { d, _ ->
                                         d.dismiss()
 
-                                        buildProgressDialog(getString(R.string.printint_dialog_title)) { pd ->
+                                        buildProgressDialog(getString(R.string.printing_dialog_title)) { pd ->
                                             coroutineLaunchIo {
                                                 val r = runCatching {
                                                     Inspection.queryDetails(insertedId!!)

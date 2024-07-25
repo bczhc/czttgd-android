@@ -37,7 +37,7 @@
     <string name="scan_dialog_title">扫描</string>
     <string name="scan_dialog_message">按下侧键进行扫描</string>
     <string name="print_button">打印</string>
-    <string name="printint_dialog_title">正在打印</string>
+    <string name="printing_dialog_title">正在打印</string>
     <string name="print_error_toast">打印失败</string>
     <string name="submit_succeeded_print_dialog_title">提交成功。是否打印？</string>
 </resources>

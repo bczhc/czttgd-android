@@ -42,7 +42,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 val inspection = inspection
                 if (it.itemId != R.id.print || inspection == null) return@l false
 
-                buildProgressDialog(getString(R.string.printint_dialog_title)) { d ->
+                buildProgressDialog(getString(R.string.printing_dialog_title)) { d ->
                     runCatching {
                         PrintUtils.printInspection(inspection, stage!!) {
                             d.dismiss()
