@@ -16,12 +16,6 @@ class MainActivity : BaseActivity() {
         val inspections = InspectionRecordsFragment()
     }
 
-    init {
-        // maybe ensures the two fragments are created on activity initialization?
-        fragments.workspace
-        fragments.inspections
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bindings = ActivityMainBinding.inflate(layoutInflater)

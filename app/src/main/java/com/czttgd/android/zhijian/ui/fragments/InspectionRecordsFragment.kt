@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,20 +28,31 @@ class InspectionRecordsFragment : Fragment() {
     private lateinit var bindings: FragmentBreakpointRecordsBinding
     private lateinit var listAdapter: ListAdapter
 
-    private val detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
-        val id = it ?: return@registerForActivityResult
+    private var detailsLauncher: ActivityResultLauncher<Int>? = null
 
-        requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
-            coroutineLaunchIo {
-                val details = Inspection.queryDetails(id)
-                withMain {
-                    val summary = InspectionSummary.fromDetails(id, details)
-                    val index = itemData.indexOfFirst { x -> x.id == id }
-                    itemData[index] = summary
-                    listAdapter.notifyItemChanged(index)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
+            val id = it ?: return@registerForActivityResult
+
+            requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
+                coroutineLaunchIo {
+                    val details = Inspection.queryDetails(id)
+                    withMain {
+                        val summary = InspectionSummary.fromDetails(id, details)
+                        val index = itemData.indexOfFirst { x -> x.id == id }
+                        itemData[index] = summary
+                        listAdapter.notifyItemChanged(index)
+                    }
                 }
             }
         }
+
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        detailsLauncher = null
+        super.onDestroy()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -74,7 +86,7 @@ class InspectionRecordsFragment : Fragment() {
 
             listAdapter.setOnItemClickListener { position, _ ->
                 val id = itemData[position].id
-                detailsLauncher.launch(id)
+                detailsLauncher!!.launch(id)
             }
 
             iv.setOnClickListener {
