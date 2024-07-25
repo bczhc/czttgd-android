@@ -146,17 +146,10 @@ class FormFillingActivity : BaseActivity() {
             }
 
         setUpSelectionFields(bindings.fieldCreator, 0) { SelectList.allUsers() }
-        setUpSelectionFields(bindings.fieldMachineNumber, 1) {
-            val stage = when (val stageExtra = intent.getIntExtra(EXTRA_STAGE, 0)) {
-                STAGE_ONE -> 1
-                STAGE_TWO -> 2
-                else -> throw RuntimeException("Unexpected stage: $stageExtra")
-            }
-            this.stage = stage
-            SelectList.machineNumbers(stage).map { it.toString() }.toTypedArray()
-        }
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
         setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
+
+        setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER)
 
         if (!updateMode) {
             bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
