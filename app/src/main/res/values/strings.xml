@@ -27,6 +27,7 @@
     <string name="inspection_records_已终检">已终检</string>
     <string name="fetching_dialog_title">正在获取……</string>
     <string name="request_failed_dialog">请求失败</string>
+    <string name="request_failed_toast">获取失败</string>
     <string name="stage_one">铜线一期</string>
     <string name="stage_two">铜线二期</string>
     <string name="inspection_a_info_title">初检信息</string>

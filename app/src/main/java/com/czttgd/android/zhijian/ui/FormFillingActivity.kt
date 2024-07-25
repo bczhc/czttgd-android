@@ -61,6 +61,11 @@ class FormFillingActivity : BaseActivity() {
         bindings = ActivityFormFillingBinding.inflate(layoutInflater)
 
         setContentView(bindings.root)
+        this.stage = when (intent.getIntExtra(EXTRA_STAGE, -1)) {
+            STAGE_ONE -> 1
+            STAGE_TWO -> 2
+            else -> throw RuntimeException("Unexpected stage number")
+        }
 
         bindings.toolbar.setUpBackButton()
 
@@ -185,6 +190,18 @@ class FormFillingActivity : BaseActivity() {
             IntentFilter(BarcodeBroadcastReceiver.ACTION),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+
+        val mock = true
+        if (mock) {
+            bindings.apply {
+                fieldProductSpecs.inputTv.text = "?"
+                fieldCreator.inputTv.text = "李四"
+                fieldMachineNumber.inputTv.text = "2"
+                fieldMachineCategory.inputTv.text = "DT"
+                fieldBreakSpecs.inputTv.text = "123"
+                fieldBreakpointReason.inputTv.text = "?"
+            }
+        }
     }
 
     private fun fillFields(form: InspectionForm) {
@@ -255,26 +272,30 @@ class FormFillingActivity : BaseActivity() {
                                     .setNegativeAction { _, _ ->
                                         finish()
                                     }
-                                    .setPositiveAction { d, _ ->
-                                        d.dismiss()
+                                    .setPositiveAction { _, _ ->
 
                                         buildProgressDialog(getString(R.string.printing_dialog_title)) { pd ->
                                             coroutineLaunchIo {
                                                 val r = runCatching {
                                                     Inspection.queryDetails(insertedId!!)
                                                 }
-                                                r.onFailure {
-                                                    toast(R.string.print_error_toast)
-                                                    finish()
-                                                }.onSuccess { details ->
-                                                    withMain {
+                                                withMain {
+                                                    r.onFailure {
+                                                        toast(R.string.request_failed_toast)
+                                                        it.printStackTrace()
+                                                        pd.dismiss()
+                                                        finish()
+                                                    }.onSuccess { details ->
                                                         runCatching {
-                                                            PrintUtils.printInspection(details, stage!!) {
-                                                                pd.dismiss()
-                                                                finish()
+                                                            runOnUiThread {
+                                                                PrintUtils.printInspection(details, stage!!) {
+                                                                    pd.dismiss()
+                                                                    finish()
+                                                                }
                                                             }
                                                         }.onFailure {
                                                             toast(R.string.print_error_toast)
+                                                            it.printStackTrace()
                                                             finish()
                                                         }
                                                     }
