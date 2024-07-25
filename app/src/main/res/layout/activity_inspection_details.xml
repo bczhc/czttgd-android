@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.App.Toolbar"
+        app:menu="@menu/inspection_details"
         app:navigationIcon="@drawable/back"
         app:title="多头拉丝断线详情"
         app:titleCentered="true"
@@ -168,8 +169,8 @@
         android:visibility="gone">
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
             android:id="@+id/bottom_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="修改" />
     </RelativeLayout>

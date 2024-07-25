@@ -35,7 +35,10 @@ class FormFillingActivity : BaseActivity() {
     private var updateId: Int? = null
     private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver { _, content ->
         toast("Scanned: $content")
+        // TODO
+        bindings.fieldBreakSpecs.inputTv.text = content
     }
+    private var stage: Int? = null
 
     private fun registerSelectionLauncher(getValue: () -> FormFillingFieldLayoutBinding): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(SelectionActivity.ActivityContract()) {
@@ -149,6 +152,7 @@ class FormFillingActivity : BaseActivity() {
                 STAGE_TWO -> 2
                 else -> throw RuntimeException("Unexpected stage: $stageExtra")
             }
+            this.stage = stage
             SelectList.machineNumbers(stage).map { it.toString() }.toTypedArray()
         }
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
@@ -230,6 +234,7 @@ class FormFillingActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
+            var insertedId: Int? = null
             buildProgressDialog(
                 title = getString(R.string.submitting_dialog_title)
             ) {
@@ -238,7 +243,7 @@ class FormFillingActivity : BaseActivity() {
                         if (updateMode) {
                             Inspection.update(record, id = updateId!!)
                         } else {
-                            Inspection.post(record)
+                            insertedId = Inspection.post(record)
                         }
                     }
                     withMain {
@@ -250,17 +255,51 @@ class FormFillingActivity : BaseActivity() {
                                     putExtra(EXTRA_UPDATE_ID, updateId!!)
                                     setResult(0, this)
                                 }
+                                finish()
                             } else {
-                                toast(R.string.submit_succeeded_toast)
+                                MaterialAlertDialogBuilder(this@FormFillingActivity)
+                                    .setTitle(R.string.submit_succeeded_print_dialog_title)
+                                    .setNegativeAction { _, _ ->
+                                        finish()
+                                    }
+                                    .setPositiveAction { d, _ ->
+                                        d.dismiss()
+
+                                        buildProgressDialog(getString(R.string.printint_dialog_title)) { pd ->
+                                            coroutineLaunchIo {
+                                                val r = runCatching {
+                                                    Inspection.queryDetails(insertedId!!)
+                                                }
+                                                r.onFailure {
+                                                    toast(R.string.print_error_toast)
+                                                    finish()
+                                                }.onSuccess { details ->
+                                                    withMain {
+                                                        runCatching {
+                                                            PrintUtils.printInspection(details, stage!!) {
+                                                                pd.dismiss()
+                                                                finish()
+                                                            }
+                                                        }.onFailure {
+                                                            toast(R.string.print_error_toast)
+                                                            finish()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }.show()
+                                    }
+                                    .create().apply {
+                                        setCanceledOnTouchOutside(false)
+                                    }.also { it.show() }
                             }
-                            finish()
                         }.onFailure {
                             toast(getString(R.string.request_error_toast_with_message, it.toString()))
                             it.printStackTrace()
                         }
                     }
                 }
-            }
+            }.show()
         }
     }
 

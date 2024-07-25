@@ -131,11 +131,14 @@ data class InspectionSummary(
 }
 
 object Inspection {
-    suspend fun post(record: InspectionForm) {
-        appHttpClient.post("$serverAddr/inspection") {
+    /**
+     * returns the last inserted id
+     */
+    suspend fun post(record: InspectionForm): Int {
+        return appHttpClient.post("$serverAddr/inspection") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
-        }.parseResponse<Unit>()
+        }.parseResponse<Int>().data!!
     }
 
     suspend fun update(record: InspectionForm, id: Int) {

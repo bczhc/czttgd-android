@@ -18,7 +18,7 @@ class InspectionDetailsActivity : BaseActivity() {
     private var inspectionId: Int? = null
     private var stage: Int? = null
     private var inspection: InspectionDetails? = null
-    private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) {id->
+    private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) { id ->
         id ?: return@registerForActivityResult
         inspectionId!!
         fetchAndUpdateUiWithDialog()
@@ -36,7 +36,27 @@ class InspectionDetailsActivity : BaseActivity() {
             setResult(0, this)
         }
 
-        bindings.toolbar.setUpBackButton()
+        bindings.toolbar.apply {
+            setUpBackButton()
+            setOnMenuItemClickListener l@{
+                val inspection = inspection
+                if (it.itemId != R.id.print || inspection == null) return@l false
+
+                buildProgressDialog(getString(R.string.printint_dialog_title)) { d ->
+                    runCatching {
+                        PrintUtils.printInspection(inspection, stage!!) {
+                            d.dismiss()
+                        }
+                    }.onFailure { e ->
+                        toast(R.string.print_error_toast)
+                        e.printStackTrace()
+                        d.dismiss()
+                    }
+                }.show()
+
+                true
+            }
+        }
         fetchAndUpdateUiWithDialog()
     }
 
@@ -75,11 +95,13 @@ class InspectionDetailsActivity : BaseActivity() {
 
         bindings.bottomRl.visibility = View.VISIBLE
         bindings.bottomButton.setOnClickListener {
-            updateLauncher.launch(FormFillingActivity.UpdateActivityContract.Input(
-                id = intent.getId(),
-                form = InspectionForm.fromDetails(inspection) ,
-                stage = this.stage!!,
-            ))
+            updateLauncher.launch(
+                FormFillingActivity.UpdateActivityContract.Input(
+                    id = intent.getId(),
+                    form = InspectionForm.fromDetails(inspection),
+                    stage = this.stage!!,
+                )
+            )
         }
     }
 
@@ -110,41 +132,11 @@ class InspectionDetailsActivity : BaseActivity() {
         bindings.creatorTv.text = inspection.creator
         bindings.timeTv.text = toDottedDateTime(inspection.creationTime)
 
-        val breakpointText = when (inspection.breakFlag) {
-            true -> {
-                inspection.breakpointB
-            }
-
-            false -> {
-                inspection.breakpointA
-            }
-        }
-
-        val fieldValues = inspection.let {
-            listOf(
-                it.creator,
-                "${it.deviceCode}",
-                toDottedDateTime(it.creationTime),
-                it.productSpec ?: "",
-                it.wireSpeed?.toString() ?: "",
-                it.wireNum?.toString() ?: "",
-                it.breakSpec,
-                it.wireBatchCode ?: "",
-                it.stickBatchCode ?: "",
-                it.warehouse ?: "",
-                toDottedDate(it.productTime ?: ""),
-                it.breakFlag.toText(),
-                breakpointText ?: "",
-                it.causeType ?: "",
-                it.breakCauseA ?: "",
-                it.comments ?: "",
-            )
-        }
         bindings.fieldsLl.removeAllViews()
-        fieldValues.zip(resources.getTextArray(R.array.inspection_a_field_labels)).forEach {
+        buildFieldsMap(inspection).forEach {
             val fieldBindings = InspectionDetailsFieldBinding.inflate(layoutInflater).apply {
-                labelTv.text = it.second
-                fieldTv.text = it.first
+                labelTv.text = it.first
+                fieldTv.text = it.second
             }
             bindings.fieldsLl.addView(fieldBindings.root)
         }
@@ -162,21 +154,6 @@ class InspectionDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun Boolean.toText(): String {
-        return when (this) {
-            true -> getString(R.string.yes)
-            false -> getString(R.string.no)
-        }
-    }
-
-    private fun toDottedDate(date: String): String {
-        return dottedDateFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
-    }
-
-    private fun toDottedDateTime(date: String): String {
-        return dottedDateTimeFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
-    }
-
     private fun Intent.getId(): Int {
         androidAssertion(intent.hasExtra(EXTRA_ID))
         return intent.getIntExtra(EXTRA_ID, -1)
@@ -187,5 +164,71 @@ class InspectionDetailsActivity : BaseActivity() {
          * int extra
          */
         const val EXTRA_ID = "id"
+
+        private fun toDottedDate(date: String): String {
+            return dottedDateFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
+        }
+
+        private fun toDottedDateTime(date: String): String {
+            return dottedDateTimeFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
+        }
+
+        private fun Boolean.toText(): String {
+            return when (this) {
+                true -> App.appContext.getString(R.string.yes)
+                false -> App.appContext.getString(R.string.no)
+            }
+        }
+
+        fun buildFieldsMap(inspection: InspectionDetails): List<Pair<CharSequence, String>> {
+            val breakpointText = when (inspection.breakFlag) {
+                true -> {
+                    inspection.breakpointB
+                }
+
+                false -> {
+                    inspection.breakpointA
+                }
+            }
+
+            return when (inspection.inspectionFlag) {
+                0 -> {
+                    App.appContext.resources.getTextArray(R.array.inspection_a_field_labels).zip(inspection.let {
+                        listOf(
+                            it.creator,
+                            "${it.deviceCode}",
+                            toDottedDateTime(it.creationTime),
+                            it.productSpec ?: "",
+                            it.wireSpeed?.toString() ?: "",
+                            it.wireNum?.toString() ?: "",
+                            it.breakSpec,
+                            it.wireBatchCode ?: "",
+                            it.stickBatchCode ?: "",
+                            it.warehouse ?: "",
+                            toDottedDate(it.productTime ?: ""),
+                            it.breakFlag.toText(),
+                            breakpointText ?: "",
+                            it.causeType ?: "",
+                            it.breakCauseA ?: "",
+                            it.comments ?: "",
+                        )
+                    })
+                }
+                1 -> {
+                    App.appContext.resources.getTextArray(R.array.inspection_b_field_labels).zip(inspection.let {
+                        listOf(
+                            it.inspector ?: "",
+                            toDottedDateTime(it.inspectionTime ?: ""),
+                            it.causeType ?: "",
+                            it.breakCauseB ?: "",
+                            it.comments ?: "",
+                        )
+                    })
+                }
+                else -> {
+                    throw RuntimeException("Unexpected value")
+                }
+            }
+        }
     }
 }
