@@ -27,6 +27,22 @@ class InspectionRecordsFragment : Fragment() {
     private lateinit var bindings: FragmentBreakpointRecordsBinding
     private lateinit var listAdapter: ListAdapter
 
+    private val detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
+        val id = it ?: return@registerForActivityResult
+
+        requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
+            coroutineLaunchIo {
+                val details = Inspection.queryDetails(id)
+                withMain {
+                    val summary = InspectionSummary.fromDetails(id, details)
+                    val index = itemData.indexOfFirst { x -> x.id == id }
+                    itemData[index] = summary
+                    listAdapter.notifyItemChanged(index)
+                }
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
         bindings = FragmentBreakpointRecordsBinding.inflate(inflater)
@@ -45,22 +61,6 @@ class InspectionRecordsFragment : Fragment() {
         SharedStates.tabIndex = bindings.tabLayout.selectedIndex()
         SharedStates.searchQuery = bindings.searchView.query.toString()
         super.onDestroyView()
-    }
-
-    private val detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
-        val id = it ?: return@registerForActivityResult
-
-        requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
-            coroutineLaunchIo {
-                val details = Inspection.queryDetails(id)
-                withMain {
-                    val summary = InspectionSummary.fromDetails(id, details)
-                    val index = itemData.indexOfFirst { x -> x.id == id }
-                    itemData[index] = summary
-                    listAdapter.notifyItemChanged(index)
-                }
-            }
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
