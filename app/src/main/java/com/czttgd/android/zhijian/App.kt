@@ -38,6 +38,6 @@ val GSON by lazy { App.GSON }
 val appHttpClient: HttpClient
     get() = HttpClient {
         install(HttpTimeout) {
-            requestTimeoutMillis = 2000
+            requestTimeoutMillis = 5000
         }
     }
