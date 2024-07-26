@@ -47,11 +47,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px" />
 
-                    <include
-                        android:id="@+id/field_machine_number"
-                        layout="@layout/form_filling_field_layout"
-                        app:label="@{`机台号`}"
-                        app:required="@{true}" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@id/device_code_qr_iv">
+
+                            <include
+                                android:id="@+id/field_machine_number"
+                                layout="@layout/form_filling_field_layout"
+                                app:label="@{`机台号`}"
+                                app:required="@{true}" />
+                        </FrameLayout>
+
+                        <ImageView
+                            android:id="@+id/device_code_qr_iv"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="5dp"
+                            android:src="@drawable/qr_scan" />
+                    </RelativeLayout>
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
@@ -165,12 +187,12 @@
 
                     <!-- wtf is the layout??? 🤯🤯 -->
                     <RadioGroup
+                        android:id="@+id/radio_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:checkedButton="@id/拉丝池内断线_radio"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:id="@+id/radio_group"
                         android:padding="8dp"
                         android:textAlignment="center"
                         android:weightSum="2">
@@ -244,8 +266,8 @@
                 android:id="@+id/bottom_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="提交"
-                app:cornerRadius="1000dp" />
+                app:cornerRadius="1000dp"
+                tools:text="提交" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

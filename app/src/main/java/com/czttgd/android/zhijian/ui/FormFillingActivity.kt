@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.ContextCompat
+import androidx.core.view.updatePadding
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.broadcast.BarcodeBroadcastReceiver
@@ -23,6 +24,7 @@ import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
 import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
 import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.utils.*
+import com.czttgd.android.zhijian.utils.Barcode.requestBarcodeWithDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -229,6 +231,17 @@ class FormFillingActivity : BaseActivity() {
             this.updateId = intent.getIntExtra(EXTRA_UPDATE_ID, 0)
         } else {
             bindings.bottomButton.text = getString(R.string.submit_button)
+        }
+
+        bindings.apply {
+            fieldMachineNumber.rl.updatePadding(right = 0)
+            fieldMachineNumber.hintTv.text = "请输入"
+            deviceCodeQrIv.setOnClickListener {
+                requestBarcodeWithDialog {
+                    fieldMachineNumber.inputTv.text = it
+                    fieldMachineNumber.hintTv.visibility = View.GONE
+                }
+            }
         }
     }
 
