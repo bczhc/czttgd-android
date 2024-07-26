@@ -3,76 +3,42 @@ package com.czttgd.android.zhijian.data
 import com.czttgd.android.zhijian.appHttpClient
 import com.czttgd.android.zhijian.data.Server.parseResponse
 import com.czttgd.android.zhijian.utils.setFormDataBody
-import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import java.io.Serializable
 
 data class InspectionForm(
-    val creator: String,
-    val machineNumber: Int,
-    val machineCategory: String,
+    val creator: RefId,
+    val deviceCode: Int,
+    val deviceCategory: String,
     val creationTime: String,
-    val productSpecs: String?,
-    val wireNumber: Int?,
+    val productSpec: String,
     val wireSpeed: Int?,
-    val breakSpecs: String,
-    val copperWireNo: String?,
-    val copperStickNo: String?,
-    val repoNo: String?,
-    // 0: 拉丝池内断线
-    // 1: 非拉丝池内断线
-    val breakType: Int,
-    // 拉丝池 BigDecimal
-    val breakPositionB: String?,
-    // 非拉丝池
-    val breakPositionA: String?,
-    // 初检
-    val breakReasonA: String,
-    val comments: String?,
-) : Serializable {
-    companion object {
-        fun fromDetails(details: InspectionDetails): InspectionForm {
-            if (details.inspectionFlag != 0) {
-                throw RuntimeException("require: 初检")
-            }
-            return details.let {
-                return@let InspectionForm(
-                    creator = it.creator,
-                    machineNumber = it.deviceCode,
-                    machineCategory = it.deviceCategory,
-                    creationTime = it.creationTime,
-                    productSpecs = it.productSpec,
-                    wireNumber = it.wireNum,
-                    wireSpeed = it.wireSpeed,
-                    breakSpecs = it.breakSpec,
-                    copperWireNo = it.wireBatchCode,
-                    copperStickNo = it.stickBatchCode,
-                    repoNo = it.warehouse,
-                    breakType = when (it.breakFlag) {
-                        true -> 0
-                        false -> 1
-                    },
-                    breakPositionB = it.breakpointB,
-                    breakPositionA = it.breakpointA,
-                    breakReasonA = it.breakCauseA!!,
-                    comments = it.comments
-                )
-            }
-        }
-    }
-}
+    val wireNumber: Int?,
+    val breakSpec: String,
+    val wireBatchCode: String?,
+    val stickBatchCode: String?,
+    val warehouse: String?,
+    /**
+     * 是否拉丝池内断线
+     */
+    val breakFlag: Boolean,
+    val breakpointB: String?,
+    val breakpointA: RefId?,
+    val breakCauseA: RefId,
+    val comments: String?
+) : Serializable
 
 data class InspectionDetails(
     val deviceCode: Int,
     val deviceCategory: String,
-    val creator: String,
+    val creator: User,
     val creationTime: String,
     /**
      * 0: 已初检 1: 已终检 2: 关闭
      */
     val inspectionFlag: Int,
-    val productSpec: String?,
+    val productSpec: String,
     val wireSpeed: Int?,
     val wireNum: Int?,
     val breakSpec: String,
@@ -88,42 +54,40 @@ data class InspectionDetails(
      * actually BigDecimal
      */
     val breakpointB: String?,
-    val breakpointA: String?,
-    val causeType: String?,
-    val breakCauseA: String?,
+    val breakpointA: Breakpoint?,
+    val breakCauseA: BreakCause?,
+    val breakCauseB: BreakCause?,
     val comments: String?,
-    val inspector: String?,
-    val inspectionTime: String?,
-    val breakCauseB: String?,
-)
+    val inspector: User?,
+    val inspectionTime: String?
+): Serializable
 
 data class InspectionSummary(
     val id: Int,
-    val machineNumber: Int,
-    val cause: String?,
+    val deviceCode: Int,
+    val breakCauseA: BreakCause?,
+    val breakCauseB: BreakCause?,
     val breakSpec: String,
-    val productSpec: String?,
-    val creator: String,
+    val productSpec: String,
+    val creator: User,
     val creationTime: String,
-    val checkingState: Int,
+    val inspectionFlag: Int,
+    val breakFlag: Boolean,
 ) {
     companion object {
         fun fromDetails(id: Int, details: InspectionDetails): InspectionSummary {
             return details.let {
                 return@let InspectionSummary(
                     id = id,
-                    machineNumber = it.deviceCode,
-                    cause = when (details.inspectionFlag) {
-                        0 -> it.breakCauseA
-                        1 -> it.breakCauseB
-                        2 -> ""
-                        else -> throw RuntimeException("Unexpected value")
-                    },
+                    deviceCode = it.deviceCode,
+                    breakCauseA = it.breakCauseA,
+                    breakCauseB = it.breakCauseB,
                     breakSpec = it.breakSpec,
                     productSpec = it.productSpec,
                     creator = it.creator,
                     creationTime = it.creationTime,
-                    checkingState = it.inspectionFlag,
+                    inspectionFlag = it.inspectionFlag,
+                    breakFlag = it.breakFlag
                 )
             }
         }

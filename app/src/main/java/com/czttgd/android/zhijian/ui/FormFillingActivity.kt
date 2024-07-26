@@ -15,6 +15,7 @@ import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.broadcast.BarcodeBroadcastReceiver
 import com.czttgd.android.zhijian.data.Inspection
+import com.czttgd.android.zhijian.data.InspectionDetails
 import com.czttgd.android.zhijian.data.InspectionForm
 import com.czttgd.android.zhijian.data.SelectList
 import com.czttgd.android.zhijian.databinding.ActivityFormFillingBinding
@@ -40,20 +41,32 @@ class FormFillingActivity : BaseActivity() {
     }
     private var stage: Int? = null
 
-    private fun registerSelectionLauncher(getValue: () -> FormFillingFieldLayoutBinding): ActivityResultLauncher<Array<String>> {
+    private val selectedIds = object {
+        var creator: Int? = null
+        var breakpointA: Int? = null
+        var breakCauseA: Int? = null
+    }
+
+    private fun registerSelectionLauncher(
+        getValue: () -> FormFillingFieldLayoutBinding,
+        onIdReturn: (Int) -> Unit
+    ): ActivityResultLauncher<Array<SelectionActivity.Item>> {
         return registerForActivityResult(SelectionActivity.ActivityContract()) {
+            it ?: return@registerForActivityResult
             val bindings = getValue()
             bindings.hintTv.visibility = View.GONE
-            bindings.inputTv.text = (it ?: return@registerForActivityResult)
+            bindings.inputTv.text = it.items[it.selected].text
+            onIdReturn(it.items[it.selected].id)
         }
     }
 
     private val selectionLaunchers = arrayOf(
-        registerSelectionLauncher { bindings.fieldCreator },
-        registerSelectionLauncher { bindings.fieldMachineNumber },
-        registerSelectionLauncher { bindings.fieldBreakpointPosition },
-        registerSelectionLauncher { bindings.fieldBreakpointReason },
-        registerSelectionLauncher { bindings.fieldMachineCategory },
+        registerSelectionLauncher({ bindings.fieldCreator }) { selectedIds.creator = it },
+        // deprecated
+        registerSelectionLauncher({ bindings.fieldMachineNumber }) {},
+        registerSelectionLauncher({ bindings.fieldBreakpointPosition }) { selectedIds.breakpointA = it },
+        registerSelectionLauncher({ bindings.fieldBreakpointReason }) { selectedIds.breakCauseA = it },
+        registerSelectionLauncher({ bindings.fieldMachineCategory }) {},
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +85,7 @@ class FormFillingActivity : BaseActivity() {
         val updateMode = intent.hasExtra(EXTRA_UPDATE_FORM_DATA)
         if (updateMode) {
             bindings.bottomButton.text = getString(R.string.modify_button)
-            fillFields(intent.getTypedSerializableExtra<InspectionForm>(EXTRA_UPDATE_FORM_DATA)!!)
+            fillFields(intent.getTypedSerializableExtra<InspectionDetails>(EXTRA_UPDATE_FORM_DATA)!!)
             androidAssertion(intent.hasExtra(EXTRA_UPDATE_ID))
             this.updateId = intent.getIntExtra(EXTRA_UPDATE_ID, 0)
         } else {
@@ -125,7 +138,7 @@ class FormFillingActivity : BaseActivity() {
         )
 
         val setUpSelectionFields =
-            a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<String> ->
+            a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<SelectionActivity.Item> ->
                 if (fieldBindings.inputTv.text.isNotEmpty()) {
                     fieldBindings.hintTv.visibility = View.GONE
                 }
@@ -150,9 +163,20 @@ class FormFillingActivity : BaseActivity() {
                 }
             }
 
-        setUpSelectionFields(bindings.fieldCreator, 0) { SelectList.allUsers() }
-        setUpSelectionFields(bindings.fieldBreakpointReason, 3) { SelectList.breakReasons() }
-        setUpSelectionFields(bindings.fieldMachineCategory, 4) { arrayOf("DL", "DT", "JX") }
+        setUpSelectionFields(bindings.fieldCreator, 0) {
+            SelectList.allUsers().mapToArray { SelectionActivity.Item(it.id, it.name) }
+        }
+        setUpSelectionFields(bindings.fieldBreakpointReason, 3) {
+            SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, it.cause ?: "") }
+        }
+        setUpSelectionFields(bindings.fieldMachineCategory, 4) {
+            arrayOf("DL", "DT", "JX").mapToArray {
+                SelectionActivity.Item(
+                    0,
+                    it
+                )
+            }
+        }
 
         setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER)
 
@@ -174,7 +198,9 @@ class FormFillingActivity : BaseActivity() {
                     bindings.fieldBreakpointPosition.apply {
                         hintTv.text = getString(R.string.form_please_select_hint)
                         inputTv.text = ""
-                        setUpSelectionFields(this, 2) { SelectList.breakPoints() }
+                        setUpSelectionFields(this, 2) {
+                            SelectList.breakPoints().mapToArray { SelectionActivity.Item(it.id, it.breakpoint ?: "") }
+                        }
                     }
                 }
 
@@ -194,43 +220,52 @@ class FormFillingActivity : BaseActivity() {
         val mock = true
         if (mock) {
             bindings.apply {
-                fieldProductSpecs.inputTv.text = "?"
-                fieldCreator.inputTv.text = "李四"
-                fieldMachineNumber.inputTv.text = "2"
-                fieldMachineCategory.inputTv.text = "DT"
+//                fieldProductSpecs.inputTv.text = "?"
+//                fieldCreator.inputTv.text = "李四"
+//                fieldMachineNumber.inputTv.text = "2"
+//                fieldMachineCategory.inputTv.text = "DT"
                 fieldBreakSpecs.inputTv.text = "123"
-                fieldBreakpointReason.inputTv.text = "?"
+//                fieldBreakpointReason.inputTv.text = "?"
             }
         }
     }
 
-    private fun fillFields(form: InspectionForm) {
+    private fun fillFields(form: InspectionDetails) {
         bindings.apply {
             form.let {
-                fieldCreator.inputTv.text = it.creator
-                fieldMachineNumber.inputTv.text = it.machineNumber.toString()
-                fieldMachineCategory.inputTv.text = it.machineCategory
+                it.creator.apply {
+                    fieldCreator.inputTv.text = name
+                    selectedIds.creator = id
+                }
+                fieldMachineNumber.inputTv.text = it.deviceCode.toString()
+                fieldMachineCategory.inputTv.text = it.deviceCategory
                 fieldBreakpointTime.inputTv.text = it.creationTime
-                fieldProductSpecs.inputTv.text = it.productSpecs ?: ""
-                fieldWireNumber.inputTv.text = it.wireNumber?.toString() ?: ""
-                fieldBreakSpecs.inputTv.text = it.breakSpecs
-                fieldCopperWireNo.inputTv.text = it.copperWireNo ?: ""
-                fieldCopperStickNo.inputTv.text = it.copperStickNo ?: ""
+                fieldProductSpecs.inputTv.text = it.productSpec
+                fieldWireSpeed.inputTv.text = it.wireSpeed?.toString() ?: ""
+                fieldWireNumber.inputTv.text = it.wireNum?.toString() ?: ""
+                fieldBreakSpecs.inputTv.text = it.breakSpec
+                fieldCopperWireNo.inputTv.text = it.wireBatchCode ?: ""
+                fieldCopperStickNo.inputTv.text = it.stickBatchCode ?: ""
+                fieldRepoNo.inputTv.text = it.warehouse ?: ""
 
                 radioGroup.check(
-                    when (it.breakType) {
-                        0 -> R.id.拉丝池内断线_radio
-                        1 -> R.id.非拉丝池内断线_radio
-                        else -> throw RuntimeException("Unknown breakpoint type")
+                    when (it.breakFlag) {
+                        true -> R.id.拉丝池内断线_radio
+                        false -> R.id.非拉丝池内断线_radio
                     }
                 )
-                fieldBreakpointPosition.inputTv.text = when (it.breakType) {
-                    0 -> it.breakPositionB
-                    1 -> it.breakPositionA
-                    else -> unreachable()
+                fieldBreakpointPosition.inputTv.text = when (it.breakFlag) {
+                    true -> it.breakpointB ?: ""
+                    false -> {
+                        it.breakpointA?.id?.let { id -> selectedIds.breakpointA = id }
+                        it.breakpointA?.breakpoint ?: ""
+                    }
                 }
 
-                fieldBreakpointReason.inputTv.text = it.breakReasonA
+                it.breakCauseA?.apply {
+                    fieldBreakpointReason.inputTv.text = cause ?: ""
+                    selectedIds.breakCauseA = id
+                }
                 fieldComments.inputTv.text = it.comments
             }
         }
@@ -348,9 +383,9 @@ class FormFillingActivity : BaseActivity() {
                 return null
             }
 
-            val breakType = when (radioGroup.checkedRadioButtonId) {
-                R.id.拉丝池内断线_radio -> 0
-                R.id.非拉丝池内断线_radio -> 1
+            val breakFlag = when (radioGroup.checkedRadioButtonId) {
+                R.id.拉丝池内断线_radio -> true
+                R.id.非拉丝池内断线_radio -> false
                 else -> unreachable()
             }
 
@@ -360,25 +395,27 @@ class FormFillingActivity : BaseActivity() {
             }
             val dummyZero = 0
             val record = InspectionForm(
-                creator = fieldCreator.checkedField(onError) { it } ?: "",
-                machineNumber = fieldMachineNumber.checkedField(onError) { it.toInt() } ?: dummyZero,
+                creator = run { fieldCreator.checkedField(onError) { it } ?: ""; selectedIds.creator!! },
+                deviceCode = fieldMachineNumber.checkedField(onError) { it.toInt() } ?: dummyZero,
                 creationTime = fieldBreakpointTime.checkedField(onError) { it } ?: "",
-                productSpecs = fieldProductSpecs.checkedField(onError) { it } ?: "",
+                productSpec = fieldProductSpecs.checkedField(onError) { it } ?: "",
                 wireNumber = fieldWireNumber.checkedField(onError) { it.toInt() },
-                breakSpecs = fieldBreakSpecs.checkedField(onError) { it } ?: "",
-                copperWireNo = fieldCopperWireNo.checkedField(onError) { it },
-                copperStickNo = fieldCopperStickNo.checkedField(onError) { it },
-                repoNo = fieldRepoNo.checkedField(onError) { it },
-                breakType = breakType,
-                breakReasonA = fieldBreakpointReason.checkedField(onError) { it } ?: "",
-                breakPositionB = if (breakType == 0) {
+                breakSpec = fieldBreakSpecs.checkedField(onError) { it } ?: "",
+                wireBatchCode = fieldCopperWireNo.checkedField(onError) { it },
+                stickBatchCode = fieldCopperStickNo.checkedField(onError) { it },
+                warehouse = fieldRepoNo.checkedField(onError) { it },
+                breakFlag = breakFlag,
+                breakCauseA = run {
+                    fieldBreakpointReason.checkedField(onError) { it } ?: ""; selectedIds.breakCauseA!!
+                },
+                breakpointB = if (breakFlag) {
                     fieldBreakpointPosition.checkedField(onError) { BigDecimal(it); it }
                 } else null,
-                breakPositionA = if (breakType == 1) {
-                    fieldBreakpointPosition.checkedField(onError) { it }
+                breakpointA = if (!breakFlag) {
+                    run { fieldBreakpointPosition.checkedField(onError) { it }; selectedIds.breakpointA!! }
                 } else null,
                 comments = fieldComments.checkedField(onError) { it },
-                machineCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
+                deviceCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
                 wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
             )
             return Pair(record, hasError)
@@ -405,7 +442,7 @@ class FormFillingActivity : BaseActivity() {
         const val STAGE_TWO = 2
 
         /**
-         * Serializable extra; type: [InspectionForm]
+         * Serializable extra; type: [InspectionDetails]
          *
          * When this is present, the bottom button will turn to "modify" instead of "submit", and
          * it will update the database
@@ -424,7 +461,7 @@ class FormFillingActivity : BaseActivity() {
 
     class UpdateActivityContract : ActivityResultContract<UpdateActivityContract.Input, Int?>() {
         data class Input(
-            val form: InspectionForm,
+            val details: InspectionDetails,
             val id: Int,
             val stage: Int,
         )
@@ -433,7 +470,7 @@ class FormFillingActivity : BaseActivity() {
             return Intent(context, FormFillingActivity::class.java).apply {
                 putExtra(EXTRA_STAGE, input.stage)
                 putExtra(EXTRA_UPDATE_ID, input.id)
-                putExtra(EXTRA_UPDATE_FORM_DATA, input.form)
+                putExtra(EXTRA_UPDATE_FORM_DATA, input.details)
             }
         }
 

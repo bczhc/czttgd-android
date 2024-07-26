@@ -14,6 +14,7 @@ import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.databinding.ActivitySelectionBinding
 import com.czttgd.android.zhijian.databinding.SelectionActivityListItemBinding
 import com.czttgd.android.zhijian.utils.AdapterWithClickListener
+import com.czttgd.android.zhijian.utils.androidAssertion
 import com.czttgd.android.zhijian.utils.getTypedSerializableExtra
 
 
@@ -25,7 +26,7 @@ class SelectionActivity : BaseActivity() {
         setContentView(bindings.root)
         bindings.toolbar.setUpBackButton()
 
-        val extra = intent.getTypedSerializableExtra<Array<String>>(EXTRA_LIST_ITEMS)
+        val extra = intent.getTypedSerializableExtra<Array<Item>>(EXTRA_LIST_ITEMS)
         val listItems = (extra ?: arrayOf()).toList()
 
         val listAdapter = ListAdapter(listItems)
@@ -42,20 +43,21 @@ class SelectionActivity : BaseActivity() {
 
         listAdapter.setOnItemClickListener { position, _ ->
             val resultIntent = Intent().apply {
-                putExtra(EXTRA_SELECTED_ITEM, listItems[position])
+                putExtra(EXTRA_SELECTED_INDEX, position)
+                putExtra(EXTRA_LIST_ITEMS, listItems.toTypedArray())
             }
             setResult(0, resultIntent)
             finish()
         }
     }
 
-    class ListAdapter(private val items: List<String>) : AdapterWithClickListener<ListAdapter.MyViewHolder>() {
+    class ListAdapter(private val items: List<Item>) : AdapterWithClickListener<ListAdapter.MyViewHolder>() {
         class MyViewHolder(bindings: SelectionActivityListItemBinding) : ViewHolder(bindings.root) {
             val textView = bindings.tv
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.textView.text = items[position]
+            holder.textView.text = items[position].text
         }
 
         override fun getItemCount(): Int {
@@ -68,29 +70,45 @@ class SelectionActivity : BaseActivity() {
         }
     }
 
+    data class Item(
+        val id: Int,
+        val text: String,
+    )
+
     companion object {
         /**
          * serializable extra
          *
-         * type: an [Array] of [String]s
+         * type: an [Array] of [Item]s
          */
         const val EXTRA_LIST_ITEMS = "items"
 
         /**
-         * string result extra
+         * int result extra
+         *
+         * returns the selected index
          */
-        const val EXTRA_SELECTED_ITEM = "selected item"
+        const val EXTRA_SELECTED_INDEX = "selected"
     }
 
-    class ActivityContract : ActivityResultContract<Array<String>, String?>() {
-        override fun createIntent(context: Context, input: Array<String>): Intent {
+    class ActivityContract : ActivityResultContract<Array<Item>, ActivityContract.Output?>() {
+        class Output(
+            val items: Array<Item>,
+            val selected: Int,
+        )
+
+        override fun createIntent(context: Context, input: Array<Item>): Intent {
             return Intent(context, SelectionActivity::class.java).apply {
                 putExtra(EXTRA_LIST_ITEMS, input)
             }
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): String? {
-            return (intent ?: return null).getStringExtra(EXTRA_SELECTED_ITEM)
+        override fun parseResult(resultCode: Int, intent: Intent?): Output? {
+            intent ?: return null
+            androidAssertion(intent.hasExtra(EXTRA_SELECTED_INDEX))
+            val index = intent.getIntExtra(EXTRA_SELECTED_INDEX, -1)
+            val items = intent.getTypedSerializableExtra<Array<Item>>(EXTRA_LIST_ITEMS)!!
+            return Output(items, index)
         }
     }
 }

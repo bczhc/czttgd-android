@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.czttgd.android.zhijian.*
 import com.czttgd.android.zhijian.data.Inspection
 import com.czttgd.android.zhijian.data.InspectionDetails
-import com.czttgd.android.zhijian.data.InspectionForm
 import com.czttgd.android.zhijian.databinding.ActivityInspectionDetailsBinding
 import com.czttgd.android.zhijian.databinding.InspectionDetailsFieldBinding
 import com.czttgd.android.zhijian.utils.*
@@ -98,7 +97,7 @@ class InspectionDetailsActivity : BaseActivity() {
             updateLauncher.launch(
                 FormFillingActivity.UpdateActivityContract.Input(
                     id = intent.getId(),
-                    form = InspectionForm.fromDetails(inspection),
+                    details = inspection,
                     stage = this.stage!!,
                 )
             )
@@ -129,7 +128,7 @@ class InspectionDetailsActivity : BaseActivity() {
             2 -> getString(R.string.stage_two)
             else -> "?"
         }
-        bindings.creatorTv.text = inspection.creator
+        bindings.creatorTv.text = inspection.creator.name
         bindings.timeTv.text = toDottedDateTime(inspection.creationTime)
 
         bindings.fieldsLl.removeAllViews()
@@ -187,7 +186,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 }
 
                 false -> {
-                    inspection.breakpointA
+                    inspection.breakpointA?.breakpoint
                 }
             }
 
@@ -195,10 +194,10 @@ class InspectionDetailsActivity : BaseActivity() {
                 0 -> {
                     App.appContext.resources.getTextArray(R.array.inspection_a_field_labels).zip(inspection.let {
                         listOf(
-                            it.creator,
+                            it.creator.name,
                             "${it.deviceCode}",
                             toDottedDateTime(it.creationTime),
-                            it.productSpec ?: "",
+                            it.productSpec,
                             it.wireSpeed?.toString() ?: "",
                             it.wireNum?.toString() ?: "",
                             it.breakSpec,
@@ -208,23 +207,25 @@ class InspectionDetailsActivity : BaseActivity() {
                             toDottedDate(it.productTime ?: ""),
                             it.breakFlag.toText(),
                             breakpointText ?: "",
-                            it.causeType ?: "",
-                            it.breakCauseA ?: "",
+                            it.breakCauseA?.type ?: "",
+                            it.breakCauseA?.cause ?: "",
                             it.comments ?: "",
                         )
                     })
                 }
+
                 1 -> {
                     App.appContext.resources.getTextArray(R.array.inspection_b_field_labels).zip(inspection.let {
                         listOf(
-                            it.inspector ?: "",
+                            it.inspector?.name ?: "",
                             toDottedDateTime(it.inspectionTime ?: ""),
-                            it.causeType ?: "",
-                            it.breakCauseB ?: "",
+                            it.breakCauseB?.type ?: "",
+                            it.breakCauseB?.cause ?: "",
                             it.comments ?: "",
                         )
                     })
                 }
+
                 else -> {
                     throw RuntimeException("Unexpected value")
                 }

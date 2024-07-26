@@ -10,6 +10,8 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
+typealias RefId = Int
+
 val serverAddr: String
     get() = Settings.read().serverAddr ?: ""
 

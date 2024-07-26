@@ -174,12 +174,27 @@ class InspectionRecordsFragment : Fragment() {
             val context = holder.bindings.inspectTv.context
             context.apply {
                 holder.bindings.apply {
-                    titleTv.text = getString(R.string.inspection_records_card_title, item.machineNumber)
-                    subtitleTv.text = item.cause
+                    val cause = when (item.inspectionFlag) {
+                        0 -> {
+                            // 初检
+                            item.breakCauseA?.cause
+                        }
+                        1 -> {
+                            // 终检
+                            item.breakCauseB?.cause
+                        }
+                        2 -> {
+                            ""
+                        }
+                        else -> throw RuntimeException("Unexpected value")
+                    }
+
+                    titleTv.text = getString(R.string.inspection_records_card_title, item.deviceCode)
+                    subtitleTv.text = cause
                     bodyLine1.text = getString(R.string.inspection_records_card_body1, item.breakSpec)
                     bodyLine2.text = getString(R.string.inspection_records_card_body2, item.productSpec)
-                    creatorTv.text = item.creator
-                    when (State.from(item.checkingState)) {
+                    creatorTv.text = item.creator.name
+                    when (State.from(item.inspectionFlag)) {
                         State.已初检 -> {
                             inspectTv.text = getString(R.string.inspection_records_已初检)
                             inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
