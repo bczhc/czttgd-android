@@ -197,7 +197,7 @@ class InspectionDetailsActivity : BaseActivity() {
                             it.creator.name,
                             "${it.deviceCode}",
                             toDottedDateTime(it.creationTime),
-                            it.productSpec,
+                            it.productSpec ?: "",
                             it.wireSpeed?.toString() ?: "",
                             it.wireNum?.toString() ?: "",
                             it.breakSpec,

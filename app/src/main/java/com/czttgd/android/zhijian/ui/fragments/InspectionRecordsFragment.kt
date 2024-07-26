@@ -192,7 +192,7 @@ class InspectionRecordsFragment : Fragment() {
                     titleTv.text = getString(R.string.inspection_records_card_title, item.deviceCode)
                     subtitleTv.text = cause
                     bodyLine1.text = getString(R.string.inspection_records_card_body1, item.breakSpec)
-                    bodyLine2.text = getString(R.string.inspection_records_card_body2, item.productSpec)
+                    bodyLine2.text = getString(R.string.inspection_records_card_body2, item.productSpec ?: "")
                     creatorTv.text = item.creator.name
                     when (State.from(item.inspectionFlag)) {
                         State.已初检 -> {

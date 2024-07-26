@@ -38,7 +38,7 @@ object PrintUtils {
         })
         PrintUtil.printText("${details.deviceCode}号机台 铜线${stageChar}期                $inspectionFlag")
         PrintUtil.printLine(1)
-        PrintUtil.printText("${details.creator} ${dottedDateFormatter.format(dbDateFormatter.tryParse(details.creationTime) ?: "")} 提交")
+        PrintUtil.printText("${details.creator.name} ${dottedDateFormatter.format(dbDateFormatter.tryParse(details.creationTime) ?: "")} 提交")
         PrintUtil.printLine(2)
 
         PrintUtil.printText(

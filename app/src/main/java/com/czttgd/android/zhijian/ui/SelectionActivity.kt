@@ -16,6 +16,7 @@ import com.czttgd.android.zhijian.databinding.SelectionActivityListItemBinding
 import com.czttgd.android.zhijian.utils.AdapterWithClickListener
 import com.czttgd.android.zhijian.utils.androidAssertion
 import com.czttgd.android.zhijian.utils.getTypedSerializableExtra
+import java.io.Serializable
 
 
 class SelectionActivity : BaseActivity() {
@@ -73,7 +74,7 @@ class SelectionActivity : BaseActivity() {
     data class Item(
         val id: Int,
         val text: String,
-    )
+    ): Serializable
 
     companion object {
         /**

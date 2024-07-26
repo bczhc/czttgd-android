@@ -4,7 +4,7 @@ import com.czttgd.android.zhijian.data.Server.fetch
 
 object SelectList {
     suspend fun machineNumbers(stage: Int): Array<Int> {
-        return fetch<Array<Int>>("$serverAddr/stage/$stage/machines")
+        return fetch<Array<Int>>("$serverAddr/stage/$stage/devices")
     }
 
     suspend fun allUsers(): Array<User> {
@@ -12,7 +12,7 @@ object SelectList {
     }
 
     suspend fun breakCauses(): Array<BreakCause> {
-        return fetch<Array<BreakCause>>("$serverAddr/break/reasons")
+        return fetch<Array<BreakCause>>("$serverAddr/break/causes")
     }
 
     suspend fun breakPoints(): Array<Breakpoint> {

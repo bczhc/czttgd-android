@@ -14,10 +14,6 @@
             type="java.lang.Boolean" />
 
         <variable
-            name="initText"
-            type="java.lang.String" />
-
-        <variable
             name="rightIcon"
             type="android.graphics.drawable.Drawable" />
     </data>
@@ -72,7 +68,6 @@
             android:drawableRight="@{rightIcon}"
             android:gravity="end|center_vertical"
             android:paddingStart="5dp"
-            android:text="@{initText}"
             android:textAppearance="@style/TextAppearance.App.FormTextHint"
             tools:ignore="RtlHardcoded"
             tools:text="请选择 >" />

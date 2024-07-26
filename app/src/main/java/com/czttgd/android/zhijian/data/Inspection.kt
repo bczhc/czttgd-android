@@ -12,7 +12,7 @@ data class InspectionForm(
     val deviceCode: Int,
     val deviceCategory: String,
     val creationTime: String,
-    val productSpec: String,
+    val productSpec: String?,
     val wireSpeed: Int?,
     val wireNumber: Int?,
     val breakSpec: String,
@@ -38,7 +38,7 @@ data class InspectionDetails(
      * 0: 已初检 1: 已终检 2: 关闭
      */
     val inspectionFlag: Int,
-    val productSpec: String,
+    val productSpec: String?,
     val wireSpeed: Int?,
     val wireNum: Int?,
     val breakSpec: String,
@@ -60,7 +60,7 @@ data class InspectionDetails(
     val comments: String?,
     val inspector: User?,
     val inspectionTime: String?
-): Serializable
+) : Serializable
 
 data class InspectionSummary(
     val id: Int,
@@ -68,7 +68,7 @@ data class InspectionSummary(
     val breakCauseA: BreakCause?,
     val breakCauseB: BreakCause?,
     val breakSpec: String,
-    val productSpec: String,
+    val productSpec: String?,
     val creator: User,
     val creationTime: String,
     val inspectionFlag: Int,
@@ -113,7 +113,7 @@ object Inspection {
     }
 
     suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
-        return appHttpClient.get("$serverAddr/inspections?filter=${filter.encodeURLPathPart()}&stage=$stage")
+        return appHttpClient.get("$serverAddr/inspection/search?filter=${filter.encodeURLPathPart()}&stage=$stage")
             .parseResponse<Array<InspectionSummary>>()
     }
 
