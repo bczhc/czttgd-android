@@ -34,16 +34,25 @@ class InspectionRecordsFragment : Fragment() {
         detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {
             val id = it ?: return@registerForActivityResult
 
-            requireContext().buildProgressDialog(getString(R.string.updating_dialog_title)) {
-                coroutineLaunchIo {
-                    val details = Inspection.queryDetails(id)
-                    withMain {
-                        val summary = InspectionSummary.fromDetails(id, details)
-                        val index = itemData.indexOfFirst { x -> x.id == id }
-                        itemData[index] = summary
-                        listAdapter.notifyItemChanged(index)
+            requireContext().apply {
+                buildProgressDialog(getString(R.string.updating_dialog_title)) {
+                    coroutineLaunchIo {
+                        val result = runCatching {
+                            Inspection.queryDetails(id)
+                        }
+                        withMain {
+                            result.onFailure {
+                                toast(R.string.request_failed_toast)
+                            }.onSuccess { details ->
+                                val summary = InspectionSummary.fromDetails(id, details)
+                                val index = itemData.indexOfFirst { x -> x.id == id }
+                                itemData[index] = summary
+                                listAdapter.notifyItemChanged(index)
+                            }
+                            it.dismiss()
+                        }
                     }
-                }
+                }.show()
             }
         }
 
@@ -179,13 +188,16 @@ class InspectionRecordsFragment : Fragment() {
                             // 初检
                             item.breakCauseA?.cause
                         }
+
                         1 -> {
                             // 终检
                             item.breakCauseB?.cause
                         }
+
                         2 -> {
                             ""
                         }
+
                         else -> throw RuntimeException("Unexpected value")
                     }
 

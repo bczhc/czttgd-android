@@ -56,15 +56,19 @@ class InspectionDetailsActivity : BaseActivity() {
                 true
             }
         }
-        fetchAndUpdateUiWithDialog()
+
+        coroutineLaunchIo {
+            fetchAndUpdateUi()
+        }
     }
 
     private fun fetchAndUpdateUiWithDialog() {
         buildProgressDialog(getString(R.string.fetching_dialog_title)) {
             coroutineLaunchIo {
                 fetchAndUpdateUi()
+                it.dismiss()
             }
-        }
+        }.show()
     }
 
     private suspend fun fetchAndUpdateUi() {
