@@ -47,6 +47,10 @@ class WorkspaceFragment : Fragment() {
             val settings = Settings.read()
 
             addrEt.setText(settings.serverAddr ?: "")
+            if (addrEt.text.toString().isEmpty()) {
+                @Suppress("HttpUrlsUsage", "SetTextI18n")
+                addrEt.setText("http://")
+            }
 
             var onConnectionTesting = false
             val dialog = MaterialAlertDialogBuilder(context)
