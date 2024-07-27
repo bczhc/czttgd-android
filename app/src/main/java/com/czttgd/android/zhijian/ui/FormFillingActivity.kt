@@ -192,6 +192,7 @@ class FormFillingActivity : BaseActivity() {
         }
 
         val radioGroupOnChecked = { checkedId: Int ->
+            selectedIds.breakpointA = null
             when (checkedId) {
                 R.id.拉丝池内断线_radio -> {
                     bindings.fieldBreakpointPosition.apply {
@@ -448,7 +449,7 @@ class FormFillingActivity : BaseActivity() {
                     fieldBreakpointPosition.checkedField(onError) { BigDecimal(it); it }
                 } else null,
                 breakpointA = if (!breakFlag) {
-                    run { fieldBreakpointPosition.checkedField(onError) { it }; selectedIds.breakpointA ?: dummyZero }
+                    run { fieldBreakpointPosition.checkedField(onError) { it }; selectedIds.breakpointA }
                 } else null,
                 comments = fieldComments.checkedField(onError) { it },
                 deviceCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
