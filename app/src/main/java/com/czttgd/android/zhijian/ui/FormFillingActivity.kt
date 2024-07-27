@@ -1,11 +1,13 @@
 package com.czttgd.android.zhijian.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -37,9 +39,19 @@ class FormFillingActivity : BaseActivity() {
     private var updateMode: Boolean = false
     private var updateId: Int? = null
     private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver { _, content ->
-        toast("Scanned: $content")
-        // TODO
-        bindings.fieldBreakSpecs.inputTv.text = content
+        Log.d(tag, "Scanned: $content")
+        content ?: return@BarcodeBroadcastReceiver
+        val captures = Regex("""^.*:(.*?),([0-9]+),([0-9]+),.*$""").find(content) ?: return@BarcodeBroadcastReceiver
+        runCatching {
+            val groups = captures.groupValues
+            bindings.apply {
+                fieldBreakSpecs.inputTv.text = groups[1]
+                fieldCopperWireNo.inputTv.text = groups[2]
+                fieldCopperStickNo.inputTv.text = groups[3]
+                // ??
+                fieldRepoNo
+            }
+        }
     }
     private var stage: Int? = null
 
@@ -71,6 +83,7 @@ class FormFillingActivity : BaseActivity() {
         registerSelectionLauncher({ bindings.fieldMachineCategory }) {},
     )
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindings = ActivityFormFillingBinding.inflate(layoutInflater)
@@ -95,6 +108,7 @@ class FormFillingActivity : BaseActivity() {
 
             fieldBindings.rl.setOnClickListener {
                 val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
+                    et.setText(fieldBindings.inputTv.text)
                     inputType?.let { et.inputType = it }
                     et.setOnFocusChangeListener { _, hasFocus ->
                         et.post {
@@ -212,7 +226,7 @@ class FormFillingActivity : BaseActivity() {
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
-        val mock = true
+        val mock = false
         if (mock) {
             bindings.apply {
 //                fieldProductSpecs.inputTv.text = "?"
