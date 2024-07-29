@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.czttgd.android.zhijian.BaseActivity
+import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.databinding.ActivitySelectionBinding
 import com.czttgd.android.zhijian.databinding.SelectionActivityListItemBinding
 import com.czttgd.android.zhijian.utils.AdapterWithClickListener
@@ -22,6 +24,8 @@ import java.io.Serializable
 class SelectionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        @Suppress("DEPRECATION")
+        overridePendingTransition(R.anim.enter, R.anim.exit)
 
         val bindings = ActivitySelectionBinding.inflate(layoutInflater)
         setContentView(bindings.root)
@@ -49,6 +53,12 @@ class SelectionActivity : BaseActivity() {
             }
             setResult(0, resultIntent)
             finish()
+        }
+
+        onBackPressedDispatcher.addCallback {
+            finish()
+            @Suppress("DEPRECATION")
+            overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
         }
     }
 
