@@ -124,7 +124,7 @@ object Inspection {
             .parseResponse<Array<InspectionSummary>>()
     }
 
-    const val LIST_LIMIT = 5
+    const val LIST_LIMIT = 50
 
     suspend fun queryDetails(id: Long): InspectionDetails {
         return appHttpClient.get("$serverAddr/inspection/$id/details")
