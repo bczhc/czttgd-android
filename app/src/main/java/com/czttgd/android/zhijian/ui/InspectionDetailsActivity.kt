@@ -1,3 +1,5 @@
+@file:Suppress("LocalVariableName", "NonAsciiCharacters")
+
 package com.czttgd.android.zhijian.ui
 
 import android.content.Context
@@ -9,6 +11,7 @@ import com.czttgd.android.zhijian.*
 import com.czttgd.android.zhijian.data.Inspection
 import com.czttgd.android.zhijian.data.InspectionDetails
 import com.czttgd.android.zhijian.databinding.ActivityInspectionDetailsBinding
+import com.czttgd.android.zhijian.databinding.InspectionDetailsCardViewBinding
 import com.czttgd.android.zhijian.databinding.InspectionDetailsFieldBinding
 import com.czttgd.android.zhijian.utils.*
 
@@ -110,38 +113,45 @@ class InspectionDetailsActivity : BaseActivity() {
 
     private fun setUpFieldsUi() {
         val inspection = this.inspection ?: return
-        when (inspection.inspectionFlag) {
-            0 -> {
-                bindings.inspectTv.text = getString(R.string.inspection_records_已初检)
-                bindings.inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
-                bindings.inspectionCardTitle.text = getString(R.string.inspection_a_info_title)
-            }
 
-            1 -> {
-                bindings.inspectTv.text = getString(R.string.inspection_records_已终检)
-                bindings.inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_b))
-                bindings.inspectionCardTitle.text = getString(R.string.inspection_b_info_title)
-            }
+        val fields = buildFieldsMap(inspection)
 
-            else -> return
+        val cardViewAddFields = {cv: InspectionDetailsCardViewBinding, cvFields: List<Pair<CharSequence, String>> ->
+            val fieldsLl = cv.fieldsLl
+
+            fieldsLl.removeAllViews()
+            cvFields.forEach {
+                val fieldBindings = InspectionDetailsFieldBinding.inflate(layoutInflater).apply {
+                    labelTv.text = it.first
+                    fieldTv.text = it.second
+                }
+                fieldsLl.addView(fieldBindings.root)
+            }
         }
 
-        bindings.deviceTv.text = getString(R.string.inspection_device_code, inspection.deviceCode)
-        bindings.stageTv.text = when (stage) {
-            1 -> getString(R.string.stage_one)
-            2 -> getString(R.string.stage_two)
-            else -> "?"
-        }
-        bindings.creatorTv.text = inspection.creator.name
-        bindings.timeTv.text = toDottedDateTime(inspection.creationTime)
+        bindings.apply {
+            inspectTv.text = getString(R.string.inspection_records_已初检)
+            inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
+            cardViewA.inspectionCardTitle.text = getString(R.string.inspection_a_info_title)
 
-        bindings.fieldsLl.removeAllViews()
-        buildFieldsMap(inspection).forEach {
-            val fieldBindings = InspectionDetailsFieldBinding.inflate(layoutInflater).apply {
-                labelTv.text = it.first
-                fieldTv.text = it.second
+            deviceTv.text = getString(R.string.inspection_device_code, inspection.deviceCode)
+            stageTv.text = when (stage) {
+                1 -> getString(R.string.stage_one)
+                2 -> getString(R.string.stage_two)
+                else -> "?"
             }
-            bindings.fieldsLl.addView(fieldBindings.root)
+            creatorTv.text = inspection.creator.name
+            timeTv.text = toDottedDateTime(inspection.creationTime)
+
+            cardViewAddFields(cardViewA, fields.初检)
+
+            if (inspection.inspectionFlag == 1) {
+                cardViewB.root.visibility = View.VISIBLE
+                inspectTv.text = getString(R.string.inspection_records_已终检)
+                inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_b))
+                cardViewB.inspectionCardTitle.text = getString(R.string.inspection_b_info_title)
+                cardViewAddFields(cardViewB, fields.终检)
+            }
         }
     }
 
@@ -183,7 +193,12 @@ class InspectionDetailsActivity : BaseActivity() {
             }
         }
 
-        fun buildFieldsMap(inspection: InspectionDetails): List<Pair<CharSequence, String>> {
+        class Fields(
+            val 初检: List<Pair<CharSequence, String>>,
+            val 终检: List<Pair<CharSequence, String>>,
+        )
+
+        fun buildFieldsMap(inspection: InspectionDetails): Fields {
             val breakpointText = when (inspection.breakFlag) {
                 true -> {
                     inspection.breakpointB
@@ -194,46 +209,37 @@ class InspectionDetailsActivity : BaseActivity() {
                 }
             }
 
-            return when (inspection.inspectionFlag) {
-                0 -> {
-                    App.appContext.resources.getTextArray(R.array.inspection_a_field_labels).zip(inspection.let {
-                        listOf(
-                            it.creator.name,
-                            "${it.deviceCode}",
-                            toDottedDateTime(it.creationTime),
-                            it.productSpec ?: "",
-                            it.wireSpeed?.toString() ?: "",
-                            it.wireNum?.toString() ?: "",
-                            it.breakSpec,
-                            it.wireBatchCode ?: "",
-                            it.stickBatchCode ?: "",
-                            it.warehouse ?: "",
-                            toDottedDate(it.productTime ?: ""),
-                            it.breakFlag.toText(),
-                            breakpointText ?: "",
-                            it.breakCauseA?.type ?: "",
-                            it.breakCauseA?.cause ?: "",
-                            it.comments ?: "",
-                        )
-                    })
-                }
-
-                1 -> {
-                    App.appContext.resources.getTextArray(R.array.inspection_b_field_labels).zip(inspection.let {
-                        listOf(
-                            it.inspector?.name ?: "",
-                            toDottedDateTime(it.inspectionTime ?: ""),
-                            it.breakCauseB?.type ?: "",
-                            it.breakCauseB?.cause ?: "",
-                            it.comments ?: "",
-                        )
-                    })
-                }
-
-                else -> {
-                    throw RuntimeException("Unexpected value")
-                }
-            }
+            return Fields(
+                初检 = App.appContext.resources.getTextArray(R.array.inspection_a_field_labels).zip(inspection.let {
+                    listOf(
+                        it.creator.name,
+                        "${it.deviceCode}",
+                        toDottedDateTime(it.creationTime),
+                        it.productSpec ?: "",
+                        it.wireSpeed?.toString() ?: "",
+                        it.wireNum?.toString() ?: "",
+                        it.breakSpec,
+                        it.wireBatchCode ?: "",
+                        it.stickBatchCode ?: "",
+                        it.warehouse ?: "",
+                        toDottedDate(it.productTime ?: ""),
+                        it.breakFlag.toText(),
+                        breakpointText ?: "",
+                        it.breakCauseA?.type ?: "",
+                        it.breakCauseA?.cause ?: "",
+                        it.comments ?: "",
+                    )
+                }),
+                终检 = App.appContext.resources.getTextArray(R.array.inspection_b_field_labels).zip(inspection.let {
+                    listOf(
+                        it.inspector?.name ?: "",
+                        toDottedDateTime(it.inspectionTime ?: ""),
+                        it.breakCauseB?.type ?: "",
+                        it.breakCauseB?.cause ?: "",
+                        it.comments ?: "",
+                    )
+                })
+            )
         }
     }
 }
