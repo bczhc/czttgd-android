@@ -156,16 +156,6 @@
                         android:layout_height="1px" />
 
                     <include
-                        android:id="@+id/field_copper_wire_no"
-                        layout="@layout/form_filling_field_layout"
-                        app:label="@{`铜线卷号`}"
-                        app:required="@{false}" />
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="1px" />
-
-                    <include
                         android:id="@+id/field_copper_stick_no"
                         layout="@layout/form_filling_field_layout"
                         app:label="@{`铜杆卷号`}"

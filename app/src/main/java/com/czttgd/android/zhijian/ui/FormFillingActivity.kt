@@ -26,7 +26,6 @@ import com.czttgd.android.zhijian.databinding.DialogInputTextBinding
 import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
 import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.utils.*
-import com.czttgd.android.zhijian.utils.Barcode.requestBarcodeWithDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -38,19 +37,31 @@ class FormFillingActivity : BaseActivity() {
     private lateinit var bindings: ActivityFormFillingBinding
     private var updateMode: Boolean = false
     private var updateId: Int? = null
-    private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver { _, content ->
+    private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver barcode@ { _, content ->
         Log.d(tag, "Scanned: $content")
-        content ?: return@BarcodeBroadcastReceiver
-        val captures = Regex("""^.*:(.*?),([0-9]+),([0-9]+),.*$""").find(content) ?: return@BarcodeBroadcastReceiver
+        content ?: return@barcode
+        if (Regex("^[0-9]+$").matches(content)) {
+            // for device code
+            bindings.fieldMachineNumber.apply {
+                inputTv.text = content
+                hintTv.visibility = View.GONE
+            }
+            return@barcode
+        }
+
+        val regex = Regex("""^.*?:.*?,([0-9]+),([0-9]+),([A-Z]+),.*$""")
         runCatching {
+            if (!regex.matches(content)) throw RuntimeException("Invalid QR")
+
+            val captures = regex.find(content)!!
             val groups = captures.groupValues
             bindings.apply {
                 fieldBreakSpecs.inputTv.text = groups[1]
-                fieldCopperWireNo.inputTv.text = groups[2]
-                fieldCopperStickNo.inputTv.text = groups[3]
-                // ??
-                fieldRepoNo
+                fieldCopperStickNo.inputTv.text = groups[2]
+                fieldRepoNo.inputTv.text = groups[3]
             }
+        }.onFailure {
+            toast(R.string.invalid_qr_toast)
         }
     }
     private var stage: Int? = null
@@ -80,6 +91,7 @@ class FormFillingActivity : BaseActivity() {
         registerSelectionLauncher({ bindings.fieldMachineNumber }) {},
         registerSelectionLauncher({ bindings.fieldBreakpointPosition }) { selectedIds.breakpointA = it },
         registerSelectionLauncher({ bindings.fieldBreakpointReason }) { selectedIds.breakCauseA = it },
+        // deprecated
         registerSelectionLauncher({ bindings.fieldMachineCategory }) {},
     )
 
@@ -180,14 +192,6 @@ class FormFillingActivity : BaseActivity() {
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) {
             SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, it.cause ?: "") }
         }
-        setUpSelectionFields(bindings.fieldMachineCategory, 4) {
-            arrayOf("DL", "DT", "JX").mapToArray {
-                SelectionActivity.Item(
-                    0,
-                    it
-                )
-            }
-        }
 
         setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER)
 
@@ -255,12 +259,9 @@ class FormFillingActivity : BaseActivity() {
         bindings.apply {
             fieldMachineNumber.rl.updatePadding(right = 0)
             fieldMachineNumber.hintTv.text = "请输入"
-            deviceCodeQrIv.setOnClickListener {
-                requestBarcodeWithDialog {
-                    fieldMachineNumber.inputTv.text = it
-                    fieldMachineNumber.hintTv.visibility = View.GONE
-                }
-            }
+
+            // this is hard-coded
+            fieldMachineCategory.inputTv.text = "DT"
         }
     }
 
@@ -284,7 +285,6 @@ class FormFillingActivity : BaseActivity() {
                 fieldWireSpeed.fill(it.wireSpeed?.toString() ?: "")
                 fieldWireNumber.fill(it.wireNum?.toString() ?: "")
                 fieldBreakSpecs.fill(it.breakSpec)
-                fieldCopperWireNo.fill(it.wireBatchCode ?: "")
                 fieldCopperStickNo.fill(it.stickBatchCode ?: "")
                 fieldRepoNo.fill(it.warehouse ?: "")
 
@@ -442,7 +442,7 @@ class FormFillingActivity : BaseActivity() {
                 productSpec = fieldProductSpecs.checkedField(onError) { it } ?: "",
                 wireNumber = fieldWireNumber.checkedField(onError) { it.toInt() },
                 breakSpec = fieldBreakSpecs.checkedField(onError) { it } ?: "",
-                wireBatchCode = fieldCopperWireNo.checkedField(onError) { it },
+                wireBatchCode = null,
                 stickBatchCode = fieldCopperStickNo.checkedField(onError) { it },
                 warehouse = fieldRepoNo.checkedField(onError) { it },
                 breakFlag = breakFlag,
