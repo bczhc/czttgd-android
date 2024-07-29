@@ -11,8 +11,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.data.Inspection
+import com.czttgd.android.zhijian.data.Inspection.LIST_LIMIT
 import com.czttgd.android.zhijian.data.InspectionSummary
 import com.czttgd.android.zhijian.databinding.FragmentBreakpointRecordsBinding
 import com.czttgd.android.zhijian.databinding.InspectionRecordsListItemBinding
@@ -84,19 +86,57 @@ class InspectionRecordsFragment : Fragment() {
         super.onDestroyView()
     }
 
+    private fun RecyclerView.setUpUi() {
+        var page = 0
+        var loading = false
+        val progressBar = bindings.loadingPi
+
+        val context = requireContext()
+        listAdapter = ListAdapter(itemData)
+        layoutManager = LinearLayoutManager(context)
+        adapter = listAdapter
+        addOnScrollListener(object : OnScrollListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    if (loading) return
+                    loading = true
+                    page += 1
+                    progressBar.visibility = View.VISIBLE
+                    coroutineLaunchIo {
+                        val result = runCatching {
+                            Inspection.querySummary(
+                                bindings.searchView.query.toString(), currentStage(),
+                                limit = LIST_LIMIT, offset = page * LIST_LIMIT
+                            ).data!!
+                        }
+                        withMain {
+                            progressBar.visibility = View.GONE
+                            result.onSuccess {
+                                itemData.addAll(it)
+                                itemData.distinctBy { x -> x.id }
+                                adapter!!.notifyDataSetChanged()
+                            }.onFailure {
+                                requireContext().toast(R.string.request_failed_toast)
+                            }
+                            loading = false
+                        }
+                    }
+                }
+            }
+        })
+
+        listAdapter.setOnItemClickListener { position, _ ->
+            val id = itemData[position].id
+            detailsLauncher!!.launch(id)
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun FragmentBreakpointRecordsBinding.setUpViews() {
         requireContext().apply contextScope@{
-            listAdapter = ListAdapter(itemData)
-            recyclerView.apply {
-                layoutManager = LinearLayoutManager(this@contextScope)
-                adapter = listAdapter
-            }
-
-            listAdapter.setOnItemClickListener { position, _ ->
-                val id = itemData[position].id
-                detailsLauncher!!.launch(id)
-            }
+            recyclerView.setUpUi()
 
             iv.setOnClickListener {
                 queryAndUpdateList()
@@ -132,6 +172,7 @@ class InspectionRecordsFragment : Fragment() {
                             }
                             itemData.clear()
                             itemData.addAll(it.data ?: arrayOf())
+                            itemData.distinctBy { x -> x.id }
                             listAdapter.notifyDataSetChanged()
                         }.onFailure {
                             toast(R.string.request_failed_dialog)

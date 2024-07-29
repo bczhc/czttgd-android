@@ -113,10 +113,18 @@ object Inspection {
         }.parseResponse<Unit>()
     }
 
-    suspend fun querySummary(filter: String, stage: Int): Server.ResponseData<Array<InspectionSummary>> {
-        return appHttpClient.get("$serverAddr/inspection/search?filter=${filter.encodeURLPathPart()}&stage=$stage")
+    suspend fun querySummary(
+        filter: String,
+        stage: Int,
+        limit: Int = LIST_LIMIT,
+        offset: Int = 0
+    ): Server.ResponseData<Array<InspectionSummary>> {
+        return appHttpClient.get("$serverAddr/inspection/search?filter=${filter.encodeURLPathPart()}" +
+                "&stage=$stage&limit=$limit&offset=$offset")
             .parseResponse<Array<InspectionSummary>>()
     }
+
+    const val LIST_LIMIT = 5
 
     suspend fun queryDetails(id: Long): InspectionDetails {
         return appHttpClient.get("$serverAddr/inspection/$id/details")

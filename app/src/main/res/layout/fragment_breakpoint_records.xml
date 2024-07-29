@@ -64,10 +64,34 @@
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        tools:listitem="@layout/inspection_records_list_item" />
+        android:gravity="center_horizontal">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/loading_pi_ll"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/inspection_records_list_item" />
+
+        <LinearLayout
+            android:id="@+id/loading_pi_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loading_pi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
