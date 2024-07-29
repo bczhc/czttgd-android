@@ -30,6 +30,7 @@ data class InspectionForm(
 ) : Serializable
 
 data class InspectionDetails(
+    val id: Long,
     val deviceCode: Int,
     val deviceCategory: String,
     val creator: User,

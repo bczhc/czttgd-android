@@ -5,6 +5,8 @@ import com.czttgd.android.zhijian.data.InspectionDetails
 import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.dottedDateFormatter
 import com.czttgd.android.zhijian.ui.InspectionDetailsActivity
+import com.example.lc_print_sdk.PrintConfig
+import com.example.lc_print_sdk.PrintConfig.BarCodeType
 import com.example.lc_print_sdk.PrintUtil
 import com.example.lc_print_sdk.PrintUtil.PrinterBinderListener
 
@@ -36,26 +38,26 @@ object PrintUtils {
             override fun onVersion(p0: String?) {
             }
         })
-        PrintUtil.printText("${details.deviceCode}号机台 铜线${stageChar}期                $inspectionFlag")
-        PrintUtil.printLine(1)
+
+        val printLine = {text: String->
+            PrintUtil.printText(text)
+            PrintUtil.printLine(1)
+        }
+
+        val breakpoint = when (details.breakFlag) {
+            true -> details.breakpointB ?: ""
+            false -> details.breakpointA?.breakpoint ?: ""
+        }
+
+        printLine("${details.deviceCode}号机台 铜线${stageChar}期                $inspectionFlag")
         PrintUtil.printText("${details.creator.name} ${dottedDateFormatter.format(dbDateFormatter.tryParse(details.creationTime) ?: "")} 提交")
         PrintUtil.printLine(2)
 
-        PrintUtil.printText(
-            "${
-                when (details.inspectionFlag) {
-                    0 -> "初检信息"
-                    1 -> "终检信息"
-                    else -> ""
-                }
-            }："
-        )
-        PrintUtil.printLine(1)
+        printLine("生产规格：${details.productSpec ?: ""}")
+        printLine("断线规格：${details.breakSpec}")
+        printLine("断线位置：$breakpoint")
 
-        InspectionDetailsActivity.buildFieldsMap(details).forEach {
-            PrintUtil.printText("${it.first}：${it.second}")
-            PrintUtil.printLine(1)
-        }
+        PrintUtil.printBarcode(100, "${details.id}", BarCodeType.TOP_TYPE_CODE128)
 
         PrintUtil.setUnwindPaperLen(50)
         PrintUtil.setFeedPaperSpace(200)
