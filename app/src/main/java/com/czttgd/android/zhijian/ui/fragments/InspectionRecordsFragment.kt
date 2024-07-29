@@ -28,7 +28,7 @@ class InspectionRecordsFragment : Fragment() {
     private lateinit var bindings: FragmentBreakpointRecordsBinding
     private lateinit var listAdapter: ListAdapter
 
-    private var detailsLauncher: ActivityResultLauncher<Int>? = null
+    private var detailsLauncher: ActivityResultLauncher<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         detailsLauncher = registerForActivityResult(InspectionDetailsActivity.ActivityContract()) {

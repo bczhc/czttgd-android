@@ -14,7 +14,7 @@ import com.czttgd.android.zhijian.utils.*
 
 class InspectionDetailsActivity : BaseActivity() {
     private lateinit var bindings: ActivityInspectionDetailsBinding
-    private var inspectionId: Int? = null
+    private var inspectionId: Long? = null
     private var stage: Int? = null
     private var inspection: InspectionDetails? = null
     private val updateLauncher = registerForActivityResult(FormFillingActivity.UpdateActivityContract()) { id ->
@@ -145,26 +145,26 @@ class InspectionDetailsActivity : BaseActivity() {
         }
     }
 
-    class ActivityContract : ActivityResultContract<Int, Int>() {
-        override fun createIntent(context: Context, input: Int): Intent {
+    class ActivityContract : ActivityResultContract<Long, Long>() {
+        override fun createIntent(context: Context, input: Long): Intent {
             return Intent(context, InspectionDetailsActivity::class.java).apply {
                 putExtra(EXTRA_ID, input)
             }
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): Int {
-            return intent!!.getIntExtra(EXTRA_ID, -1)
+        override fun parseResult(resultCode: Int, intent: Intent?): Long {
+            return intent!!.getLongExtra(EXTRA_ID, -1)
         }
     }
 
-    private fun Intent.getId(): Int {
+    private fun Intent.getId(): Long {
         androidAssertion(intent.hasExtra(EXTRA_ID))
-        return intent.getIntExtra(EXTRA_ID, -1)
+        return intent.getLongExtra(EXTRA_ID, -1)
     }
 
     companion object {
         /**
-         * int extra
+         * long extra
          */
         const val EXTRA_ID = "id"
 

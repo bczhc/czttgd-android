@@ -63,7 +63,7 @@ data class InspectionDetails(
 ) : Serializable
 
 data class InspectionSummary(
-    val id: Int,
+    val id: Long,
     val deviceCode: Int,
     val breakCauseA: BreakCause?,
     val breakCauseB: BreakCause?,
@@ -75,7 +75,7 @@ data class InspectionSummary(
     val breakFlag: Boolean,
 ) {
     companion object {
-        fun fromDetails(id: Int, details: InspectionDetails): InspectionSummary {
+        fun fromDetails(id: Long, details: InspectionDetails): InspectionSummary {
             return details.let {
                 return@let InspectionSummary(
                     id = id,
@@ -98,11 +98,11 @@ object Inspection {
     /**
      * returns the last inserted id
      */
-    suspend fun post(record: InspectionForm): Int {
+    suspend fun post(record: InspectionForm): Long {
         return appHttpClient.post("$serverAddr/inspection") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
-        }.parseResponse<Int>().data!!
+        }.parseResponse<Long>().data!!
     }
 
     suspend fun update(record: InspectionForm, id: Int) {
@@ -117,7 +117,7 @@ object Inspection {
             .parseResponse<Array<InspectionSummary>>()
     }
 
-    suspend fun queryDetails(id: Int): InspectionDetails {
+    suspend fun queryDetails(id: Long): InspectionDetails {
         return appHttpClient.get("$serverAddr/inspection/$id/details")
             .parseResponse<InspectionDetails>().data!!
     }

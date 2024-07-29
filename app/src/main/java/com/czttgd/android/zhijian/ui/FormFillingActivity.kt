@@ -320,7 +320,7 @@ class FormFillingActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            var insertedId: Int? = null
+            var insertedId: Long? = null
             buildProgressDialog(
                 title = getString(R.string.submitting_dialog_title)
             ) {
@@ -503,7 +503,7 @@ class FormFillingActivity : BaseActivity() {
     class UpdateActivityContract : ActivityResultContract<UpdateActivityContract.Input, Int?>() {
         data class Input(
             val details: InspectionDetails,
-            val id: Int,
+            val id: Long,
             val stage: Int,
         )
 
