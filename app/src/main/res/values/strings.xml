@@ -41,4 +41,5 @@
     <string name="printing_dialog_title">正在打印</string>
     <string name="print_error_toast">打印失败</string>
     <string name="submit_succeeded_print_dialog_title">提交成功。是否打印？</string>
+    <string name="no_network_toast">无网络</string>
 </resources>

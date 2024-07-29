@@ -161,8 +161,12 @@ class FormFillingActivity : BaseActivity() {
                                 result.onSuccess {
                                     selectionLaunchers[launcherIndex].launch(it)
                                 }.onFailure {
-                                    toast(it.toString())
                                     it.printStackTrace()
+                                    if (it.toString().contains("unreachable")) {
+                                        toast(R.string.no_network_toast)
+                                    } else {
+                                        toast(R.string.request_failed_toast)
+                                    }
                                 }
                             }
                         }
