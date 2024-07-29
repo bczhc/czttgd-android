@@ -15,6 +15,7 @@ import com.czttgd.android.zhijian.data.Settings
 import com.czttgd.android.zhijian.databinding.FragmentWorkspaceBinding
 import com.czttgd.android.zhijian.databinding.SettingsDialogBinding
 import com.czttgd.android.zhijian.ui.FormFillingActivity
+import com.czttgd.android.zhijian.ui.ManualActivity
 import com.czttgd.android.zhijian.utils.defaultNegativeButton
 import com.czttgd.android.zhijian.utils.setPositiveAction
 import com.czttgd.android.zhijian.utils.toast
@@ -37,6 +38,9 @@ class WorkspaceFragment : Fragment() {
             startActivity(Intent(context, FormFillingActivity::class.java).apply {
                 putExtra(FormFillingActivity.EXTRA_STAGE, FormFillingActivity.STAGE_TWO)
             })
+        }
+        bindings.card1.button.setOnClickListener {
+            startActivity(Intent(context, ManualActivity::class.java))
         }
 
         bindings.settingsIv.setOnClickListener {
