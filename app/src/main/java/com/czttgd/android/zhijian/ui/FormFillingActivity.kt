@@ -36,8 +36,8 @@ import java.util.*
 class FormFillingActivity : BaseActivity() {
     private lateinit var bindings: ActivityFormFillingBinding
     private var updateMode: Boolean = false
-    private var updateId: Int? = null
-    private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver barcode@ { _, content ->
+    private var updateId: Long? = null
+    private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver barcode@{ _, content ->
         Log.d(tag, "Scanned: $content")
         content ?: return@barcode
         if (Regex("^[0-9]+$").matches(content)) {
@@ -190,7 +190,7 @@ class FormFillingActivity : BaseActivity() {
             SelectList.allUsers().mapToArray { SelectionActivity.Item(it.id, it.name) }
         }
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) {
-            SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, it.cause ?: "") }
+            SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}") }
         }
 
         setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER)
@@ -251,7 +251,7 @@ class FormFillingActivity : BaseActivity() {
             bindings.bottomButton.text = getString(R.string.modify_button)
             fillFields(intent.getTypedSerializableExtra<InspectionDetails>(EXTRA_UPDATE_FORM_DATA)!!)
             androidAssertion(intent.hasExtra(EXTRA_UPDATE_ID))
-            this.updateId = intent.getIntExtra(EXTRA_UPDATE_ID, 0)
+            this.updateId = intent.getLongExtra(EXTRA_UPDATE_ID, 0)
         } else {
             bindings.bottomButton.text = getString(R.string.submit_button)
         }

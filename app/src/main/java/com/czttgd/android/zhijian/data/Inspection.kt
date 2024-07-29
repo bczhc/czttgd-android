@@ -106,7 +106,7 @@ object Inspection {
         }.parseResponse<Long>().data!!
     }
 
-    suspend fun update(record: InspectionForm, id: Int) {
+    suspend fun update(record: InspectionForm, id: Long) {
         appHttpClient.put("$serverAddr/inspection/$id") {
             contentType(ContentType.Application.FormUrlEncoded)
             setFormDataBody(record)
