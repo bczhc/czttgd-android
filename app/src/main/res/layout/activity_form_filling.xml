@@ -119,6 +119,7 @@
                         android:id="@+id/field_wire_speed"
                         layout="@layout/form_filling_field_layout"
                         app:label="@{`线速`}"
+                        android:visibility="gone"
                         app:required="@{false}" />
 
                     <com.google.android.material.divider.MaterialDivider

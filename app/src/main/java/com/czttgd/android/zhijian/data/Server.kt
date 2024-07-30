@@ -6,7 +6,6 @@ import com.czttgd.android.zhijian.utils.bodyAsJson
 import com.czttgd.android.zhijian.utils.fromJsonOrNull
 import com.czttgd.android.zhijian.utils.withIo
 import com.google.gson.JsonObject
-import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 
