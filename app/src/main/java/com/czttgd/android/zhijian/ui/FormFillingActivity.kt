@@ -12,6 +12,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import com.czttgd.android.zhijian.BaseActivity
@@ -111,48 +112,62 @@ class FormFillingActivity : BaseActivity() {
 
         updateMode = intent.hasExtra(EXTRA_UPDATE_FORM_DATA)
 
-        val setUpClickEvent = { fieldBindings: FormFillingFieldLayoutBinding, inputType: Int? ->
-            if (fieldBindings.inputTv.text.isNotEmpty()) {
-                fieldBindings.hintTv.visibility = View.GONE
-            } else {
-                fieldBindings.hintTv.text = getString(R.string.form_please_input_hint)
-            }
+        val setUpClickEvent =
+            { fieldBindings: FormFillingFieldLayoutBinding, inputType: Int?, check: (String) -> Boolean ->
+                if (fieldBindings.inputTv.text.isNotEmpty()) {
+                    fieldBindings.hintTv.visibility = View.GONE
+                } else {
+                    fieldBindings.hintTv.text = getString(R.string.form_please_input_hint)
+                }
 
-            fieldBindings.rl.setOnClickListener {
-                val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
-                    et.setText(fieldBindings.inputTv.text)
-                    inputType?.let { et.inputType = it }
-                    et.setOnFocusChangeListener { _, hasFocus ->
-                        et.post {
-                            if (hasFocus) {
-                                val imm: InputMethodManager =
-                                    this@FormFillingActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                                imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
+                fieldBindings.rl.setOnClickListener {
+                    val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
+                        et.setText(fieldBindings.inputTv.text)
+                        inputType?.let { et.inputType = it }
+                        et.setOnFocusChangeListener { _, hasFocus ->
+                            et.post {
+                                if (hasFocus) {
+                                    val imm: InputMethodManager =
+                                        this@FormFillingActivity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                                    imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
+                                }
                             }
                         }
                     }
+                    MaterialAlertDialogBuilder(this)
+                        .defaultNegativeButton()
+                        .setPositiveButton(R.string.confirm_button, null)
+                        .setTitle(getString(R.string.please_enter_text_dialog_title, fieldBindings.labelTv.text))
+                        .setView(dialogBindings.root)
+                        .create().apply {
+                            setCanceledOnTouchOutside(false)
+
+                            setOnShowListener { d ->
+                                val button = (d as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                                button.setOnClickListener {
+                                    if (check(dialogBindings.et.text.toString())) {
+                                        dialogBindings.et.error = null
+                                        fieldBindings.hintTv.visibility = View.GONE
+                                        fieldBindings.inputTv.text = dialogBindings.et.text.toString()
+                                        d.dismiss()
+                                    } else {
+                                        dialogBindings.et.error = "格式示例：10/0.100"
+                                    }
+                                }
+                            }
+                        }
+                        .show()
+
+                    dialogBindings.et.requestFocus()
                 }
-                MaterialAlertDialogBuilder(this)
-                    .defaultNegativeButton()
-                    .setPositiveAction { _, _ ->
-                        fieldBindings.hintTv.visibility = View.GONE
-                        fieldBindings.inputTv.text = dialogBindings.et.text.toString()
-                    }
-                    .setTitle(getString(R.string.please_enter_text_dialog_title, fieldBindings.labelTv.text))
-                    .setView(dialogBindings.root)
-                    .create().apply {
-                        setCanceledOnTouchOutside(false)
-                    }
-                    .show()
-
-                dialogBindings.et.requestFocus()
             }
-        }
 
-        setUpClickEvent(bindings.fieldProductSpecs, null)
-        setUpClickEvent(bindings.fieldComments, null)
-        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER)
-        setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER)
+        setUpClickEvent(bindings.fieldProductSpecs, null) {
+            it.matches(Regex("""^[0-9]{2}/[0-9]\.[0-9]{3}$"""))
+        }
+        setUpClickEvent(bindings.fieldComments, null) { true }
+        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) { true }
+        setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER) { true }
 
         val setUpSelectionFields =
             a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<SelectionActivity.Item> ->
@@ -193,7 +208,7 @@ class FormFillingActivity : BaseActivity() {
             SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}") }
         }
 
-        setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER)
+        setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER) { true }
 
         if (!updateMode) {
             bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
@@ -206,7 +221,10 @@ class FormFillingActivity : BaseActivity() {
                     bindings.fieldBreakpointPosition.apply {
                         hintTv.text = getString(R.string.form_please_input_hint)
                         inputTv.text = ""
-                        setUpClickEvent(this, InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL)
+                        setUpClickEvent(
+                            this,
+                            InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                        ) { true }
                     }
                 }
 
