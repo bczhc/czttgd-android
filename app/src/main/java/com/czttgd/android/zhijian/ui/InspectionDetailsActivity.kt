@@ -218,7 +218,6 @@ class InspectionDetailsActivity : BaseActivity() {
                         it.productSpec ?: "",
                         it.wireNum?.toString() ?: "",
                         it.breakSpec,
-                        it.wireBatchCode ?: "",
                         it.stickBatchCode ?: "",
                         it.warehouse ?: "",
                         toDottedDate(it.productTime ?: ""),
