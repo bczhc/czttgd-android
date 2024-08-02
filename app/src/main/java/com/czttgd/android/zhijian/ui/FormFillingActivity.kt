@@ -209,7 +209,11 @@ class FormFillingActivity : BaseActivity() {
             }.map { SelectionActivity.Item(it.id, it.name) }.toTypedArray()
         }
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) {
-            SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}") }
+            SelectList.breakCauses().filter {
+                it.enableState == 2 /* 已启用 */
+            }.map {
+                SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}")
+            }.toTypedArray()
         }
 
         setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER) {

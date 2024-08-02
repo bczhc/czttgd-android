@@ -6,4 +6,5 @@ data class BreakCause(
     val id: Int,
     val type: String?,
     val cause: String?,
+    val enableState: Int,
 ) : Serializable
