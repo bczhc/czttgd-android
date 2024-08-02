@@ -168,7 +168,9 @@ class FormFillingActivity : BaseActivity() {
             FieldCheckResult.from(match, "格式示例：10/0.100")
         }
         setUpClickEvent(bindings.fieldComments, null) { FieldCheckResult.Success }
-        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) { FieldCheckResult.Success }
+        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) {
+            FieldCheckResult.from(it.matches(Regex("^[0-9]{1,2}$")), "最多两位数字")
+        }
         setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER) { FieldCheckResult.Success }
 
         val setUpSelectionFields =
