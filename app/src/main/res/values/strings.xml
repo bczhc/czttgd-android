@@ -47,4 +47,6 @@
     <string name="uploading_succeeded_toast">上传成功</string>
     <string name="uploading_failed_toast">上传失败</string>
     <string name="app_version_name_tv">应用版本名：%1$s</string>
+    <string name="breakpoint_b_out_of_range_toast">断线位置超出范围</string>
+    <string name="network_error_toast">网络问题：%1$s</string>
 </resources>

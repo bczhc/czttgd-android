@@ -13,7 +13,7 @@ object FormDataUtils {
         return FormDataContent(Parameters.build {
             // only applicable for fields with @JvmField
             T::class.memberProperties.filter {
-                it.visibility == KVisibility.PUBLIC
+               true
             }.forEach {
                 val name = it.name
                 val value = it.getter.call(obj)

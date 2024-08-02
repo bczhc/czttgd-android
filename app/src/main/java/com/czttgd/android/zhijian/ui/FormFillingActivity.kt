@@ -396,7 +396,15 @@ class FormFillingActivity : BaseActivity() {
                                     }.also { it.show() }
                             }
                         }.onFailure {
-                            toast(getString(R.string.request_error_toast_with_message, it.toString()))
+                            val error = it.toString()
+                            // display user-friendly toasts for specific errors
+                            if (error.contains("Out of range value for column 'breakpointb'")) {
+                                toast(getString(R.string.breakpoint_b_out_of_range_toast))
+                            } else if (error.contains("network")) {
+                                toast(getString(R.string.network_error_toast, error))
+                            } else {
+                                toast(getString(R.string.request_error_toast_with_message, error))
+                            }
                             it.printStackTrace()
                         }
                     }
