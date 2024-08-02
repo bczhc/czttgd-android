@@ -163,7 +163,7 @@ class FormFillingActivity : BaseActivity() {
             }
 
         setUpClickEvent(bindings.fieldProductSpecs, null) {
-            it.matches(Regex("""^[0-9]{2}/[0-9]\.[0-9]{3}$"""))
+            it.matches(Regex("""^[0-9]{1,2}/[0-9]\.[0-9]{3}$"""))
         }
         setUpClickEvent(bindings.fieldComments, null) { true }
         setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) { true }
