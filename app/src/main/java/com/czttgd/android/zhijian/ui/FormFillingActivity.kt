@@ -391,6 +391,9 @@ class FormFillingActivity : BaseActivity() {
                                             }
                                         }.show()
                                     }
+                                    .setOnCancelListener {
+                                        finish()
+                                    }
                                     .create().apply {
                                         setCanceledOnTouchOutside(false)
                                     }.also { it.show() }
