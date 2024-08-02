@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.czttgd.android.zhijian.BuildConfig
 import com.czttgd.android.zhijian.R
 import com.czttgd.android.zhijian.data.Log
 import com.czttgd.android.zhijian.data.Ping
@@ -45,6 +46,10 @@ class WorkspaceFragment : Fragment() {
 
         bindings.settingsIv.setOnClickListener {
             val dialogBindings = SettingsDialogBinding.inflate(layoutInflater)
+
+            dialogBindings.apply {
+                versionNameTv.text = getString(R.string.app_version_name_tv, BuildConfig.VERSION_NAME)
+            }
 
             val addrEt = dialogBindings.addrEt
 
