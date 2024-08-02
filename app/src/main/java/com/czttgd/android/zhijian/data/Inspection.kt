@@ -19,8 +19,6 @@ data class InspectionForm(
     @JvmField
     val productSpec: String?,
     @JvmField
-    val wireSpeed: Int?,
-    @JvmField
     val wireNumber: Int?,
     @JvmField
     val breakSpec: String,
@@ -56,7 +54,6 @@ data class InspectionDetails(
      */
     val inspectionFlag: Int,
     val productSpec: String?,
-    val wireSpeed: Int?,
     val wireNum: Int?,
     val breakSpec: String,
     val wireBatchCode: String?,

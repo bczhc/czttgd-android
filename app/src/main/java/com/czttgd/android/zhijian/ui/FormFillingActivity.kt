@@ -306,7 +306,7 @@ class FormFillingActivity : BaseActivity() {
                 fieldMachineCategory.fill(it.deviceCategory)
                 fieldBreakpointTime.fill(it.creationTime)
                 fieldProductSpecs.fill(it.productSpec ?: "")
-                fieldWireSpeed.fill(it.wireSpeed?.toString() ?: "")
+//                fieldWireSpeed.fill(it.wireSpeed?.toString() ?: "")
                 fieldWireNumber.fill(it.wireNum?.toString() ?: "")
                 fieldBreakSpecs.fill(it.breakSpec)
                 fieldCopperStickNo.fill(it.stickBatchCode ?: "")
@@ -492,7 +492,7 @@ class FormFillingActivity : BaseActivity() {
                 } else null,
                 comments = fieldComments.checkedField(onError) { it },
                 deviceCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
-                wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
+//                wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
             )
             return Pair(record, hasError)
         }
