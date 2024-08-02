@@ -8,24 +8,40 @@ import io.ktor.http.*
 import java.io.Serializable
 
 data class InspectionForm(
+    @JvmField
     val creator: RefId,
+    @JvmField
     val deviceCode: Int,
+    @JvmField
     val deviceCategory: String,
+    @JvmField
     val creationTime: String,
+    @JvmField
     val productSpec: String?,
+    @JvmField
     val wireSpeed: Int?,
+    @JvmField
     val wireNumber: Int?,
+    @JvmField
     val breakSpec: String,
+    @JvmField
     val wireBatchCode: String?,
+    @JvmField
     val stickBatchCode: String?,
+    @JvmField
     val warehouse: String?,
     /**
      * 是否拉丝池内断线
      */
+    @JvmField
     val breakFlag: Boolean,
+    @JvmField
     val breakpointB: String?,
+    @JvmField
     val breakpointA: RefId?,
+    @JvmField
     val breakCauseA: RefId,
+    @JvmField
     val comments: String?
 ) : Serializable
 
