@@ -253,18 +253,6 @@ class FormFillingActivity : BaseActivity() {
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
-        val mock = false
-        if (mock) {
-            bindings.apply {
-//                fieldProductSpecs.inputTv.text = "?"
-//                fieldCreator.inputTv.text = "李四"
-//                fieldMachineNumber.inputTv.text = "2"
-//                fieldMachineCategory.inputTv.text = "DT"
-                fieldBreakSpecs.inputTv.text = "123"
-//                fieldBreakpointReason.inputTv.text = "?"
-            }
-        }
-
         if (updateMode) {
             bindings.bottomButton.text = getString(R.string.modify_button)
             fillFields(intent.getTypedSerializableExtra<InspectionDetails>(EXTRA_UPDATE_FORM_DATA)!!)
@@ -280,6 +268,12 @@ class FormFillingActivity : BaseActivity() {
 
             // this is hard-coded
             fieldMachineCategory.inputTv.text = "DT"
+
+            // for mock purposes
+            fieldBreakSpecs.hintTv.setOnLongClickListener {
+                fieldBreakSpecs.inputTv.text = "123"
+                true
+            }
         }
     }
 
