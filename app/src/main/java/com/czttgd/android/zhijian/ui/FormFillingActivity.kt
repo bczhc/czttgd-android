@@ -113,7 +113,7 @@ class FormFillingActivity : BaseActivity() {
         updateMode = intent.hasExtra(EXTRA_UPDATE_FORM_DATA)
 
         val setUpClickEvent =
-            { fieldBindings: FormFillingFieldLayoutBinding, inputType: Int?, check: (String) -> Boolean ->
+            { fieldBindings: FormFillingFieldLayoutBinding, inputType: Int?, check: (String) -> FieldCheckResult ->
                 if (fieldBindings.inputTv.text.isNotEmpty()) {
                     fieldBindings.hintTv.visibility = View.GONE
                 } else {
@@ -145,13 +145,14 @@ class FormFillingActivity : BaseActivity() {
                             setOnShowListener { d ->
                                 val button = (d as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
                                 button.setOnClickListener {
-                                    if (check(dialogBindings.et.text.toString())) {
+                                    val fieldCheckResult = check(dialogBindings.et.text.toString())
+                                    if (fieldCheckResult == FieldCheckResult.Success) {
                                         dialogBindings.et.error = null
                                         fieldBindings.hintTv.visibility = View.GONE
                                         fieldBindings.inputTv.text = dialogBindings.et.text.toString()
                                         d.dismiss()
                                     } else {
-                                        dialogBindings.et.error = "格式示例：10/0.100"
+                                        dialogBindings.et.error = fieldCheckResult.error
                                     }
                                 }
                             }
@@ -163,11 +164,12 @@ class FormFillingActivity : BaseActivity() {
             }
 
         setUpClickEvent(bindings.fieldProductSpecs, null) {
-            it.matches(Regex("""^[0-9]{1,2}/[0-9]\.[0-9]{3}$"""))
+            val match = it.matches(Regex("""^[0-9]{1,2}/[0-9]\.[0-9]{3}$"""))
+            FieldCheckResult.from(match, "格式示例：10/0.100")
         }
-        setUpClickEvent(bindings.fieldComments, null) { true }
-        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) { true }
-        setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER) { true }
+        setUpClickEvent(bindings.fieldComments, null) { FieldCheckResult.Success }
+        setUpClickEvent(bindings.fieldWireNumber, InputType.TYPE_CLASS_NUMBER) { FieldCheckResult.Success }
+        setUpClickEvent(bindings.fieldWireSpeed, InputType.TYPE_CLASS_NUMBER) { FieldCheckResult.Success }
 
         val setUpSelectionFields =
             a@{ fieldBindings: FormFillingFieldLayoutBinding, launcherIndex: Int, getItems: suspend () -> Array<SelectionActivity.Item> ->
@@ -208,7 +210,9 @@ class FormFillingActivity : BaseActivity() {
             SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}") }
         }
 
-        setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER) { true }
+        setUpClickEvent(bindings.fieldMachineNumber, InputType.TYPE_CLASS_NUMBER) {
+            FieldCheckResult.from(it.matches(Regex("^[0-9]{1,2}$")), "最多两位数字")
+        }
 
         if (!updateMode) {
             bindings.fieldBreakpointTime.inputTv.text = dbDateFormatter.format(Date())
@@ -224,7 +228,7 @@ class FormFillingActivity : BaseActivity() {
                         setUpClickEvent(
                             this,
                             InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-                        ) { true }
+                        ) { FieldCheckResult.Success }
                     }
                 }
 
@@ -542,6 +546,22 @@ class FormFillingActivity : BaseActivity() {
             intent ?: return null
             androidAssertion(intent.hasExtra(EXTRA_UPDATE_ID))
             return intent.getIntExtra(EXTRA_UPDATE_ID, -1)
+        }
+    }
+
+    enum class FieldCheckResult {
+        Success,
+        Failure;
+
+        var error: String? = null
+
+        companion object {
+            fun from(check: Boolean, error: String? = null): FieldCheckResult {
+                return when (check) {
+                    true -> Success
+                    false -> Failure.apply { this.error = error }
+                }
+            }
         }
     }
 }
