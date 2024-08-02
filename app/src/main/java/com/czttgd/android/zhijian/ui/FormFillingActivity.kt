@@ -204,7 +204,9 @@ class FormFillingActivity : BaseActivity() {
             }
 
         setUpSelectionFields(bindings.fieldCreator, 0) {
-            SelectList.allUsers().mapToArray { SelectionActivity.Item(it.id, it.name) }
+            SelectList.allUsers().filter {
+                it.enableState == 2 /* 已启用 */ && it.userType == "2" /* App用户 */
+            }.map { SelectionActivity.Item(it.id, it.name) }.toTypedArray()
         }
         setUpSelectionFields(bindings.fieldBreakpointReason, 3) {
             SelectList.breakCauses().mapToArray { SelectionActivity.Item(it.id, "${it.type ?: ""}/${it.cause ?: ""}") }
