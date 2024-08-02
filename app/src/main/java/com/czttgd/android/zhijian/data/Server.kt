@@ -2,12 +2,16 @@ package com.czttgd.android.zhijian.data
 
 import com.czttgd.android.zhijian.GSON
 import com.czttgd.android.zhijian.appHttpClient
+import com.czttgd.android.zhijian.httpLogFile
 import com.czttgd.android.zhijian.utils.bodyAsJson
 import com.czttgd.android.zhijian.utils.fromJsonOrNull
 import com.czttgd.android.zhijian.utils.withIo
 import com.google.gson.JsonObject
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.FileOutputStream
 
 typealias RefId = Int
 
@@ -32,7 +36,15 @@ object Server {
     )
 
     suspend inline fun <reified T : Any> HttpResponse.parseResponse(): ResponseData<T> {
-        println(this.bodyAsText())
+        val bodyAsText = this.bodyAsText()
+        println(bodyAsText)
+        withIo {
+            FileOutputStream(httpLogFile, true).writer().also {
+                it.write(bodyAsText)
+                it.write("\n")
+                it.close()
+            }
+        }
         val json = this.bodyAsJson<JsonObject>() ?: throw RuntimeException("Response JSON parsing error")
         val code = json["code"].asInt
         val element = json["message"]

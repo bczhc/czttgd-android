@@ -10,15 +10,15 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.czttgd.android.zhijian.R
+import com.czttgd.android.zhijian.data.Log
 import com.czttgd.android.zhijian.data.Ping
 import com.czttgd.android.zhijian.data.Settings
 import com.czttgd.android.zhijian.databinding.FragmentWorkspaceBinding
 import com.czttgd.android.zhijian.databinding.SettingsDialogBinding
+import com.czttgd.android.zhijian.httpLogFile
 import com.czttgd.android.zhijian.ui.FormFillingActivity
 import com.czttgd.android.zhijian.ui.ManualActivity
-import com.czttgd.android.zhijian.utils.defaultNegativeButton
-import com.czttgd.android.zhijian.utils.setPositiveAction
-import com.czttgd.android.zhijian.utils.toast
+import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -98,6 +98,25 @@ class WorkspaceFragment : Fragment() {
                     dialog.setCanceledOnTouchOutside(false)
                 }
             }
+        }
+
+        bindings.settingsIv.setOnLongClickListener {
+            context.buildProgressDialog(getString(R.string.uploading_log_dialog_title)) { d ->
+                coroutineLaunchIo {
+                    val result = runCatching {
+                        Log.uploadLog(httpLogFile)
+                    }
+                    withMain {
+                        result.onSuccess {
+                            context.toast(R.string.uploading_succeeded_toast)
+                        }.onFailure {
+                            context.toast(R.string.uploading_failed_toast)
+                        }
+                        d.dismiss()
+                    }
+                }
+            }.show()
+            true
         }
 
         return bindings.root

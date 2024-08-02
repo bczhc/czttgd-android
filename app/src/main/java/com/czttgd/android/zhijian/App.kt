@@ -5,6 +5,7 @@ import android.content.Context
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.plugins.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +35,14 @@ val dottedDateFormatter by lazy {
 }
 
 val GSON by lazy { App.GSON }
+
+val httpLogFile by lazy {
+    File(App.appContext.filesDir, "http.log").also {
+        if (!it.exists()) {
+            it.writeText("")
+        }
+    }
+}
 
 val appHttpClient: HttpClient
     get() = HttpClient {

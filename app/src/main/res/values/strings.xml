@@ -43,4 +43,7 @@
     <string name="submit_succeeded_print_dialog_title">提交成功。是否打印？</string>
     <string name="no_network_toast">无网络</string>
     <string name="invalid_qr_toast">无效二维码</string>
+    <string name="uploading_log_dialog_title">正在上传日志</string>
+    <string name="uploading_succeeded_toast">上传成功</string>
+    <string name="uploading_failed_toast">上传失败</string>
 </resources>
