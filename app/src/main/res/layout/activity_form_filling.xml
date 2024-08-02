@@ -118,8 +118,8 @@
                     <include
                         android:id="@+id/field_wire_speed"
                         layout="@layout/form_filling_field_layout"
-                        app:label="@{`线速`}"
                         android:visibility="gone"
+                        app:label="@{`线速`}"
                         app:required="@{false}" />
 
                     <com.google.android.material.divider.MaterialDivider
@@ -160,7 +160,8 @@
                         android:id="@+id/field_copper_stick_no"
                         layout="@layout/form_filling_field_layout"
                         app:label="@{`铜杆卷号`}"
-                        app:required="@{false}" />
+                        app:required="@{false}"
+                        app:rightIcon="@{@drawable/qr_scan}" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
@@ -170,7 +171,8 @@
                         android:id="@+id/field_repo_no"
                         layout="@layout/form_filling_field_layout"
                         app:label="@{`大拉仓号`}"
-                        app:required="@{false}" />
+                        app:required="@{false}"
+                        app:rightIcon="@{@drawable/qr_scan}" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
