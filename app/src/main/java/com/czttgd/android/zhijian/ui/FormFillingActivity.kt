@@ -276,6 +276,17 @@ class FormFillingActivity : BaseActivity() {
                 }
             }
         }
+
+        if (updateMode) {
+            setUpClickEvent(bindings.fieldBreakpointTime, null) {
+                val dateRegex = Regex("""^\d{4}-\d{2}-\d{2}$""")
+                if (!it.matches(dateRegex)) {
+                    return@setUpClickEvent FieldCheckResult.Failure.apply { error = "格式有误。示例：2024-02-03" }
+                }
+
+                FieldCheckResult.Success
+            }
+        }
     }
 
     /**
