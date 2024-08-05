@@ -141,7 +141,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 else -> "?"
             }
             creatorTv.text = inspection.creator.name
-            timeTv.text = toDottedDateTime(inspection.creationTime)
+            timeTv.text = toDottedDate(inspection.creationTime)
 
             cardViewAddFields(cardViewA, fields.初检)
 
@@ -182,10 +182,6 @@ class InspectionDetailsActivity : BaseActivity() {
             return dottedDateFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
         }
 
-        private fun toDottedDateTime(date: String): String {
-            return dottedDateTimeFormatter.format(dbDateFormatter.tryParse(date) ?: return "")
-        }
-
         private fun Boolean.toText(): String {
             return when (this) {
                 true -> App.appContext.getString(R.string.yes)
@@ -214,7 +210,7 @@ class InspectionDetailsActivity : BaseActivity() {
                     listOf(
                         it.creator.name,
                         "${it.deviceCode}",
-                        toDottedDateTime(it.creationTime),
+                        toDottedDate(it.creationTime),
                         it.productSpec ?: "",
                         it.wireNum?.toString() ?: "",
                         it.breakSpec,
@@ -231,7 +227,7 @@ class InspectionDetailsActivity : BaseActivity() {
                 终检 = App.appContext.resources.getTextArray(R.array.inspection_b_field_labels).zip(inspection.let {
                     listOf(
                         it.inspector?.name ?: "",
-                        toDottedDateTime(it.inspectionTime ?: ""),
+                        toDottedDate(it.inspectionTime ?: ""),
                         it.breakCauseB?.type ?: "",
                         it.breakCauseB?.cause ?: "",
                         it.comments ?: "",

@@ -23,11 +23,7 @@ class App : Application() {
 }
 
 val dbDateFormatter by lazy {
-    SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-}
-
-val dottedDateTimeFormatter by lazy {
-    SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault())
+    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 }
 
 val dottedDateFormatter by lazy {

@@ -19,11 +19,10 @@ import com.czttgd.android.zhijian.data.InspectionSummary
 import com.czttgd.android.zhijian.databinding.FragmentBreakpointRecordsBinding
 import com.czttgd.android.zhijian.databinding.InspectionRecordsListItemBinding
 import com.czttgd.android.zhijian.dbDateFormatter
+import com.czttgd.android.zhijian.dottedDateFormatter
 import com.czttgd.android.zhijian.ui.InspectionDetailsActivity
 import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.tabs.TabLayout
-import java.text.SimpleDateFormat
-import java.util.*
 
 class InspectionRecordsFragment : Fragment() {
     private val itemData = mutableListOf<InspectionSummary>()
@@ -261,7 +260,7 @@ class InspectionRecordsFragment : Fragment() {
 
                     val date = dbDateFormatter.tryParse(item.creationTime)
                     date?.let {
-                        dateTv.text = cardDateFormatter.format(it)
+                        dateTv.text = dottedDateFormatter.format(it)
                     }
                 }
             }
@@ -273,10 +272,6 @@ class InspectionRecordsFragment : Fragment() {
     }
 
     companion object {
-        val cardDateFormatter by lazy {
-            SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault())
-        }
-
         /**
          * workaround for fragment not saving view states
          */
