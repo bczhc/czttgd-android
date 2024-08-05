@@ -178,6 +178,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px" />
 
+                    <include
+                        android:id="@+id/field_product_time"
+                        layout="@layout/form_filling_field_layout"
+                        app:label="@{`铜杆日期`}"
+                        app:required="@{false}"
+                        app:rightIcon="@{@drawable/qr_scan}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
+
                     <!-- wtf is the layout??? 🤯🤯 -->
                     <RadioGroup
                         android:id="@+id/radio_group"

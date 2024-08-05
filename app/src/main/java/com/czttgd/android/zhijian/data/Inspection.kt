@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import java.io.Serializable
 
+// https://discuss.kotlinlang.org/t/cant-understand-kotlins-manner-that-privatize-members-of-a-data-class
 data class InspectionForm(
     @JvmField
     val creator: RefId,
@@ -40,7 +41,9 @@ data class InspectionForm(
     @JvmField
     val breakCauseA: RefId,
     @JvmField
-    val comments: String?
+    val comments: String?,
+    @JvmField
+    val productTime: String?,
 ) : Serializable
 
 data class InspectionDetails(

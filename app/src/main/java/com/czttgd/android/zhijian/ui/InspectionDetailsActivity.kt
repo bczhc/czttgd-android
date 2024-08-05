@@ -1,4 +1,4 @@
-@file:Suppress("LocalVariableName", "NonAsciiCharacters")
+@file:Suppress("LocalVariableName", "NonAsciiCharacters", "PropertyName")
 
 package com.czttgd.android.zhijian.ui
 

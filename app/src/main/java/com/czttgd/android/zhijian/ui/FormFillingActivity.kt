@@ -268,7 +268,8 @@ class FormFillingActivity : BaseActivity() {
                 bindings.fieldMachineNumber,
                 bindings.fieldBreakSpecs,
                 bindings.fieldCopperStickNo,
-                bindings.fieldRepoNo
+                bindings.fieldRepoNo,
+                bindings.fieldProductTime,
             ).forEach {
                 it.hintTv.setOnLongClickListener {
                     zxingLauncher.launch(ScanOptions())
@@ -278,6 +279,9 @@ class FormFillingActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Fills the fields on "modification" mode.
+     */
     private fun fillFields(form: InspectionDetails) {
         fun FormFillingFieldLayoutBinding.fill(text: String) {
             if (text.isEmpty()) return
@@ -300,6 +304,7 @@ class FormFillingActivity : BaseActivity() {
                 fieldBreakSpecs.fill(it.breakSpec)
                 fieldCopperStickNo.fill(it.stickBatchCode ?: "")
                 fieldRepoNo.fill(it.warehouse ?: "")
+                fieldProductTime.fill(it.productTime ?: "")
 
                 when (it.breakFlag) {
                     true -> {
@@ -482,6 +487,7 @@ class FormFillingActivity : BaseActivity() {
                 comments = fieldComments.checkedField(onError) { it },
                 deviceCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
 //                wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
+                productTime = fieldProductTime.checkedField(onError) { it } ?: ""
             )
             return Pair(record, hasError)
         }
@@ -507,9 +513,15 @@ class FormFillingActivity : BaseActivity() {
         runCatching {
             val split = content.split(",")
             bindings.apply {
+                val stickBatchCode = split[split.lastIndex - 1]
                 fieldBreakSpecs.inputTv.text = split[1]
-                fieldCopperStickNo.inputTv.text = split[split.lastIndex - 1]
+                fieldCopperStickNo.inputTv.text = stickBatchCode
                 fieldRepoNo.inputTv.text = split.last()
+                val productTime = stickBatchCode.substring(1 until (1 + 6)).let {
+                    // just assume the date is in 20xx
+                    "20${it.substring(0 until 2)}-${it.substring(2 until 4)}-${it.substring(4 until 6)}"
+                }
+                fieldProductTime.inputTv.text = productTime
             }
         }.onFailure {
             toast(R.string.invalid_qr_toast)
