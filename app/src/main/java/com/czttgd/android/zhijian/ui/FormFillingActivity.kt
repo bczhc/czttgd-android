@@ -10,6 +10,7 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AlertDialog
@@ -54,6 +55,8 @@ class FormFillingActivity : BaseActivity() {
     private val zxingLauncher = registerForActivityResult(ScanContract()) a@{
         onBarcodeScanned((it ?: return@a).contents)
     }
+
+    private var modified = false
 
     private fun registerSelectionLauncher(
         getValue: () -> FormFillingFieldLayoutBinding,
@@ -103,6 +106,7 @@ class FormFillingActivity : BaseActivity() {
                 }
 
                 fieldBindings.rl.setOnClickListener {
+                    modified = true
                     val dialogBindings = DialogInputTextBinding.inflate(layoutInflater).apply {
                         et.setText(fieldBindings.inputTv.text)
                         inputType?.let { et.inputType = it }
@@ -164,6 +168,7 @@ class FormFillingActivity : BaseActivity() {
                 }
 
                 fieldBindings.rl.setOnClickListener {
+                    modified = true
                     buildProgressDialog(
                         title = getString(R.string.fetching_info_dialog_title)
                     ) { d ->
@@ -286,6 +291,20 @@ class FormFillingActivity : BaseActivity() {
 
                 FieldCheckResult.Success
             }
+        }
+
+        onBackPressedDispatcher.addCallback {
+            if (modified) {
+                MaterialAlertDialogBuilder(this@FormFillingActivity)
+                    .setTitle(R.string.ask_for_save_dialog_title)
+                    .setNegativeAction { _, _ ->
+                        finish()
+                    }
+                    .setPositiveAction { _, _ ->
+                        bindings.bottomButton.performClick()
+                    }
+                    .show()
+            } else finish()
         }
     }
 

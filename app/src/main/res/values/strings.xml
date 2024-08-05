@@ -49,4 +49,5 @@
     <string name="app_version_name_tv">应用版本名：%1$s</string>
     <string name="breakpoint_b_out_of_range_toast">断线位置超出范围</string>
     <string name="network_error_toast">网络问题：%1$s</string>
+    <string name="ask_for_save_dialog_title">是否保存？</string>
 </resources>
