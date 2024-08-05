@@ -504,16 +504,12 @@ class FormFillingActivity : BaseActivity() {
             return
         }
 
-        val regex = Regex("""^.*?:.*?,([0-9]+),([0-9]+),([A-Z]+),.*$""")
         runCatching {
-            if (!regex.matches(content)) throw RuntimeException("Invalid QR")
-
-            val captures = regex.find(content)!!
-            val groups = captures.groupValues
+            val split = content.split(",")
             bindings.apply {
-                fieldBreakSpecs.inputTv.text = groups[1]
-                fieldCopperStickNo.inputTv.text = groups[2]
-                fieldRepoNo.inputTv.text = groups[3]
+                fieldBreakSpecs.inputTv.text = split[1]
+                fieldCopperStickNo.inputTv.text = split[split.lastIndex - 1]
+                fieldRepoNo.inputTv.text = split.last()
             }
         }.onFailure {
             toast(R.string.invalid_qr_toast)
