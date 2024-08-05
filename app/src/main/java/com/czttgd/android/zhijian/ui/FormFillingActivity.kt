@@ -146,7 +146,7 @@ class FormFillingActivity : BaseActivity() {
             }
 
         setUpClickEvent(bindings.fieldProductSpecs, null) {
-            val match = it.matches(Regex("""^[0-9]{1,2}/[0-9]\.[0-9]{3}$"""))
+            val match = it.matches(Regex("""^[0-9]{2}/[0-9]\.[0-9]{3}$"""))
             FieldCheckResult.from(match, "格式示例：10/0.100")
         }
         setUpClickEvent(bindings.fieldComments, null) { FieldCheckResult.Success }
