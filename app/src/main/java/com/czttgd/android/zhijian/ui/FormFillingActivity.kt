@@ -265,7 +265,6 @@ class FormFillingActivity : BaseActivity() {
 
             // for camera barcode scanning
             listOf(
-                bindings.fieldMachineNumber,
                 bindings.fieldBreakSpecs,
                 bindings.fieldCopperStickNo,
                 bindings.fieldRepoNo,
