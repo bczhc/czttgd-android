@@ -28,6 +28,8 @@ import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
 import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -39,31 +41,7 @@ class FormFillingActivity : BaseActivity() {
     private var updateMode: Boolean = false
     private var updateId: Long? = null
     private val barcodeBroadcastReceiver = BarcodeBroadcastReceiver barcode@{ _, content ->
-        Log.d(tag, "Scanned: $content")
-        content ?: return@barcode
-        if (Regex("^[0-9]+$").matches(content)) {
-            // for device code
-            bindings.fieldMachineNumber.apply {
-                inputTv.text = content
-                hintTv.visibility = View.GONE
-            }
-            return@barcode
-        }
-
-        val regex = Regex("""^.*?:.*?,([0-9]+),([0-9]+),([A-Z]+),.*$""")
-        runCatching {
-            if (!regex.matches(content)) throw RuntimeException("Invalid QR")
-
-            val captures = regex.find(content)!!
-            val groups = captures.groupValues
-            bindings.apply {
-                fieldBreakSpecs.inputTv.text = groups[1]
-                fieldCopperStickNo.inputTv.text = groups[2]
-                fieldRepoNo.inputTv.text = groups[3]
-            }
-        }.onFailure {
-            toast(R.string.invalid_qr_toast)
-        }
+        onBarcodeScanned(content)
     }
     private var stage: Int? = null
 
@@ -71,6 +49,10 @@ class FormFillingActivity : BaseActivity() {
         var creator: Int? = null
         var breakpointA: Int? = null
         var breakCauseA: Int? = null
+    }
+
+    private val zxingLauncher = registerForActivityResult(ScanContract()) a@{
+        onBarcodeScanned((it ?: return@a).contents)
     }
 
     private fun registerSelectionLauncher(
@@ -281,10 +263,17 @@ class FormFillingActivity : BaseActivity() {
             // this is hard-coded
             fieldMachineCategory.inputTv.text = "DT"
 
-            // for mock purposes
-            fieldBreakSpecs.hintTv.setOnLongClickListener {
-                fieldBreakSpecs.inputTv.text = "123"
-                true
+            // for camera barcode scanning
+            listOf(
+                bindings.fieldMachineNumber,
+                bindings.fieldBreakSpecs,
+                bindings.fieldCopperStickNo,
+                bindings.fieldRepoNo
+            ).forEach {
+                it.hintTv.setOnLongClickListener {
+                    zxingLauncher.launch(ScanOptions())
+                    true
+                }
             }
         }
     }
@@ -501,6 +490,34 @@ class FormFillingActivity : BaseActivity() {
     override fun onDestroy() {
         unregisterReceiver(barcodeBroadcastReceiver)
         super.onDestroy()
+    }
+
+    private fun onBarcodeScanned(content: String?) {
+        Log.d(tag, "Scanned: $content")
+        content ?: return
+        if (Regex("^[0-9]+$").matches(content)) {
+            // for device code
+            bindings.fieldMachineNumber.apply {
+                inputTv.text = content
+                hintTv.visibility = View.GONE
+            }
+            return
+        }
+
+        val regex = Regex("""^.*?:.*?,([0-9]+),([0-9]+),([A-Z]+),.*$""")
+        runCatching {
+            if (!regex.matches(content)) throw RuntimeException("Invalid QR")
+
+            val captures = regex.find(content)!!
+            val groups = captures.groupValues
+            bindings.apply {
+                fieldBreakSpecs.inputTv.text = groups[1]
+                fieldCopperStickNo.inputTv.text = groups[2]
+                fieldRepoNo.inputTv.text = groups[3]
+            }
+        }.onFailure {
+            toast(R.string.invalid_qr_toast)
+        }
     }
 
     companion object {
