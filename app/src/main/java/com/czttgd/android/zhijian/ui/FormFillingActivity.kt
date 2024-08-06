@@ -232,7 +232,10 @@ class FormFillingActivity : BaseActivity() {
                         hintTv.text = getString(R.string.form_please_select_hint)
                         inputTv.text = ""
                         setUpSelectionFields(this, 2) {
-                            SelectList.breakPoints().mapToArray { SelectionActivity.Item(it.id, it.breakpoint ?: "") }
+                            SelectList.breakPoints()
+                                .filter { it.enableState == 2 }
+                                .map { SelectionActivity.Item(it.id, it.breakpoint ?: "") }
+                                .toTypedArray()
                         }
                     }
                 }
