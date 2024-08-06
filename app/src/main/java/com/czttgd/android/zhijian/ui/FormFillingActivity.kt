@@ -266,7 +266,7 @@ class FormFillingActivity : BaseActivity() {
 
         bindings.apply {
             fieldMachineNumber.rl.updatePadding(right = 0)
-            fieldMachineNumber.hintTv.text = "请输入"
+            fieldMachineNumber.hintTv.text = "请输入或扫码"
 
             // this is hard-coded
             fieldMachineCategory.inputTv.text = "DT"
@@ -309,6 +309,8 @@ class FormFillingActivity : BaseActivity() {
                     .show()
             } else finish()
         }
+
+        bindings.fieldBreakSpecs.hintTv.text = "请扫码"
     }
 
     /**
