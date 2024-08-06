@@ -533,7 +533,7 @@ class FormFillingActivity : BaseActivity() {
     private fun onBarcodeScanned(content: String?) {
         Log.d(tag, "Scanned: $content")
         content ?: return
-        if (Regex("^[0-9]+$").matches(content)) {
+        if (Regex("^[0-9]{1,2}$").matches(content)) {
             // for device code
             bindings.fieldMachineNumber.apply {
                 inputTv.text = content
