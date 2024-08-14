@@ -135,6 +135,16 @@
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="1px" />
+
+                    <include
+                        android:id="@+id/field_wire_type"
+                        layout="@layout/form_filling_field_layout"
+                        app:label="@{`线种`}"
+                        app:required="@{false}" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1px" />
                 </LinearLayout>
 
                 <!-- group three -->

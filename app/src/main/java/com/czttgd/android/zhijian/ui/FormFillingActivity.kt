@@ -79,6 +79,7 @@ class FormFillingActivity : BaseActivity() {
         registerSelectionLauncher({ bindings.fieldBreakpointReason }) { selectedIds.breakCauseA = it },
         // deprecated
         registerSelectionLauncher({ bindings.fieldMachineCategory }) {},
+        registerSelectionLauncher({ bindings.fieldWireType }) {},
     )
 
     @SuppressLint("SetTextI18n")
@@ -311,6 +312,10 @@ class FormFillingActivity : BaseActivity() {
         }
 
         bindings.fieldBreakSpecs.hintTv.text = "请扫码"
+
+        setUpSelectionFields(bindings.fieldWireType, 5) {
+            arrayOf("裸铜", "镀锡").mapToArray { SelectionActivity.Item(0, it) }
+        }
     }
 
     /**
@@ -360,6 +365,7 @@ class FormFillingActivity : BaseActivity() {
                     selectedIds.breakCauseA = id
                 }
                 fieldComments.fill(it.comments ?: "")
+                fieldWireType.fill(it.wireType ?: "")
             }
         }
     }
@@ -502,7 +508,7 @@ class FormFillingActivity : BaseActivity() {
                 creator = run { fieldCreator.checkedField(onError) { it } ?: ""; selectedIds.creator ?: dummyZero },
                 deviceCode = fieldMachineNumber.checkedField(onError) { it.toInt() } ?: dummyZero,
                 creationTime = fieldBreakpointTime.checkedField(onError) { it } ?: "",
-                productSpec = fieldProductSpecs.checkedField(onError) { it } ?: "",
+                productSpec = fieldProductSpecs.checkedField(onError) { it },
                 wireNumber = fieldWireNumber.checkedField(onError) { it.toInt() },
                 breakSpec = fieldBreakSpecs.checkedField(onError) { it } ?: "",
                 wireBatchCode = null,
@@ -520,8 +526,8 @@ class FormFillingActivity : BaseActivity() {
                 } else null,
                 comments = fieldComments.checkedField(onError) { it },
                 deviceCategory = fieldMachineCategory.checkedField(onError) { it } ?: "",
-//                wireSpeed = fieldWireSpeed.checkedField(onError) { it.toInt() },
-                productTime = fieldProductTime.checkedField(onError) { it } ?: ""
+                productTime = fieldProductTime.checkedField(onError) { it },
+                wireType = fieldWireType.checkedField(onError) { it },
             )
             return Pair(record, hasError)
         }
