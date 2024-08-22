@@ -68,13 +68,17 @@ class FormFillingActivity : BaseActivity() {
         onIdReturn: (Int?) -> Unit,
     ): ActivityResultLauncher<Array<SelectionActivity.Item>> {
         return registerForActivityResult(SelectionActivity.ActivityContract()) a@{
+            val bindings = getValue()
+
             if (it == null && acceptDiscard) {
+                bindings.hintTv.visibility = View.VISIBLE
+                bindings.hintTv.text = getString(R.string.form_please_input_hint)
+                bindings.inputTv.text = ""
                 onIdReturn(null)
                 return@a
             }
 
             it ?: return@a
-            val bindings = getValue()
             bindings.hintTv.visibility = View.GONE
             bindings.inputTv.text = it.items[it.selected].text
             onIdReturn(it.items[it.selected].id)
