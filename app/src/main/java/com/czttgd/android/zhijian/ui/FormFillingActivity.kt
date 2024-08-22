@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.updatePadding
 import com.czttgd.android.zhijian.BaseActivity
 import com.czttgd.android.zhijian.R
@@ -29,6 +30,7 @@ import com.czttgd.android.zhijian.databinding.FormFillingFieldLayoutBinding
 import com.czttgd.android.zhijian.dbDateFormatter
 import com.czttgd.android.zhijian.utils.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.radiobutton.MaterialRadioButton
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.Dispatchers
@@ -215,6 +217,7 @@ class FormFillingActivity : BaseActivity() {
         }
 
         val radioGroupOnChecked = { checkedId: Int ->
+            bindings.fieldBreakpointPosition.root.visibility = View.VISIBLE
             selectedIds.breakpointA = null
             when (checkedId) {
                 R.id.拉丝池内断线_radio -> {
@@ -245,7 +248,6 @@ class FormFillingActivity : BaseActivity() {
             }
         }
         bindings.radioGroup.setOnCheckedChangeListener { _, id -> radioGroupOnChecked(id) }
-        radioGroupOnChecked(bindings.radioGroup.checkedRadioButtonId)
 
         setUpButton()
 
@@ -493,9 +495,17 @@ class FormFillingActivity : BaseActivity() {
                 return null
             }
 
+
             val breakFlag = when (radioGroup.checkedRadioButtonId) {
                 R.id.拉丝池内断线_radio -> true
                 R.id.非拉丝池内断线_radio -> false
+                -1 -> {
+                    // on empty selection
+                    hasError = true
+                    (radioGroup.children.first() as MaterialRadioButton).setTextColor(resources.getColor(R.color.red, null))
+                    (radioGroup.children.last() as MaterialRadioButton).setTextColor(resources.getColor(R.color.red, null))
+                    false
+                }
                 else -> unreachable()
             }
 

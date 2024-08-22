@@ -199,45 +199,56 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px" />
 
-                    <!-- wtf is the layout??? 🤯🤯 -->
-                    <RadioGroup
-                        android:id="@+id/radio_group"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checkedButton="@id/拉丝池内断线_radio"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="8dp"
-                        android:textAlignment="center"
-                        android:weightSum="2">
+                        android:layout_height="wrap_content">
+                        <!-- wtf is the layout??? 🤯🤯 -->
+                        <RadioGroup
+                            android:id="@+id/radio_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            android:textAlignment="center"
+                            android:weightSum="2">
 
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/拉丝池内断线_radio"
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/拉丝池内断线_radio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                android:padding="0dp"
+                                android:text="拉丝池内断线"
+                                android:textColor="@color/form_filling_radio_button"
+                                android:theme="@style/Theme.App.FormFilling.RadioButton" />
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/非拉丝池内断线_radio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                android:padding="0dp"
+                                android:text="非拉丝池内断线"
+                                android:textColor="@color/form_filling_radio_button"
+                                android:theme="@style/Theme.App.FormFilling.RadioButton" />
+                        </RadioGroup>
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:minWidth="0dp"
-                            android:minHeight="0dp"
-                            android:padding="0dp"
-                            android:text="拉丝池内断线"
-                            android:textColor="@color/form_filling_radio_button"
-                            android:theme="@style/Theme.App.FormFilling.RadioButton" />
-
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/非拉丝池内断线_radio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minWidth="0dp"
-                            android:minHeight="0dp"
-                            android:padding="0dp"
-                            android:text="非拉丝池内断线"
-                            android:textColor="@color/form_filling_radio_button"
-                            android:theme="@style/Theme.App.FormFilling.RadioButton" />
-                    </RadioGroup>
+                            android:layout_marginStart="10dp"
+                            android:text="*"
+                            android:textColor="@color/required_red" />
+                    </FrameLayout>
 
                     <include
                         android:id="@+id/field_breakpoint_position"
                         layout="@layout/form_filling_field_layout"
+                        android:visibility="gone"
                         app:label="@{`断线位置`}"
                         app:required="@{false}" />
 
@@ -249,7 +260,7 @@
                         android:id="@+id/field_breakpoint_reason"
                         layout="@layout/form_filling_field_layout"
                         app:label="@{`断线原因（初检）`}"
-                        app:required="@{true}" />
+                        app:required="@{false}" />
 
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
