@@ -55,6 +55,8 @@ class FormFillingActivity : BaseActivity() {
     }
 
     private val zxingLauncher = registerForActivityResult(ScanContract()) a@{
+        // for mock purposes
+        bindings.fieldBreakSpecs.inputTv.text = "123123123"
         onBarcodeScanned((it ?: return@a).contents)
     }
 
@@ -62,10 +64,16 @@ class FormFillingActivity : BaseActivity() {
 
     private fun registerSelectionLauncher(
         getValue: () -> FormFillingFieldLayoutBinding,
-        onIdReturn: (Int) -> Unit
+        acceptDiscard: Boolean = false,
+        onIdReturn: (Int?) -> Unit,
     ): ActivityResultLauncher<Array<SelectionActivity.Item>> {
-        return registerForActivityResult(SelectionActivity.ActivityContract()) {
-            it ?: return@registerForActivityResult
+        return registerForActivityResult(SelectionActivity.ActivityContract()) a@{
+            if (it == null && acceptDiscard) {
+                onIdReturn(null)
+                return@a
+            }
+
+            it ?: return@a
             val bindings = getValue()
             bindings.hintTv.visibility = View.GONE
             bindings.inputTv.text = it.items[it.selected].text
@@ -74,11 +82,11 @@ class FormFillingActivity : BaseActivity() {
     }
 
     private val selectionLaunchers = arrayOf(
-        registerSelectionLauncher({ bindings.fieldCreator }) { selectedIds.creator = it },
+        registerSelectionLauncher({ bindings.fieldCreator }) { selectedIds.creator = it!! },
         // deprecated
         registerSelectionLauncher({ bindings.fieldMachineNumber }) {},
-        registerSelectionLauncher({ bindings.fieldBreakpointPosition }) { selectedIds.breakpointA = it },
-        registerSelectionLauncher({ bindings.fieldBreakpointReason }) { selectedIds.breakCauseA = it },
+        registerSelectionLauncher({ bindings.fieldBreakpointPosition }) { selectedIds.breakpointA = it!! },
+        registerSelectionLauncher({ bindings.fieldBreakpointReason }, acceptDiscard = true) { selectedIds.breakCauseA = it },
         // deprecated
         registerSelectionLauncher({ bindings.fieldMachineCategory }) {},
         registerSelectionLauncher({ bindings.fieldWireType }) {},
@@ -342,7 +350,7 @@ class FormFillingActivity : BaseActivity() {
                 fieldProductSpecs.fill(it.productSpec ?: "")
 //                fieldWireSpeed.fill(it.wireSpeed?.toString() ?: "")
                 fieldWireNumber.fill(it.wireNum?.toString() ?: "")
-                fieldBreakSpecs.fill(it.breakSpec)
+                fieldBreakSpecs.fill(it.breakSpec ?: "")
                 fieldCopperStickNo.fill(it.stickBatchCode ?: "")
                 fieldRepoNo.fill(it.warehouse ?: "")
                 fieldProductTime.fill(it.productTime ?: "")
@@ -526,7 +534,7 @@ class FormFillingActivity : BaseActivity() {
                 warehouse = fieldRepoNo.checkedField(onError) { it },
                 breakFlag = breakFlag,
                 breakCauseA = run {
-                    fieldBreakpointReason.checkedField(onError) { it } ?: ""; selectedIds.breakCauseA ?: dummyZero
+                    fieldBreakpointReason.checkedField(onError) { it } ?: ""; selectedIds.breakCauseA
                 },
                 breakpointB = if (breakFlag) {
                     fieldBreakpointPosition.checkedField(onError) { BigDecimal(it); it }

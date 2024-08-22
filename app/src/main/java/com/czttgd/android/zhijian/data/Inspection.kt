@@ -41,7 +41,7 @@ data class InspectionForm(
     @JvmField
     val breakpointA: RefId?,
     @JvmField
-    val breakCauseA: RefId,
+    val breakCauseA: RefId?,
     @JvmField
     val comments: String?,
     @JvmField
