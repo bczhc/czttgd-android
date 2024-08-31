@@ -25,7 +25,7 @@ object PrintUtils {
             else -> ""
         }
         val inspectionFlag = when (details.inspectionFlag) {
-            0 -> "已初检"
+            0 -> "未终检"
             1 -> "已终检"
             2 -> "关闭"
             else -> ""

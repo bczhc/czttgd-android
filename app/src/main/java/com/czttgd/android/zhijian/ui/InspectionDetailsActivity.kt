@@ -130,7 +130,7 @@ class InspectionDetailsActivity : BaseActivity() {
         }
 
         bindings.apply {
-            inspectTv.text = getString(R.string.inspection_records_已初检)
+            inspectTv.text = getString(R.string.inspection_records_未终检)
             inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
             cardViewA.inspectionCardTitle.text = getString(R.string.inspection_a_info_title)
 

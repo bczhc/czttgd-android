@@ -248,7 +248,7 @@ class InspectionRecordsFragment : Fragment() {
                     creatorTv.text = item.creator.name
                     when (State.from(item.inspectionFlag)) {
                         State.已初检 -> {
-                            inspectTv.text = getString(R.string.inspection_records_已初检)
+                            inspectTv.text = getString(R.string.inspection_records_未终检)
                             inspectTv.setTextColor(getColor(R.color.inspection_records_inspect_a))
                         }
 
