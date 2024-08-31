@@ -54,7 +54,7 @@ object PrintUtils {
         PrintUtil.printLine(2)
 
         printLine("生产规格：${details.productSpec ?: ""}")
-        printLine("断线规格：${details.breakSpec}")
+        printLine("原料规格：${details.breakSpec}")
         printLine("断线位置：$breakpoint")
 
         PrintUtil.printBarcode(100, "${details.id}", BarCodeType.TOP_TYPE_CODE128)

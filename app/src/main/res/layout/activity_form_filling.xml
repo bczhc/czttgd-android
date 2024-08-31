@@ -158,7 +158,7 @@
                     <include
                         android:id="@+id/field_break_specs"
                         layout="@layout/form_filling_field_layout"
-                        app:label="@{`断线规格`}"
+                        app:label="@{`原料规格`}"
                         app:required="@{true}"
                         app:rightIcon="@{@drawable/qr_scan}" />
 

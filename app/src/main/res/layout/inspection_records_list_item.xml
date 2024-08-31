@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?textAppearanceBodySmall"
             android:textColor="@color/inspection_records_gray"
-            tools:text="断线规格：TXR1.8(TTGD)3.0" />
+            tools:text="原料规格：TXR1.8(TTGD)3.0" />
 
         <TextView
             android:id="@+id/body_line2"
