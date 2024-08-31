@@ -2,6 +2,7 @@ package com.czttgd.android.zhijian
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.plugins.*
@@ -19,6 +20,8 @@ class App : Application() {
 
     init {
         appContext = this
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 }
 
