@@ -33,7 +33,7 @@ APK文件生成在`app/build/outputs/apk/release/app-release.apk`，可直接安
    
    构建产物在`dao/target/x86_64-pc-windows-gnu/release/czttgd-dao`（交叉编译）或`dao/target/release/czttgd-dao`（本地目标编译）
    
-   注：如果目标为Windows平台，编译产物后面加上`.exe`扩展名，如`czttgd-dao.exe`。下方描述中均省略`.exe`。
+   注：如果目标为Windows，则产物二进制文件名为`czttgd-dao.exe`。下方描述中省略`.exe`扩展名。
 3. 参考`dao/server.toml.template`创建配置文件，配置文件名为`server.toml`，放在与`czttgd-dao`同一目录下。
 4. 执行`czttgd-dao`。
 
